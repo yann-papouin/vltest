@@ -1,0 +1,355 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_EXPLORER_BAR TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_EXPLORER_PARENT
+    BUTTON      ID_EXPLORER_SEARCH
+END
+
+IDR_MAINFRAME TOOLBAR  17, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+    BUTTON      IDR_PANE_MODEL
+    BUTTON      IDR_PANE_VIEW
+    BUTTON      ID_ORBIT_OPT
+    BUTTON      ID_ZOOM_OPT
+    BUTTON      ID_PAN_OPT
+    BUTTON      ID_WINDOW_SELECT
+    BUTTON      ID_TOOLS_RENDERMODE_GOURAUDWITHLINES
+    BUTTON      ID_TOOLS_RENDERMODE_HIDDENLINE
+    BUTTON      ID_TOOLS_RENDERMODE_WIREFRAME
+    BUTTON      ID_ZOOM_TO_EXTENTS
+    BUTTON      ID_ZOOM_TO_WINDOW
+    BUTTON      ID_CREATE_SPHERE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_FALGS               BITMAP                  "res\\falgs.bmp"
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDB_TAB                 BITMAP                  "res\\tab.bmp"
+IDR_EXPLORER_BAR        BITMAP                  "res\\explorerbar.bmp"
+IDB_GENVIEWER            BITMAP                  "res\\GenViewerCtrl.bmp"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1 TYPELIB ""GenViewer.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "GenViewer.ocx"
+            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "OriginalFilename", "GenViewer.ocx"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ABOUTDLL            ICON                    "GenViewer.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX_GenViewer DIALOG  34, 22, 260, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About GenViewer Control"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDI_ABOUTDLL,IDC_STATIC,10,10,20,20
+    LTEXT           "GenViewer Control, Version 1.0",IDC_STATIC,40,10,170,8
+    LTEXT           "Copyright (C) 2011, ",IDC_STATIC,40,25,170,8
+    DEFPUSHBUTTON   "OK",IDOK,221,7,32,16,WS_GROUP
+END
+
+IDD_PROPPAGE_GenViewer DIALOG  0, 0, 250, 62
+STYLE DS_SETFONT | WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "TODO: Place controls to manipulate properties of GenViewer Control on this dialog.",IDC_STATIC,7,25,229,16
+END
+
+IDD_IOP_FILE_TRANSLATION_PROGRESS DIALOGEX 0, 0, 182, 87
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_NOIDLEMSG | DS_SETFOREGROUND | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION
+EXSTYLE WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT
+CAPTION "Loading File... (0%)"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDD_IOP_FILE_TRANSLATION_PROGRESS_OUTPUT,"RichEdit20A",ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_BORDER | WS_VSCROLL,4,7,172,49
+    CONTROL         "",IDD_IOP_FILE_TRANSLATION_PROGRESS_PROGRESS,
+                    "msctls_progress32",PBS_SMOOTH | WS_BORDER,4,62,172,14
+END
+
+IDD_DIALOG_IOP_ASM_IMPORT DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Assembly import method"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,22,41,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,95,41,50,14
+    CONTROL         "EBOM-XML",IDC_RADIO_IOP_ASM_XML,"Button",BS_AUTORADIOBUTTON,18,18,50,10
+    CONTROL         "Standard",IDC_RADIO_IOP_ASM_STANDARD,"Button",BS_AUTORADIOBUTTON,90,18,45,10
+END
+
+IDD_DIALOG_IOP_IMPORT DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PRT File Type"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,22,41,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,95,41,50,14
+    CONTROL         "Pro/Engineer",IDC_RADIO_IOP_PROE,"Button",BS_AUTORADIOBUTTON,18,18,57,10
+    CONTROL         "Unigraphics",IDC_RADIO_IOP_UG,"Button",BS_AUTORADIOBUTTON,90,18,53,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX_GenViewer, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 253
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_PROPPAGE_GenViewer, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 243
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\GenViewer.ico"
+IDR_PINDOCTYPE          ICON                    "res\\GenViewerDoc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "Instant Bar",                 ID_VIEW_INSTANTBAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About GenViewer...",          ID_APP_ABOUT
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_GenViewer            "GenViewer Control"
+    IDS_GenViewer_PPG        "GenViewer Property Page"
+    IDS_GROUP_CHECKED_TRUE  "Check State: Checked"
+    IDS_GROUP_CHECKED_FALSE  "Check State: UnChecked"
+
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_PANE_MODEL       "Model"
+    IDR_PANE_VIEW          "View"
+    IDS_ABOUT               "About"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_GenViewer_PPG_CAPTION "General"
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_EXPLORER_BAR TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_EXPLORER_PARENT
+    BUTTON      ID_EXPLORER_SEARCH
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_EXPLORER_BAR        BITMAP                  "res\\ExplorerBar.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "GenViewer.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
