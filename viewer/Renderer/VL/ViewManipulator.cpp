@@ -208,6 +208,9 @@ _zoomFactor(50)
 
 void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 {
+	_x = x;
+	_y = y;
+
 	if (this->mode() == RotationMode)
 		return vl::TrackballManipulator::mouseMoveEvent(x, y);
 
@@ -314,16 +317,37 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-	//_zoomFactor += 2 * n;
-	//_zoomFactor = _zoomFactor != 0 ? _zoomFactor : 1;
+	_zoomFactor += 2 * n;
+	_zoomFactor = _zoomFactor != 0 ? _zoomFactor : 1;
 
-	double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
+	if (m_bShift)
+	{
+		double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
+		vl::mat4 projMatrix = this->camera()->projectionMatrix();
+		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
+		this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
+	}
+	else
+	{
+		const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
+			(1 / std::abs(_zoomFactor));
 
-	vl::mat4 projMatrix = this->camera()->projectionMatrix();
-	projMatrix *= vl::mat4::getScaling(scale,scale,scale);
-	this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
+		const int w = this->camera()->viewport()->width()/zoomFactor;
+		const int h = this->camera()->viewport()->height()/zoomFactor;
 
-//	this->setProjection();
+		double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
+		vl::mat4 projMatrix = this->camera()->projectionMatrix();
+		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
+
+		//need to consider the best factor for offset
+		double dOffsetX = -(_x - this->camera()->viewport()->width() /2.0 )/_zoomFactor/20.0*n;
+		double dOffsetY = (_y - this->camera()->viewport()->height()/2.0 ) /_zoomFactor/20.0*n;
+
+		projMatrix *= vl::mat4::getTranslation(dOffsetX, dOffsetY, 0);
+
+		this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
+
+	}
 }
 
 void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, int y )

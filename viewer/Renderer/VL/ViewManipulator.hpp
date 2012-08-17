@@ -72,6 +72,9 @@ private:
 	VLBaseView* m_pVLBaseView;
 	Actor* mCrossActor;
 	bool m_bShift;
+
+	int _x;
+	int _y;
 };
 
 
