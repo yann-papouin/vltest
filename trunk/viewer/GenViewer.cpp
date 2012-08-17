@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 
 #ifdef VL
 #include <vlCore/VisualizationLibrary.hpp>
-#include "Renderer/vl/IOManager.hpp"
+#include "InterOp/IOManager.hpp"
 #endif
 
 #define UtC(x,y)     (wcstombs(y, x, wcslen(x)), y)
