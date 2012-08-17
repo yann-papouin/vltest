@@ -337,7 +337,7 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-	mMode = ZoomMode;
+//	mMode = ZoomMode;
 
 	_zoomFactorOld = _zoomFactor;
 
