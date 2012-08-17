@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenViewer_sdi", "GenViewer_osg_sdi_vc9 .vcproj", "{438EC051-59EF-42FE-9752-0516C587BBEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Static_Debug|Win32 = Static_Debug|Win32
+		Static_Release|Win32 = Static_Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Debug|Win32.Build.0 = Debug|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Release|Win32.ActiveCfg = Release|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Release|Win32.Build.0 = Release|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Static_Debug|Win32.ActiveCfg = Static_Debug|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Static_Debug|Win32.Build.0 = Static_Debug|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Static_Release|Win32.ActiveCfg = Static_Release|Win32
+		{438EC051-59EF-42FE-9752-0516C587BBEF}.Static_Release|Win32.Build.0 = Static_Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,9 @@
+; GenViewer.def : Declares the module parameters.
+
+LIBRARY      "GenViewer.OCX"
+
+EXPORTS
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer PRIVATE
