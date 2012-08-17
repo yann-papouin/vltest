@@ -68,15 +68,10 @@ public:
 
 private:
 	int _zoomFactor;
-	int _zoomFactorOld;
 	Transform* mIntersectionPoint;
 	VLBaseView* m_pVLBaseView;
 	Actor* mCrossActor;
 	bool m_bShift;
-
-	int _x;//current x
-	int _y;//current y
-
 };
 
 

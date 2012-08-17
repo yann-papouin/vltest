@@ -23,7 +23,6 @@ PerspectiveTrackballManipulator::PerspectiveTrackballManipulator( VLBaseView* pV
 //-----------------------------------------------------------------------------
 void PerspectiveTrackballManipulator::mouseDownEvent(EMouseButton btn, int x, int y)
 {
-	int a;
 	if ( camera() == NULL )
 		return;
 
@@ -220,16 +219,9 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 	x -= vp->x();
 	y -= this->openglContext()->height() - 1 - (vp->y() + vp->height() - 1);
 
-
 	if (mode() == ZoomMode)
 	{
 		// Handled by mouse wheel
-		const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-			(1 / std::abs(_zoomFactor));
-
-		_x = x/zoomFactor;
-		_y = y/zoomFactor;
-
 	}
 	else if (mode() == TranslationMode)
 	{
@@ -274,18 +266,6 @@ void OrthographicTrackballManipulator::setProjection()
 	const int w = this->camera()->viewport()->width()/zoomFactor;
 	const int h = this->camera()->viewport()->height()/zoomFactor;
 
-	//const double zoomFactor = 0;
-	//OrthographicTrackballManipulator* pOrthoTM = dynamic_cast<OrthographicTrackballManipulator*>(trackball());
-	//if (pOrthoTM)
-	//{
-	//	zoomFactor = pOrthoTM->GetZoomFactor();
-	//}
-	//const int w = this->camera()->viewport()->width()*zoomFactor;
-	//const int h = this->camera()->viewport()->height()*zoomFactor;
-
-
-	/* Shift the target slightly toward the mouse pointer. */
-	
 	double tx,ty;
 	tx = w/2; // center the view
 	ty = h/2;
@@ -313,15 +293,15 @@ void OrthographicTrackballManipulator::setProjection()
 		//adjusted.position = adjusted.target + dir_to_position * 2.5 * diagonal_len;
 	}
 
+	//projMatrix *= vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane);
+	//this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
+
+
 	// install the orthographic projection
 	this->camera()->setProjectionMatrix(
 		// compute directly an orthographic projection & center the scene on the screen
 		vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) *
 		vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
-	//this->camera()->setProjectionMatrix(
-	//	// compute directly an orthographic projection & center the scene on the screen
-	//	vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) *
-	//	vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
 }
 
 void OrthographicTrackballManipulator::resizeEvent( int w, int h )
@@ -329,22 +309,21 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 	const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
 		(1 / std::abs(_zoomFactor));
 
-	_x = w/zoomFactor;
-	_y = h/zoomFactor;
-
 	this->setProjection();
 }
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-//	mMode = ZoomMode;
+	//_zoomFactor += 2 * n;
+	//_zoomFactor = _zoomFactor != 0 ? _zoomFactor : 1;
 
-	_zoomFactorOld = _zoomFactor;
+	double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
 
-	_zoomFactor += 2 * n;
-	_zoomFactor = _zoomFactor != 0 ? _zoomFactor : 1;
+	vl::mat4 projMatrix = this->camera()->projectionMatrix();
+	projMatrix *= vl::mat4::getScaling(scale,scale,scale);
+	this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
 
-	this->setProjection();
+//	this->setProjection();
 }
 
 void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, int y )
@@ -363,10 +342,6 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 		RayIntersector intersector;
 		// compute a frustum along the ray to accelerate the intersection test
 		intersector.setFrustum( camera()->computeRayFrustum( x,y ) );
-
-		//ray.setOrigin(vec3(20,5,5));
-		//ray.setDirection(vec3(0,0,-1));
-		//ray.setDirection(vec3(-1,0,0));
 
 		// compute the intersections!
 		intersector.intersect(ray, m_pVLBaseView->sceneManager());
@@ -416,7 +391,6 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 			//	// compute directly an orthographic projection & center the scene on the screen
 			//	mOldProjMatrix*
 			//	vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
-
 		}
 
 		openglContext()->update();
