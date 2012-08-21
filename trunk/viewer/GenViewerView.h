@@ -146,6 +146,10 @@ public:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnFileOpen();
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnDestroy();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	void    put_Filename(char* pathname);
 	bool    m_bFlush;
 	void  SetWindowColor(COLORREF new_top_color, COLORREF new_bottom_color, bool emit_message = true);
@@ -153,10 +157,6 @@ public:
 	unsigned long MapFlags(unsigned long state);
 	void  LocalSetOperator(HBaseOperator * NewOperator);	
 #endif	
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnDestroy();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 #ifndef _DEBUG  // debug version in pindockView.cpp

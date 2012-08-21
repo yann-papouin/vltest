@@ -39,10 +39,15 @@ public:
 	virtual void mouseUpEvent(EMouseButton, int x, int y);
 	virtual void mouseMoveEvent(int x, int y);
 	virtual void mouseWheelEvent(int) {}
+	void SetOldBufferFrameSize(int cx,int cy){mOldSizeX = cx,mOldSizeY=cy;};
+
 private:
 	Transform* mIntersectionPoint;
 	VLBaseView* m_pVLBaseView;
 	Actor* mCrossActor;
+
+	int mOldSizeX;
+	int mOldSizeY;
 };
 
 class OrthographicTrackballManipulator : public vl::TrackballManipulator
@@ -61,20 +66,24 @@ public:
 	  virtual void keyPressEvent( unsigned short, EKey key);
 	  virtual void keyReleaseEvent( unsigned short, EKey key);
 	  void setProjection();
-	  int GetZoomFactor() const { return _zoomFactor; }
-	  void SetZoomFactor(int val) { _zoomFactor = val; }
+	  float GetZoomFactor() const { return mZoomFactor; }
+	  void SetZoomFactor(float val) { mZoomFactor = val; }
+
+	  void SetOldBufferFrameSize(int cx,int cy){mOldSizeX = cx,mOldSizeY=cy;};
 
 	  vl::mat4 mOldProjMatrix;
 
 private:
-	int _zoomFactor;
 	Transform* mIntersectionPoint;
 	VLBaseView* m_pVLBaseView;
 	Actor* mCrossActor;
 	bool m_bShift;
+	float mZoomFactor;
 
 	int _x;
 	int _y;
+	int mOldSizeX;
+	int mOldSizeY;
 };
 
 

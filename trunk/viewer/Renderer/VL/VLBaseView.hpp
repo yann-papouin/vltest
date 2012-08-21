@@ -55,7 +55,7 @@ public:
 
 	virtual void resizeEvent(int, int);
 
-	virtual void initEvent(){};
+	virtual void initEvent();;
 
 	virtual void enableEvent(bool) {}
 
@@ -126,6 +126,8 @@ public:
 
 	void FitWorld();
 	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
+
+	void SetOldBufferFrameSize(int cx,int cy);
 
 protected:
 	void bindManipulators(Camera* camera);

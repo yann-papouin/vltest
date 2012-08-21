@@ -136,11 +136,11 @@ void VLBaseView::resizeEvent(int w, int h)
 		rend->camera()->viewport()->setHeight( h );
 		if (m_bPerspective)
 		{
-			rend->camera()->setProjectionPerspective();
+	//		rend->camera()->setProjectionPerspective();
 		}
 		else
 		{
-			rend->camera()->setProjectionOrtho();
+//			rend->camera()->setProjectionOrtho();
 		}
 	}
 }
@@ -189,53 +189,32 @@ void VLBaseView::FitWorld()
 		vl::vec3 new_at = bs.center();
 		mTrackball->setPivot(new_at);
 
-		//Set new at to the center of bounding sphere, and accordingly set the eye position
-	//	vl::vec3 old_eye;  
-	//	vl::vec3 old_at;
-	//	vl::vec3 up;  
-	//	vl::vec3 right;
-	//	rend->camera()->getViewMatrixAsLookAt(old_eye, old_at,up,right);
-	//	vl::vec3 dir = old_eye-old_at;
-
-	//	vl::vec3 new_at = bs.center();
-	//	vl::vec3 new_eye = new_at+2*bs.radius()*dir.normalize();
-
-	////	vl::vec3 new_eye = old_eye+new_at-old_at;
-
-	//	rend->camera()->setViewMatrixLookAt(new_eye, new_at,up);
-
-		//vl::mat4 newMat = rend->camera()->viewMatrix();
-		//vl::mat4 transMatrix =	vl::mat4::getTranslation(vl::vec3(newat.x()-oldat.x(),newat.y()-oldat.y(),newat.z()-oldat.z()));
-		//newMat*=transMatrix;
-		//rend->camera()->setViewMatrix(newMat);
-
 		//Set projection matrix
-		float ratio = 1.0f*rend->camera()->viewport()->width()/rend->camera()->viewport()->height();
-		float w,h;
-		if (ratio>1)
+		float w = (float) rend->camera()->viewport()->width();
+		float h =  (float) rend->camera()->viewport()->height();
+		if (bs.radius()>0)
 		{
-			h = bs.radius()*2.0f*1.01f;
-			w = h*ratio;
-		}
-		else
-		{
-			if(ratio != 0)
+			float aspectRatio = rend->camera()->aspectRatio();
+			if (aspectRatio>1)
 			{
-				w = bs.radius()*2.0f*1.01f;
-				h = w/ratio;
+				h = bs.radius()*2.0f*1.01f;
+				w = h*aspectRatio;
+			}
+			else
+			{
+				if(aspectRatio != 0)
+				{
+					w = bs.radius()*2.0f*1.01f;
+					h = w/aspectRatio;
+				}
 			}
 		}
 
-		//double scale = 1.0f*rend->camera()->viewport()->width()/w;
-
-		//vl::mat4 scaleMatrix = vl::mat4::getScaling(scale,scale,scale);
-		//rend->camera()->setViewMatrix(rend->camera()->viewMatrix()*scaleMatrix);
-
-		double scale = 1.0f*rend->camera()->viewport()->width()/w;
 		OrthographicTrackballManipulator* pOrthoTM = dynamic_cast<OrthographicTrackballManipulator*>(trackball());
 		if (pOrthoTM)
 		{
-			pOrthoTM->SetZoomFactor(int(scale));
+			float zoomFactor = 1.0f*rend->camera()->viewport()->width()/w;
+			pOrthoTM->SetZoomFactor(zoomFactor);
 		}
 
 		const float nearPlane = 0.5f;
@@ -246,8 +225,9 @@ void VLBaseView::FitWorld()
 		{
 			rend->camera()->setProjectionMatrix(
 				// compute directly an orthographic projection & center the scene on the screen
-				vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) * 
-				vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0),PMT_OrthographicProjection);
+				vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
+				* vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) 
+				,PMT_OrthographicProjection) ;
 		}
 		else
 		{
@@ -362,5 +342,36 @@ void VLBaseView::SetViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 
 void VLBaseView::keyPressEvent( unsigned short, EKey key)
 {
+}
+
+void VLBaseView::initEvent()
+{
+	Rendering* rend = cast<Rendering>(rendering());
+	if (rend)
+	{
+		if (m_bPerspective)
+		{
+			rend->camera()->setProjectionPerspective();
+		}
+		else
+		{
+			rend->camera()->setProjectionOrtho();
+		}
+	}
+}
+
+void VLBaseView::SetOldBufferFrameSize(int cx,int cy)
+{
+	OrthographicTrackballManipulator* pOrthoTM = dynamic_cast<OrthographicTrackballManipulator*>(trackball());
+	if (pOrthoTM)
+	{
+		pOrthoTM->SetOldBufferFrameSize(cx,cy);
+	}
+
+	PerspectiveTrackballManipulator* pPerspTM =  dynamic_cast<PerspectiveTrackballManipulator*>(trackball());
+	if (pPerspTM)
+	{
+		pPerspTM->SetOldBufferFrameSize(cx,cy);
+	}
 }
 //-----------------------------------------------------------------------------
