@@ -309,6 +309,9 @@ void CGenViewerView::Init()
 	mRendering = new vl::Rendering;
 	mRendering->renderer()->setFramebuffer( this->OpenGLContext::framebuffer() );
 
+	OpenGLContext::framebuffer()->setWidth(rect.Width());
+	OpenGLContext::framebuffer()->setHeight(rect.Height());
+
 
 	/*edge renderer*/
 	//ref< EdgeRenderer > mEdgeRenderer = new EdgeRenderer;
@@ -1298,6 +1301,12 @@ void CGenViewerView::DrawScene()
 
 void CGenViewerView::OnSize(UINT nType, int cx, int cy)
 {
+	if (mVLBaseView)
+	{
+		mVLBaseView->SetOldBufferFrameSize(this->OpenGLContext::framebuffer()->width(),
+			this->OpenGLContext::framebuffer()->height());
+	}
+
 	CMFCView::OnSize(nType, cx, cy);
 
 	// Inform the renderer of changes in view size

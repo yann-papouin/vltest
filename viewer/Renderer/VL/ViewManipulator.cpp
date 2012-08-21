@@ -200,7 +200,7 @@ void PerspectiveTrackballManipulator::mouseMoveEvent(int x, int y)
 
 //-----------------------------------------------------------------------------
 OrthographicTrackballManipulator::OrthographicTrackballManipulator(VLBaseView* pVLBaseView) :
-_zoomFactor(50)
+mZoomFactor(50)
 {
 	m_pVLBaseView = pVLBaseView;
 	m_bShift = false;
@@ -228,18 +228,18 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 	}
 	else if (mode() == TranslationMode)
 	{
-		const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-			(1 / std::abs(_zoomFactor));
+		const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
+			(1 / std::abs(mZoomFactor));
 
-		float tx =1.0f * (mMouseStart.x() - x) /zoomFactor ;
-		float ty = -1.0f * (mMouseStart.y() - y)/zoomFactor;
+		float tx =1.0f * (x - mMouseStart.x()) /zoomFactor ;
+		float ty = -1.0f * (y - mMouseStart.y())/zoomFactor;
 		tx *= translationSpeed();
 		ty *= translationSpeed();	
 		
 		this->camera()->setProjectionMatrix(
 			// compute directly an orthographic projection & center the scene on the screen
 			mOldProjMatrix*
-			vl::mat4::getTranslation(-tx, -ty, 0),PMT_OrthographicProjection);
+			vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
 	}
 
 	// update the view
@@ -256,57 +256,78 @@ void OrthographicTrackballManipulator::setProjection()
 	//this->camera()->setNearPlane(nearPlane);
 	//this->camera()->setFarPlane(farPlane);
 
-	float nearPlane = this->camera()->nearPlane();
-	float farPlane = this->camera()->farPlane();
+	//float nearPlane = this->camera()->nearPlane();
+	//float farPlane = this->camera()->farPlane();
 
-	// make view X units high and compute the width as whatever it takes to keep the aspect ratio.
-	const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-		(1 / std::abs(_zoomFactor));
+	//// make view X units high and compute the width as whatever it takes to keep the aspect ratio.
+	//const double zoomFactor = m_dZoomFactor > 0 ? m_dZoomFactor :
+	//	(1 / std::abs(m_dZoomFactor));
 
-	vl::mat4 projMatrix = this->camera()->projectionMatrix();
-	//const int w = (int)this->camera()->aspectRatio() * zoomFactor;
-	//const int h = (int)zoomFactor;
-	const int w = this->camera()->viewport()->width()/zoomFactor;
-	const int h = this->camera()->viewport()->height()/zoomFactor;
+	//vl::mat4 projMatrix = this->camera()->projectionMatrix();
+	////const int w = (int)this->camera()->aspectRatio() * zoomFactor;
+	////const int h = (int)zoomFactor;
+	//const int w = this->camera()->viewport()->width()/zoomFactor;
+	//const int h = this->camera()->viewport()->height()/zoomFactor;
 
-	// install the orthographic projection
-	this->camera()->setProjectionMatrix(
-		// compute directly an orthographic projection & center the scene on the screen
-		vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) *
-		vl::mat4::getTranslation(w/2, h/2, 0),PMT_OrthographicProjection);
+	//// install the orthographic projection
+	//this->camera()->setProjectionMatrix(
+	//	// compute directly an orthographic projection & center the scene on the screen
+	//	vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) *
+	//	vl::mat4::getTranslation(w/2, h/2, 0),PMT_OrthographicProjection);
 }
 
 void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 {
-	const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-		(1 / std::abs(_zoomFactor));
+	float nearPlane = this->camera()->nearPlane();
+	float farPlane = this->camera()->farPlane();
 
-	this->setProjection();
+	float scale = 1.0f;
+ 	//scale = 1.0*mOldSizeX/w;
+ 	//if (mOldSizeX/mOldSizeY > camera()->aspectRatio())
+ 	//{
+ 	//	scale = 1.0f*mOldSizeY/h;
+ 	//}
+	
+	float new_w =w/mZoomFactor*scale;
+	float new_h = h/mZoomFactor*scale;
+
+	vl::mat4 projMatrix = camera()->projectionMatrix();
+	vl::vec3 translation = projMatrix.getT();
+
+	vl::mat4 invMatrix;
+//	vl::mat4 orthoMatrix = 	vl::mat4::getOrtho(0,mOldSizeX/mZoomFactor,0,mOldSizeY/mZoomFactor,nearPlane,farPlane);
+	vl::mat4 orthoMatrix = 	vl::mat4::getOrtho(0,new_w,0,new_h,nearPlane,farPlane);
+	invMatrix = orthoMatrix.getInverse();
+
+	vl::mat4 transf = invMatrix*projMatrix;
+	translation = transf.getT();
+
+	// install the orthographic projection
+	this->camera()->setProjectionMatrix(
+		// compute directly an orthographic projection & center the scene on the screen
+		vl::mat4::getOrtho(0, new_w, 0, new_h, nearPlane, farPlane) *
+//		vl::mat4::getTranslation(new_w/2, new_h/2, 0)
+		vl::mat4::getTranslation(translation.x(), translation.y(), 0)
+		,PMT_OrthographicProjection);
 }
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-	//_zoomFactor += 2 * n;
-	//_zoomFactor = _zoomFactor != 0 ? _zoomFactor : 1;
+	mZoomFactor += 2 * n;
+	mZoomFactor = mZoomFactor != 0 ? mZoomFactor : 1;
 
 	if (m_bShift)
 	{
-		double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
+		double dScale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
 		vl::mat4 projMatrix = this->camera()->projectionMatrix();
-		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
+		projMatrix *= vl::mat4::getScaling(dScale,dScale,dScale);
 		this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
 	}
 	else
 	{
-		const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-			(1 / std::abs(_zoomFactor));
-
-		const int w = this->camera()->viewport()->width()/zoomFactor;
-		const int h = this->camera()->viewport()->height()/zoomFactor;
-
-		double scale = 1.0* (_zoomFactor+2*n)/_zoomFactor;
+		double dScale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
 		vl::mat4 projMatrix = this->camera()->projectionMatrix();
-		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
+		projMatrix *= vl::mat4::getScaling(dScale,dScale,dScale);
 
 		//need to consider the best factor for offset
 		double dOffsetX = -(_x - this->camera()->viewport()->width()/2.0 )/800.0*n;
@@ -362,8 +383,8 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 
 
 			//// TODO: Move to the center of the screen
-			//const double zoomFactor = _zoomFactor > 0 ? _zoomFactor :
-			//	(1 / std::abs(_zoomFactor));
+			//const double zoomFactor = m_dZoomFactor > 0 ? m_dZoomFactor :
+			//	(1 / std::abs(m_dZoomFactor));
 
 			//vl::vec4 in1(mPivot.x(),mPivot.y(),mPivot.z(),1);
 			//vl::vec4 out1;
