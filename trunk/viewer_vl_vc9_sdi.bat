@@ -11,6 +11,6 @@ SET ARCH=NT_VC9_DLLD
 SET ARCH_RELEASE=NT_VC9_DLL
 SET ARCH_DEBUG=NT_VC9_DLLD
 
-SET PATH=%VL%\Applets\bin\Debug;%VL%\vlMFC\bin\Debug;%VL%\vlMolecule\bin\Debug;%VL%\vlVG\bin\Debug;%VL%\vlVolume\bin\Debug;%VL%\vlGraphics\bin\Debug;%VL%\vlCore\bin\Debug;%VL%\vlWin32\bin\Debug;%XERCES%\BIN;%CSP%\BIN\VC90;%A3DT%\BIN\%ARCH_RELEASE%;%A3DT%\BIN\%ARCH_DEBUG%;%X3DT%\BIN\%ARCH_RELEASE%;%X3DT%\BIN\%ARCH_DEBUG%;%XERCES%\bin;%HOOPS_INSTALL_DIR%\bin\%HOOPS_ARCH%;%HOOPS_INSTALL_DIR%\bin\%HOOPS_ARCH_DEBUG%;%PATH%
+SET PATH=%VL%\Applets\bin\Debug;%VL%\vlMFC\bin\Debug;%VL%\vlGraphics\bin\Debug;%VL%\vlCore\bin\Debug;%VL%\vlWin32\bin\Debug;%VL%\Applets\bin\Release;%VL%\vlMFC\bin\Release;%VL%\vlGraphics\bin\Release;%VL%\vlCore\bin\Release;%VL%\vlWin32\bin\Release;%XERCES%\BIN;%CSP%\BIN\VC90;%A3DT%\BIN\%ARCH_RELEASE%;%A3DT%\BIN\%ARCH_DEBUG%;%X3DT%\BIN\%ARCH_RELEASE%;%X3DT%\BIN\%ARCH_DEBUG%;%XERCES%\bin;%HOOPS_INSTALL_DIR%\bin\%HOOPS_ARCH%;%HOOPS_INSTALL_DIR%\bin\%HOOPS_ARCH_DEBUG%;%PATH%
 
 "c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe" viewer\GenViewer_vl_sdi_vc9.sln
