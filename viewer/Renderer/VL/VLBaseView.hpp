@@ -14,7 +14,7 @@
 using namespace vl;
 
 //-----------------------------------------------------------------------------
-// MainApplet
+// VLBaseView
 //-----------------------------------------------------------------------------
 enum ViewMode 
 {
@@ -121,7 +121,7 @@ public:
 	 * \note Since updateScene() is called by updateEvent() this function is called only if somebody
 	 * requests a OpenGLContext::update() or if OpenGLContext::continuousUpdate() is set to \p true. 
 	 */
-	  virtual void updateScene() {}
+	virtual void updateScene() {}
 
 	/** Sets the MainApplet name, used for the window title and for naming screenshots. */
 	void setMainAppletName(const String& app_name) { mMainAppletName = app_name; } 
@@ -131,31 +131,31 @@ public:
 
 	bool GetPerspective() const { return m_bPerspective; }
 	void SetPerspective(bool val) { m_bPerspective = val; }
-
+	void SetOldBufferFrameSize(int cx,int cy);
 	void FitWorld();
 	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
 	void SetRenderMode(RenderMode eRenderMode);
-
-	void SetOldBufferFrameSize(int cx,int cy);
 
 protected:
 	void bindManipulators(Camera* camera);
 
 private:
 	ref<RenderingAbstract> mRendering;
-	ref<Renderer> mSolidRenderer;
-	ref< EdgeRenderer > mEdgeRenderer;
-
 	ref<GhostCameraManipulator> mFly;
 	ref<TrackballManipulator> mTrackball;
 	ref<SceneManagerActorTree> mSceneManagerActorTree;
 	ref<ReadPixels> mReadPixels;
+
 	String mMainAppletName;
 	double mStartTime;
 	double mFPS;
 	int mFrameCount;
+
+	ref<Renderer> mSolidRenderer;
+	ref<EdgeRenderer> mEdgeRenderer;
+	RenderMode mRenderMode;
+
 	bool m_bPerspective;
 	ViewMode mViewMode;
-	RenderMode mRenderMode;
 };
 #endif
