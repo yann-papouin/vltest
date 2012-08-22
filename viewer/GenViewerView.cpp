@@ -42,19 +42,18 @@
 	#include "HSelectionSet.h"
 	#include "HOpCreateSphere.h"
 #elif defined VL
-	#include "vlCore/Colors.hpp"
-	#include "vlCore/Sphere.hpp"
+	#include <vlCore/Colors.hpp>
+	#include <vlCore/Sphere.hpp>
+	#include <vlcore/ResourceDatabase.hpp>
 
-	#include "vlGraphics/Rendering.hpp"
+	#include <vlGraphics/Rendering.hpp>
 	#include <vlGraphics/Geometry.hpp>
-	#include "vlGraphics/GeometryPrimitives.hpp"
-	#include <vlGraphics/EdgeRenderer.hpp>
+	#include <vlGraphics/GeometryPrimitives.hpp>
 	#include <vlGraphics/Text.hpp>
 	#include <vlGraphics/FontManager.hpp>
 
 	#include "renderer/vl/VLBaseView.hpp"
-	#include "Renderer/VL/AxisCameraUpdateCallback.hpp"
-#include "Renderer/VL/AxisRenderer.hpp"
+//	#include "Renderer/VL/AxisCameraUpdateCallback.hpp"
 #endif
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -124,12 +123,12 @@ BEGIN_MESSAGE_MAP(CGenViewerView, CMFCView)
 	ON_UPDATE_COMMAND_UI(ID_PAN_OPT, &CGenViewerView::OnUpdatePanOpt)
 	ON_COMMAND(ID_ZOOM_OPT,&CGenViewerView::OnZoomOpt)
 	ON_UPDATE_COMMAND_UI(ID_ZOOM_OPT, &CGenViewerView::OnUpdateZoomOpt)
-	ON_COMMAND(ID_TOOLS_RENDERMODE_GOURAUDWITHLINES, OnToolsRendermodeGouraudWithLines)
-	ON_COMMAND(ID_TOOLS_RENDERMODE_HIDDENLINE, OnToolsRendermodeHiddenline)
+	ON_COMMAND(ID_TOOLS_RENDERMODE_SHADEDWITHLINES, OnToolsRendermodeShadedWithLines)
+	ON_COMMAND(ID_TOOLS_RENDERMODE_SHADED, OnToolsRendermodeShaded)
 	ON_COMMAND(ID_TOOLS_RENDERMODE_WIREFRAME, OnToolsRendermodeWireframe)
 	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_WIREFRAME, OnUpdateToolsRendermodeWireframe)
-	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_GOURAUDWITHLINES, OnUpdateToolsRendermodeGouraudWithLines)
-	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_HIDDENLINE, OnUpdateToolsRendermodeHiddenline)
+	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_SHADEDWITHLINES, OnUpdateToolsRendermodeShadedWithLines)
+	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_SHADED, OnUpdateToolsRendermodeShaded)
 	ON_COMMAND(ID_ZOOM_TO_EXTENTS, OnZoomToExtents)
 	ON_COMMAND(ID_ZOOM_TO_WINDOW, OnZoomToWindow)
 	ON_UPDATE_COMMAND_UI(ID_ZOOM_TO_WINDOW, OnUpdateZoomToWindow)
@@ -295,7 +294,24 @@ void CGenViewerView::Init()
 
 
 #ifdef VL
+	/* create a new vl::Rendering for this window */
+	mRendering = new vl::Rendering;
 
+	/* create the applet to be run */
+	mVLBaseView = new VLBaseView;
+	mVLBaseView->setRendering(mRendering.get());
+
+	mRendering->renderer()->setFramebuffer(this->OpenGLContext::framebuffer());
+	
+	mVLBaseView->initialize();
+
+	/* bind the applet so it receives all the GUI events related to the OpenGLContext */
+	this->OpenGLContext::addEventListener(mVLBaseView.get());
+
+
+	/* Initialize the OpenGL context and window properties */	
+	CRect r; 	
+	GetWindowRect(&r);
 	vl::OpenGLContextFormat format;
 	format.setDoubleBuffer(true);
 	format.setRGBABits( 8,8,8,0 );
@@ -304,66 +320,7 @@ void CGenViewerView::Init()
 	format.setFullscreen(false);
 	format.setMultisampleSamples(16);
 	format.setMultisample(true);
-
-	/* create a new vl::Rendering for this window */
-	mRendering = new vl::Rendering;
-	mRendering->renderer()->setFramebuffer( this->OpenGLContext::framebuffer() );
-
-	OpenGLContext::framebuffer()->setWidth(rect.Width());
-	OpenGLContext::framebuffer()->setHeight(rect.Height());
-
-
-	/*edge renderer*/
-	//ref< EdgeRenderer > mEdgeRenderer = new EdgeRenderer;
-	//mEdgeRenderer->setFramebuffer( this->OpenGLContext::framebuffer());
-
-	//mEdgeRenderer->setShowHiddenLines(true);
-	//mEdgeRenderer->setShowCreases(true);
-	//mEdgeRenderer->setCreaseAngle(35.0f);
-
-	//// style options
-	//mEdgeRenderer->setLineWidth(2.0f);
-	//mEdgeRenderer->setSmoothLines(true);
-	//mEdgeRenderer->setDefaultLineColor(black);
-
-	//mRendering->renderers().push_back( mEdgeRenderer.get() );
-
-	/*axis renderer*/
-	ref< AxisRenderer > mAxisRenderer = new AxisRenderer;
-	mAxisRenderer->setFramebuffer( this->OpenGLContext::framebuffer());
-	mRendering->renderers().push_back( mAxisRenderer.get() );
-
-	/* black background */
-	mRendering->camera()->viewport()->setClearColor( vl::gray );
-
-	/* create the applet to be run */
-	mVLBaseView = new VLBaseView;
-	mVLBaseView->setRendering(mRendering.get());
-	
-	mVLBaseView->initialize();
-
-	/* bind the applet so it receives all the GUI events related to the OpenGLContext */
-	this->OpenGLContext::addEventListener(mVLBaseView.get());
-
-
-
-	//vl::ref<vl::Rendering> mAppletRendering = new vl::Rendering;
-	//mAppletRendering->renderer()->setFramebuffer( this->OpenGLContext::framebuffer() );
-	//mAppletRendering->camera()->viewport()->setClearColor(vl::white);
-	//mAppletRendering->camera()->viewport()->setWidth(100);
-	//mAppletRendering->camera()->viewport()->setHeight(100);
-
-
-	//mAxisApplet= new AxisApplet;
-	//mAxisApplet->setRendering(mAppletRendering.get());
-	//mAxisApplet->initialize();
-	///* bind the applet so it receives all the GUI events related to the OpenGLContext */
-	//this->OpenGLContext::addEventListener(mAxisApplet.get());
-
-	/* Initialize the OpenGL context and window properties */	
-	CRect r; 	
-	GetWindowRect(&r);
-	Win32Context::initWin32GLContext(NULL, "Visualization Library MFC MDI- Rotating Cube", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
+	Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
 
 	MakeCube();
 
@@ -381,9 +338,6 @@ void CGenViewerView::MakeCube()
 	// bind the Transform with the transform tree of the rendring pipeline 
 	mVLBaseView->rendering()->as<vl::Rendering>()->transform()->addChild( mCubeTransform.get() );
 
-	// create the cube's Geometry and compute its normals to support lighting 
-	vl::ref<vl::Geometry> cube = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
-	cube->computeNormals();
 
 	// setup the effect to be used to render the cube 
 	vl::ref<vl::Effect> effect = new vl::Effect;
@@ -398,12 +352,15 @@ void CGenViewerView::MakeCube()
 	effect->shader()->setRenderState( light.get(), 0 );
 	// enable the standard OpenGL lighting 
 	effect->shader()->enable(vl::EN_LIGHTING);
-	// set the front and back material color of the cube 
-	// "gocMaterial" stands for "get-or-create Material"
-	effect->shader()->gocMaterial()->setDiffuse( vl::green );
 
-	/* wireframe shader */
-#if defined(VL_OPENGL)
+	// "gocMaterial" stands for "get-or-create Material"
+	// set the front and back material color 
+	effect->shader()->gocLightModel()->setTwoSide(true);
+	effect->shader()->gocMaterial()->setDiffuse( vl::green );
+//	effect->shader()->gocMaterial()->setBackDiffuse(vl::green);
+
+	/* display mesh */
+#if defined(VL_OPENGL1)
 	effect->lod(0)->push_back( new Shader );
 	effect->shader(0,1)->setRenderState( new Light, 0 );
 	effect->shader(0,1)->enable(EN_LIGHTING);
@@ -415,72 +372,14 @@ void CGenViewerView::MakeCube()
 	effect->shader(0,1)->enable(EN_DEPTH_TEST);
 #endif
 
-	// install our scene manager, we use the SceneManagerActorTree which is the most generic
-	// add the cube to the scene using the previously defined effect and transform 
-	mVLBaseView->sceneManager()->tree()->addActor( cube.get(), effect.get(), mCubeTransform.get()  );
+	// create the cube's Geometry and compute its normals to support lighting 
+	vl::ref<vl::Geometry> model = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/stereo.stl")->get<vl::Geometry>(0);
+//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/turbine.stl")->get<vl::Geometry>(0);
+//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/body.dash.cowl.stl")->get<vl::Geometry>(0);
 
-	//float r = 0.2f;
-	////arrow for x axis
-	//vl::ref<vl::Geometry> xarrow = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(11,-r,-r), true);
-	//vl::ref<vl::Effect> effect1 = new vl::Effect; 
-	//effect1->shader()->enable(vl::EN_DEPTH_TEST);
-	//effect1->shader()->enable(vl::EN_LIGHTING);
-	//effect1->shader()->setRenderState( new Light, 0 );
-	//effect1->shader()->gocMaterial()->setDiffuse( vl::red );
-	//mVLBaseView->sceneManager()->tree()->addActor( xarrow.get(), effect1.get(), mCubeTransform.get()  );
-
-	////arrow for y axis
-	//vl::ref<vl::Geometry> yarrow = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(-r,11,-r), true);
-	//vl::ref<vl::Effect> effect2 = new vl::Effect; 
-	//effect2->shader()->enable(vl::EN_DEPTH_TEST);
-	//effect2->shader()->enable(vl::EN_LIGHTING);
-	//effect2->shader()->setRenderState( new Light, 0 );
-	//effect2->shader()->gocMaterial()->setDiffuse( vl::green );
-	//mVLBaseView->sceneManager()->tree()->addActor( yarrow.get(), effect2.get(), mCubeTransform.get()  );
-
-	////arrow for z axis
-	//vl::ref<vl::Geometry> zarrow = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(-r,-r,11), true);
-	//vl::ref<vl::Effect> effect3 = new vl::Effect; 
-	//effect3->shader()->enable(vl::EN_DEPTH_TEST);
-	//effect3->shader()->enable(vl::EN_LIGHTING);
-	//effect3->shader()->setRenderState( new Light, 0 );
-	//effect3->shader()->gocMaterial()->setDiffuse( vl::blue );
-	//vl::ref<vl::Actor> zarrow_actor = new vl::Actor(zarrow.get(), effect3.get(), mCubeTransform.get());
-
-
-	//vl::ref<AxisCameraUpdateCallback> axisCameraUpdateCallback = new AxisCameraUpdateCallback(zarrow_actor.get());
-	//zarrow_actor->actorEventCallbacks()->push_back(axisCameraUpdateCallback.get());
-
-	//mVLBaseView->sceneManager()->tree()->addActor( zarrow_actor.get());
-
-//
-//	  vl::ref<vl::Effect> name_effect = new vl::Effect;
-//      name_effect->shader()->setRenderState( light.get(), 0 );
-//      name_effect->shader()->enable(vl::EN_LIGHTING);
-//      name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-//      name_effect->shader()->enable(vl::EN_CULL_FACE);
-//      name_effect->shader()->disable(vl::EN_LIGHTING);
-//      name_effect->shader()->enable(vl::EN_BLEND);
-//      ///* to avoid clipping artefacts due to partial character overlapping we either disable depth
-//      //   testing, set depth-write mask to false or enable an appropriate alpha testing. */
-//      // name_effect->shader()->disable(vl::EN_DEPTH_TEST);
-//      name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-//
-//	vl::ref<vl::Text> text = new vl::Text;
-//
-////	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont("/font/bitstream-vera/Vera.ttf", 10);
-//	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont("C:/Windows/Fonts/arial.ttf", 20);
-//
-//	text->setFont(font.get());
-//	text->setMode( vl::Text2D );
-////	text->setMode( vl::Text3D );
-//	text->setText( L"The Viewer System");
-//	text->setColor(vl::red);
-//	text->setAlignment(vl::AlignTop | vl::AlignHCenter );
-//	text->setViewportAlignment(vl::AlignTop | vl::AlignHCenter );
-////	text->translate(0,-20,0);
-//	mVLBaseView->sceneManager()->tree()->addActor( text.get(), name_effect.get() );
-
+	model->computeNormals();
+	mVLBaseView->sceneManager()->tree()->addActor( model.get(), effect.get(), mCubeTransform.get()  );
 
 #endif
 }
@@ -869,15 +768,33 @@ void CGenViewerView::OnUpdateZoomToWindow(CCmdUI* pCmdUI)
 #endif
 }
 
-void CGenViewerView::OnToolsRendermodeGouraudWithLines() 
+void CGenViewerView::OnToolsRendermodeShadedWithLines() 
 {
 #ifdef HOOPS
 	m_pHSolidView->RenderGouraudWithLines();
 	m_pHSolidView->Update();
+#elif defined VL
+	//mSolidRenderer->setEnableMask(0xFFFFFFFF);
+
+	///*edge renderer*/
+	//mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
+	//mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+
+	//mEdgeRenderer->setShowHiddenLines(false);
+	//mEdgeRenderer->setShowCreases(true);
+
+	//// style options
+	//mEdgeRenderer->setLineWidth(1.0f);
+	//mEdgeRenderer->setSmoothLines(true);
+	//mEdgeRenderer->setDefaultLineColor(black);
+
+	mVLBaseView->SetRenderMode(RenderShadedWithLines);
+
+	update();
 #endif
 }
 
-void CGenViewerView::OnUpdateToolsRendermodeGouraudWithLines(CCmdUI* pCmdUI) 
+void CGenViewerView::OnUpdateToolsRendermodeShadedWithLines(CCmdUI* pCmdUI) 
 {
 #ifdef HOOPS
 	if (m_pHSolidView->GetRenderMode() == HRenderGouraudWithLines)
@@ -888,15 +805,21 @@ void CGenViewerView::OnUpdateToolsRendermodeGouraudWithLines(CCmdUI* pCmdUI)
 }
 
 
-void CGenViewerView::OnToolsRendermodeHiddenline() 
+void CGenViewerView::OnToolsRendermodeShaded() //SHADED WITHOUT LINE
 {
 #ifdef HOOPS
 	m_pHSolidView->SetRenderMode(HRenderHiddenLine, true);
 	m_pHSolidView->Update();
+#elif defined VL
+	//mSolidRenderer->setEnableMask(0xFFFFFFFF);
+	//mEdgeRenderer->setEnableMask(0);
+	mVLBaseView->SetRenderMode(RenderShaded);
+
+	update();
 #endif
 }
 
-void CGenViewerView::OnUpdateToolsRendermodeHiddenline(CCmdUI* pCmdUI) 
+void CGenViewerView::OnUpdateToolsRendermodeShaded(CCmdUI* pCmdUI) 
 {
 #ifdef HOOPS
 	if (m_pHSolidView->GetRenderMode() == HRenderHiddenLine || m_pHSolidView->GetRenderMode() == HRenderHiddenLineHOOPS)
@@ -911,6 +834,23 @@ void CGenViewerView::OnToolsRendermodeWireframe()
 #ifdef HOOPS
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
+#elif defined VL
+	//mSolidRenderer->setEnableMask(0);
+
+	///*edge renderer*/
+	//mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
+	//mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+
+	//mEdgeRenderer->setShowHiddenLines(false);
+	//mEdgeRenderer->setShowCreases(true);
+
+	//// style options
+	//mEdgeRenderer->setLineWidth(1.5f);
+	//mEdgeRenderer->setSmoothLines(true);
+	//mEdgeRenderer->setDefaultLineColor(black);
+	mVLBaseView->SetRenderMode(RenderWireframe);
+
+	update();
 #endif
 }
 

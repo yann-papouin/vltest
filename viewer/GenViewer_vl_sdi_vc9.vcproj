@@ -123,7 +123,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -150,8 +150,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\base_stream\include&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_stream\source&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_3dgs\source&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\utility\source&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_mvo\source&quot;;&quot;$(A3DT)\include&quot;;&quot;$(X3DT)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;ACIS;INTEROP;NT_VC9_DLL;SPA_NO_AUTO_LINK;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;VL"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -178,11 +178,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfc90.lib hoops.lib hoops_mvo_mgk.lib hoops_mfcu_mgk.lib hoops_stream.lib hoops_utilsstat_md.lib SpaHBridge.lib SpaACIS.lib SPAXAcisBase.lib SPAXAssemblyRep.lib SPAXBase.lib SPAXDefaultGeometryRep.lib SPAXGeometryRepresentation.lib SPAXInterop.lib SPAXPropertiesAssemblyImporter.lib SPAXPropertiesBRepImporter.lib SPAXPropertiesBase.lib SPAXAcisPMIEntities.lib xacis2k.lib xcore2k.lib"
+				AdditionalDependencies="mfc90u.lib psapi.lib opengl32.lib glu32.lib VLApplets.lib VLMFC.lib VLGraphics.lib VLCore.lib VLWin32.lib"
 				OutputFile="$(OutDir)/GenViewer.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_3dgs\lib\nt_i386_vc90&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_mvo\lib\nt_i386_vc90&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_mfc\lib\nt_i386_vc90&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\hoops_stream\lib\nt_i386_vc90&quot;;&quot;$(HOOPS_INSTALL_DIR)\Dev_Tools\utility\lib\nt_i386_vc90&quot;;&quot;$(A3DT)/lib/NT_VC9_DLL&quot;;&quot;$(X3DT)/lib/NT_VC9_DLL&quot;;&quot;%(AdditionalLibraryDirectories)&quot;"
+				AdditionalLibraryDirectories="&quot;$(VL)\vlCore\lib\Release&quot;;&quot;$(VL)\vlGraphics\lib\Release&quot;;&quot;$(VL)\vlWin32\lib\Release&quot;;&quot;$(VL)\vlMFC\lib\Release&quot;;&quot;$(VL)\examples\Applets\lib\Release&quot;;&quot;%(AdditionalLibraryDirectories)&quot;;&quot;$(CSP)/lib/vc90&quot;;&quot;$(XERCES)\lib&quot;"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -628,10 +628,6 @@
 					Name="VL"
 					>
 					<File
-						RelativePath=".\Renderer\VL\AxisCameraUpdateCallback.hpp"
-						>
-					</File>
-					<File
 						RelativePath=".\Renderer\VL\AxisRenderer.cpp"
 						>
 					</File>
@@ -676,22 +672,6 @@
 			<Filter
 				Name="Util"
 				>
-				<File
-					RelativePath=".\Util\Hpt.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Util\Hpt.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Util\PerformanceMetrics.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Util\PerformanceMetrics.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Math"
