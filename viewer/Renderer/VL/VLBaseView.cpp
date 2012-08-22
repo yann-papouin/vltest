@@ -11,6 +11,7 @@
 #include <vlGraphics/FlatManipulator.hpp>
 
 #include "Renderer/VL/VLBaseView.hpp"
+#include "Renderer/VL/AxisRenderer.hpp"
 
 using namespace vl;
 
@@ -33,6 +34,25 @@ void VLBaseView::initialize()
 	// if the user didn't provide one use the one installed by default
 	ref<Rendering> rend = rendering() && rendering()->as<Rendering>() ? rendering()->as<Rendering>() : new Rendering;
 	setRendering(rend.get());
+
+	/* set background */
+	rend->camera()->viewport()->setClearColor( vl::gray );
+
+	/*solid renderer*/
+	mSolidRenderer = rend->renderer();
+
+	/*edge renderer*/
+	mEdgeRenderer = new EdgeRenderer;
+	mEdgeRenderer->setFramebuffer( mSolidRenderer->framebuffer());
+	rend->renderers().push_back( mEdgeRenderer.get() );
+
+	/*axis renderer*/
+	ref< AxisRenderer > mAxisRenderer = new AxisRenderer;
+	mAxisRenderer->setFramebuffer( mSolidRenderer->framebuffer());
+	rend->renderers().push_back( mAxisRenderer.get() );
+
+	/* set render mode */
+	SetRenderMode(RenderShadedWithLines);
 
 	// installs a SceneManagerActorTree as the default scene manager
 	mSceneManagerActorTree = new SceneManagerActorTree;
@@ -372,6 +392,52 @@ void VLBaseView::SetOldBufferFrameSize(int cx,int cy)
 	if (pPerspTM)
 	{
 		pPerspTM->SetOldBufferFrameSize(cx,cy);
+	}
+}
+
+void VLBaseView::SetRenderMode( RenderMode eRenderMode )
+{
+	switch(eRenderMode)
+	{
+	case RenderShaded:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
+
+		break;
+	case RenderShadedWithLines:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		/*edge renderer*/
+		mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
+		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+
+		mEdgeRenderer->setShowHiddenLines(false);
+		mEdgeRenderer->setShowCreases(true);
+
+		// style options
+		mEdgeRenderer->setLineWidth(1.0f);
+		mEdgeRenderer->setSmoothLines(true);
+		mEdgeRenderer->setDefaultLineColor(black);
+
+		break;
+	case RenderWireframe:
+		mSolidRenderer->setEnableMask(0);
+
+		/*edge renderer*/
+		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
+		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+
+		mEdgeRenderer->setShowHiddenLines(false);
+		mEdgeRenderer->setShowCreases(true);
+
+		// style options
+		mEdgeRenderer->setLineWidth(1.5f);
+		mEdgeRenderer->setSmoothLines(true);
+		mEdgeRenderer->setDefaultLineColor(black);
+
+		break;
+
+	default:
+	    break;
 	}
 }
 //-----------------------------------------------------------------------------

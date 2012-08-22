@@ -1,0 +1,37 @@
+glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glViewport(m_WinPos.x,m_WinPos.y,m_WinPos.width(),m_WinPos.height());
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(-1.2, 1.2, -1.2, 1.2,-1.0,1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+
+	glLoadIdentity();
+float axislength = 0.8;
+	glMultMatrixd(m_Rot.data);
+	glLineWidth(1.4f); 
+
+	glBegin(GL_LINES);
+	glColor4f(1.f,.0f,.0f,1.0f);
+	glVertex2f(0.0,0.0);
+	glVertex2f(axislength,0);
+	glColor4f(0.f,1.0f,.0f,1.0f);
+	glVertex2f(0,0);
+	glVertex2f(0,axislength);
+	glColor4f(0.f,0.0f,1.0f,1.0f);
+	glVertex3f(0,0,0);
+	glVertex3f(0,0,axislength);
+	glEnd();
+
+	glColor4f(1.f,.0f,.0f,1.0f);
+	m_Xtext.text_out("x",axislength+0.01,0);
+	glColor4f(0.f,1.0f,.0f,1.0f);
+	m_Ytext.text_out("y",0,axislength+0.01);
+	glColor4f(0.f,0.0f,1.0f,1.0f);
+	m_Ztext.text_out("z",0,0,axislength+0.01);

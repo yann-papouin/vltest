@@ -106,8 +106,8 @@ const RenderQueue* AxisRenderer::render(const RenderQueue* render_queue, Camera*
   double dAspectRatio = camera->aspectRatio();
 
   dAspectRatio  = 1.0;
-  double h = 100;
-  double w = h*dAspectRatio;
+  int h = 100;
+  int w = (int)h*dAspectRatio;
 
   glViewport(0,0,w,h);
   glMatrixMode (GL_PROJECTION);		

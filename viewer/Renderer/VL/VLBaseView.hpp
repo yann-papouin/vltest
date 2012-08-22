@@ -7,6 +7,7 @@
 #include <vlGraphics/SceneManagerActorTree.hpp>
 #include <vlGraphics/Rendering.hpp>
 #include <vlGraphics/ReadPixels.hpp>
+#include <vlGraphics/EdgeRenderer.hpp>
 
 #include <Renderer/vl/ViewManipulator.hpp>
 
@@ -25,6 +26,13 @@ enum ViewMode
 	ViewYZ,  //!< self-explanatory
 	ViewZY,  //!< self-explanatory
 	ViewIso  //!< self-explanatory
+};
+
+enum RenderMode
+{
+	RenderShaded,
+	RenderShadedWithLines,
+	RenderWireframe
 };
 
 class VLBaseView: public UIEventListener
@@ -126,6 +134,7 @@ public:
 
 	void FitWorld();
 	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
+	void SetRenderMode(RenderMode eRenderMode);
 
 	void SetOldBufferFrameSize(int cx,int cy);
 
@@ -134,6 +143,9 @@ protected:
 
 private:
 	ref<RenderingAbstract> mRendering;
+	ref<Renderer> mSolidRenderer;
+	ref< EdgeRenderer > mEdgeRenderer;
+
 	ref<GhostCameraManipulator> mFly;
 	ref<TrackballManipulator> mTrackball;
 	ref<SceneManagerActorTree> mSceneManagerActorTree;
@@ -144,5 +156,6 @@ private:
 	int mFrameCount;
 	bool m_bPerspective;
 	ViewMode mViewMode;
+	RenderMode mRenderMode;
 };
 #endif
