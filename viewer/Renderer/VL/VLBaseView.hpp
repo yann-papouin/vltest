@@ -9,7 +9,8 @@
 #include <vlGraphics/ReadPixels.hpp>
 #include <vlGraphics/EdgeRenderer.hpp>
 
-#include <Renderer/vl/ViewManipulator.hpp>
+#include <Renderer/vl/OrthographicTrackballManipulator.hpp>
+#include <Renderer/vl/PerspectiveTrackballManipulator.hpp>
 
 using namespace vl;
 
