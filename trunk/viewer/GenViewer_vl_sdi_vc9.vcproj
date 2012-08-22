@@ -652,11 +652,19 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Renderer\VL\ViewManipulator.cpp"
+						RelativePath=".\Renderer\VL\OrthographicTrackballManipulator.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Renderer\VL\ViewManipulator.hpp"
+						RelativePath=".\Renderer\VL\OrthographicTrackballManipulator.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Renderer\VL\PerspectiveTrackballManipulator.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Renderer\VL\PerspectiveTrackballManipulator.hpp"
 						>
 					</File>
 					<File
