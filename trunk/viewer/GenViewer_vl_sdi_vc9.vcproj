@@ -678,10 +678,6 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="Util"
-				>
-			</Filter>
-			<Filter
 				Name="Math"
 				>
 				<File

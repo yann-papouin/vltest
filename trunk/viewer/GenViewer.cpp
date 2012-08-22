@@ -292,6 +292,11 @@ void CGenViewerApp::OnAppAbout()
 
 void CGenViewerApp::CreateAllFileTypesString(CString * filters, const char * file_types) 
 {
+	if ( file_types == 0)
+	{
+		return;
+	}
+	
 	int stringLength = (int)strlen(file_types);
 	char extension[4096];
 
@@ -355,14 +360,16 @@ void CGenViewerApp::OnFileOpen()
 #elif GRANITE
 	filter = _T("ProE Files (*.prt;*.prt.*)|*.prt;*.prt.*|ProE Assemblies (*.asm;*.asm.*)|*.asm;*.asm.*|GraniteHOOPS Stream Files (*.gsf)|*.gsf|Parasolid Files (*.x_t;*.xmt_txt;x_b)|*.x_t;*.xmt_txt;*.xmb|IGES Files (*.igs)|*.igs|Acis Files (*.sat)|*.sat|STEP Files (*.stp;*.step)|*.stp;*.step|VDA Files (*.vda)|*.vda|Granite Neutral Files (*.g)|*.g|");
 	def_ext = _T(".prt");
-#endif 
+#elif defined VL
+	filter  = _T("STL Files (*.STL)|*.STL|");
+	filter += _T("Obj Files (*.obj)|*.obj|");
+#endif
 
 	CreateAllFileTypesString(&filter,IOManager::Instance()->GetInputHandlerTypes());
 	filter += _T("|");
 
 	// this adds file types that have HIO handlers and appear in ProcessFilters()
 	ProcessFilters(&filter, IOManager::Instance()->GetInputHandlerTypes());
-
 	filter += _T("|");
 
 	TCHAR cur_dir[4096];
@@ -379,11 +386,15 @@ void CGenViewerApp::OnFileOpen()
 		pathname.Truncate(end);
 		SetCurrentDirectory(pathname);
 	}
-
 }
 
 void CGenViewerApp::ProcessFilters( CString * filters, const char * file_types )
 {
+	if (file_types == 0)
+	{
+		return;
+	}
+	
 	if(strstr(file_types, ";hsf;"))
 		*filters += CString(_T("HOOPS Stream File (*.hsf)|*.hsf|"));
 

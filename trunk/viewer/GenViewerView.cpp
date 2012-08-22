@@ -134,7 +134,7 @@ BEGIN_MESSAGE_MAP(CGenViewerView, CMFCView)
 	ON_UPDATE_COMMAND_UI(ID_ZOOM_TO_WINDOW, OnUpdateZoomToWindow)
 	ON_COMMAND(ID_WINDOW_SELECT, OnWindowSelect)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_SELECT, OnUpdateWindowSelect)
-	ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
+	//ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
 	ON_COMMAND(ID_CREATE_SPHERE, OnCreateSphere)
 	ON_UPDATE_COMMAND_UI(ID_CREATE_SPHERE, OnUpdateCreateSphere)
 	ON_WM_CREATE()
@@ -1056,56 +1056,56 @@ void CGenViewerView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 
 }
 
-void  CGenViewerView::OnFileOpen()
-{
-	CString filter = _T("");
-	CString def_ext = _T(".hsf");
-	def_ext = _T(".sldasm");
-
-#ifdef INTEROP
-	/*filter  = _T("Catia V5 Files (*.CATPart;*.CATProduct;*.CATShape;*.cgr)|*.CATPart;*.CATProduct;*.CATShape;*.cgr|");*/
-	filter += _T("Solidworks Assembly Files (*.sldasm)|*.sldasm|");
-	filter += _T("Solidworks Part Files (*.sldprt)|*.sldprt|");
-	filter += _T("ACIS Files (*.sat;*.asat)|*.sat;*.asat|");
-	filter += _T("Catia V4 Files (*.model;*.session;*.exp)|*.model;*.session;*.exp|");
-	filter += _T("ProE Files (*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*)|*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*|");
-	filter += _T("IGES Files (*.igs;*.iges)|*.igs;*.iges|");
-	filter += _T("STEP Files (*.stp;*.step)|*.stp;*.step|");
-	filter += _T("VDA Files(*.vda)|*.VDA|");
-	filter += _T("UG Files (*.prt)|*.prt|");
-	filter += _T("Inventor Files (*.ipt;*.iam)|*.ipt;*.iam|");
-	filter += _T("Parasolid Files (*.x_t*;*.xmt_*)|*.x_t*;*.xmt_*|");/**/
-	filter += _T("All Files (*.*)|*.*|");/**/
-#ifdef ACIS
-	filter += _T("HOOPS Files (*.hsf)|*.hsf|");
-//	def_ext = _T(".sat;.asat");
+//void  CGenViewerView::OnFileOpen()
+//{
+//	CString filter = _T("");
+//	CString def_ext = _T(".hsf");
 //	def_ext = _T(".sldasm");
-	//filter += _T("AcisHOOPS Stream Files (*.asf)|*.asf|");
-#endif // ACIS
-#endif // INTEROP
-
-	CFileDialog file_dlg(TRUE, def_ext, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter , NULL);
-
-	if (file_dlg.DoModal() == IDOK)
-	{
-		CString pathname;
-		pathname = file_dlg.GetPathName();
-#if defined(InterOp) && defined(HOOPS)
-		if (m_pHSolidView)
-		{
-			if(m_bFlush)
-			{
-				m_pHSolidView->FlushProgressBar();
-				m_pHSolidView->Flush();
-				m_pHSolidView->GetModel()->Flush();
-				m_bFlush=false;
-			}
-			char* c_pathname=pathname.GetBuffer(0);
-			put_Filename(c_pathname);
-		}
-#endif
-	}
-}
+//
+//#ifdef INTEROP
+//	/*filter  = _T("Catia V5 Files (*.CATPart;*.CATProduct;*.CATShape;*.cgr)|*.CATPart;*.CATProduct;*.CATShape;*.cgr|");*/
+//	filter += _T("Solidworks Assembly Files (*.sldasm)|*.sldasm|");
+//	filter += _T("Solidworks Part Files (*.sldprt)|*.sldprt|");
+//	filter += _T("ACIS Files (*.sat;*.asat)|*.sat;*.asat|");
+//	filter += _T("Catia V4 Files (*.model;*.session;*.exp)|*.model;*.session;*.exp|");
+//	filter += _T("ProE Files (*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*)|*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*|");
+//	filter += _T("IGES Files (*.igs;*.iges)|*.igs;*.iges|");
+//	filter += _T("STEP Files (*.stp;*.step)|*.stp;*.step|");
+//	filter += _T("VDA Files(*.vda)|*.VDA|");
+//	filter += _T("UG Files (*.prt)|*.prt|");
+//	filter += _T("Inventor Files (*.ipt;*.iam)|*.ipt;*.iam|");
+//	filter += _T("Parasolid Files (*.x_t*;*.xmt_*)|*.x_t*;*.xmt_*|");/**/
+//	filter += _T("All Files (*.*)|*.*|");/**/
+//#ifdef ACIS
+//	filter += _T("HOOPS Files (*.hsf)|*.hsf|");
+////	def_ext = _T(".sat;.asat");
+////	def_ext = _T(".sldasm");
+//	//filter += _T("AcisHOOPS Stream Files (*.asf)|*.asf|");
+//#endif // ACIS
+//#endif // INTEROP
+//
+//	CFileDialog file_dlg(TRUE, def_ext, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter , NULL);
+//
+//	if (file_dlg.DoModal() == IDOK)
+//	{
+//		CString pathname;
+//		pathname = file_dlg.GetPathName();
+//#if defined(InterOp) && defined(HOOPS)
+//		if (m_pHSolidView)
+//		{
+//			if(m_bFlush)
+//			{
+//				m_pHSolidView->FlushProgressBar();
+//				m_pHSolidView->Flush();
+//				m_pHSolidView->GetModel()->Flush();
+//				m_bFlush=false;
+//			}
+//			char* c_pathname=pathname.GetBuffer(0);
+//			put_Filename(c_pathname);
+//		}
+//#endif
+//	}
+//}
 
 void  CGenViewerView::put_Filename(char* c_pathname)
 {
