@@ -65,10 +65,8 @@ public:
 	  virtual void resizeEvent(int w, int h);
 	  virtual void keyPressEvent( unsigned short, EKey key);
 	  virtual void keyReleaseEvent( unsigned short, EKey key);
-	  void setProjection();
 	  float GetZoomFactor() const { return mZoomFactor; }
 	  void SetZoomFactor(float val) { mZoomFactor = val; }
-
 	  void SetOldBufferFrameSize(int cx,int cy){mOldSizeX = cx,mOldSizeY=cy;};
 
 	  vl::mat4 mOldProjMatrix;

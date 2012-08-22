@@ -246,36 +246,6 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 	this->openglContext()->update();
 }
 
-void OrthographicTrackballManipulator::setProjection()
-{
-	//const int nearPlane = 1;
-	//const int farPlane  = 1000;
-
-	//// these are actually not needed since we dont call setProjectionAsOrtho()
-	//// but is good practice to keep things up to date anyway...
-	//this->camera()->setNearPlane(nearPlane);
-	//this->camera()->setFarPlane(farPlane);
-
-	//float nearPlane = this->camera()->nearPlane();
-	//float farPlane = this->camera()->farPlane();
-
-	//// make view X units high and compute the width as whatever it takes to keep the aspect ratio.
-	//const double zoomFactor = m_dZoomFactor > 0 ? m_dZoomFactor :
-	//	(1 / std::abs(m_dZoomFactor));
-
-	//vl::mat4 projMatrix = this->camera()->projectionMatrix();
-	////const int w = (int)this->camera()->aspectRatio() * zoomFactor;
-	////const int h = (int)zoomFactor;
-	//const int w = this->camera()->viewport()->width()/zoomFactor;
-	//const int h = this->camera()->viewport()->height()/zoomFactor;
-
-	//// install the orthographic projection
-	//this->camera()->setProjectionMatrix(
-	//	// compute directly an orthographic projection & center the scene on the screen
-	//	vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) *
-	//	vl::mat4::getTranslation(w/2, h/2, 0),PMT_OrthographicProjection);
-}
-
 void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 {
 	float nearPlane = this->camera()->nearPlane();
@@ -313,22 +283,27 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-	mZoomFactor += 2 * n;
-	mZoomFactor = mZoomFactor != 0 ? mZoomFactor : 1;
+	if (n>0)
+	{
+		mZoomFactor*=1.1f;
+	}
+	else
+	{
+		mZoomFactor*=0.9f;
+	}
+// 	mZoomFactor += 2 * n;
+// 	mZoomFactor = mZoomFactor != 0 ? mZoomFactor : 1;
+//	double scale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
+	float scale = n>0?1.1f:0.9f;
+	vl::mat4 projMatrix = this->camera()->projectionMatrix();
+	projMatrix *= vl::mat4::getScaling(scale,scale,scale);
 
 	if (m_bShift)
 	{
-		double dScale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
-		vl::mat4 projMatrix = this->camera()->projectionMatrix();
-		projMatrix *= vl::mat4::getScaling(dScale,dScale,dScale);
 		this->camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
 	}
 	else
 	{
-		double dScale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
-		vl::mat4 projMatrix = this->camera()->projectionMatrix();
-		projMatrix *= vl::mat4::getScaling(dScale,dScale,dScale);
-
 		//need to consider the best factor for offset
 		double dOffsetX = -(_x - this->camera()->viewport()->width()/2.0 )/800.0*n;
 		double dOffsetY = (_y - this->camera()->viewport()->height()/2.0 ) /800.0*n;
