@@ -1241,6 +1241,7 @@ void CGenViewerView::DrawScene()
 
 void CGenViewerView::OnSize(UINT nType, int cx, int cy)
 {
+	// Save old framebuffer size
 	if (mVLBaseView)
 	{
 		mVLBaseView->SetOldBufferFrameSize(this->OpenGLContext::framebuffer()->width(),

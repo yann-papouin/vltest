@@ -19,8 +19,6 @@ void selectFont(int size, int charset, const char* face) {
 	DeleteObject(hOldFont);
 }
 
-
-
 void drawCNString(const char* str) {
 	int len, i;
 	wchar_t* wstring;

@@ -154,14 +154,6 @@ void VLBaseView::resizeEvent(int w, int h)
 		VL_CHECK( h == rend->renderer()->framebuffer()->height() );
 		rend->camera()->viewport()->setWidth( w );
 		rend->camera()->viewport()->setHeight( h );
-		if (m_bPerspective)
-		{
-	//		rend->camera()->setProjectionPerspective();
-		}
-		else
-		{
-//			rend->camera()->setProjectionOrtho();
-		}
 	}
 }
 //-----------------------------------------------------------------------------

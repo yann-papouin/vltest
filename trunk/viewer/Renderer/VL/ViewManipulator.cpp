@@ -206,46 +206,6 @@ mZoomFactor(50)
 	m_bShift = false;
 }
 
-void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
-{
-	_x = x;
-	_y = y;
-
-	if (this->mode() == RotationMode)
-		return vl::TrackballManipulator::mouseMoveEvent(x, y);
-
-	if (this->camera() == 0 || this->mode() == NoMode)
-		return;
-
-	// set x/y relative to the top/left corner of the viewport
-	const vl::Viewport* vp = this->camera()->viewport();
-	x -= vp->x();
-	y -= this->openglContext()->height() - 1 - (vp->y() + vp->height() - 1);
-
-	if (mode() == ZoomMode)
-	{
-		// Handled by mouse wheel
-	}
-	else if (mode() == TranslationMode)
-	{
-		const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
-			(1 / std::abs(mZoomFactor));
-
-		float tx =1.0f * (x - mMouseStart.x()) /zoomFactor ;
-		float ty = -1.0f * (y - mMouseStart.y())/zoomFactor;
-		tx *= translationSpeed();
-		ty *= translationSpeed();	
-		
-		this->camera()->setProjectionMatrix(
-			// compute directly an orthographic projection & center the scene on the screen
-			mOldProjMatrix*
-			vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
-	}
-
-	// update the view
-	this->openglContext()->update();
-}
-
 void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 {
 	float nearPlane = this->camera()->nearPlane();
@@ -320,7 +280,7 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 
 	if (btn == MiddleButton)
 	{
-		mOldProjMatrix = this->camera()->projectionMatrix();
+		mProjMatrixBeforePan = this->camera()->projectionMatrix();
 		// convert Y coordinates to the OpenGL conventions
 		y = openglContext()->height() - y;
 
@@ -394,6 +354,46 @@ void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, in
 		m_pVLBaseView->sceneManager()->tree()->eraseActor( mCrossActor);
 		openglContext()->update();
 	}
+}
+
+void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
+{
+	_x = x;
+	_y = y;
+
+	if (this->mode() == RotationMode)
+		return vl::TrackballManipulator::mouseMoveEvent(x, y);
+
+	if (this->camera() == 0 || this->mode() == NoMode)
+		return;
+
+	// set x/y relative to the top/left corner of the viewport
+	const vl::Viewport* vp = this->camera()->viewport();
+	x -= vp->x();
+	y -= this->openglContext()->height() - 1 - (vp->y() + vp->height() - 1);
+
+	if (mode() == ZoomMode)
+	{
+		// Handled by mouse wheel
+	}
+	else if (mode() == TranslationMode)
+	{
+		const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
+			(1 / std::abs(mZoomFactor));
+
+		float tx =1.0f * (x - mMouseStart.x()) /zoomFactor ;
+		float ty = -1.0f * (y - mMouseStart.y())/zoomFactor;
+		tx *= translationSpeed();
+		ty *= translationSpeed();	
+		
+		this->camera()->setProjectionMatrix(
+			// compute directly an orthographic projection & center the scene on the screen
+			mProjMatrixBeforePan*
+			vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
+	}
+
+	// update the view
+	this->openglContext()->update();
 }
 
 void OrthographicTrackballManipulator::keyReleaseEvent( unsigned short, EKey key )
