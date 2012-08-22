@@ -32,8 +32,9 @@ public:
 
 #ifdef VL
 #include <vlGraphics/Rendering.hpp>
+//#include <vlGraphics/EdgeRenderer.hpp>
 #include <Renderer/vl/VLBaseView.hpp>
-#include <Renderer/vl/AxisApplet.hpp>
+//#include <Renderer/vl/AxisApplet.hpp>
 #include <vlMFC/MDIWindow.hpp>
 #define CMFCView vlMFC::MDIWindow
 #else 
@@ -91,7 +92,11 @@ protected:
 #elif defined VL
 	vl::ref<vl::Rendering> mRendering;
 	vl::ref<VLBaseView> mVLBaseView;
-	vl::ref<AxisApplet> mAxisApplet;
+//	vl::ref<AxisApplet> mAxisApplet;
+
+	//ref<Renderer> mSolidRenderer;
+	//ref< EdgeRenderer > mEdgeRenderer;
+
 	void MakeCube();
 #endif
 // Generated message map functions
@@ -118,12 +123,12 @@ protected:
 	afx_msg void OnUpdateZoomToExtents(CCmdUI* pCmdUI);
 	afx_msg void OnZoomToWindow();
 	afx_msg void OnUpdateZoomToWindow(CCmdUI* pCmdUI);
-	afx_msg void OnToolsRendermodeGouraudWithLines();
-	afx_msg void OnToolsRendermodeHiddenline();
+	afx_msg void OnToolsRendermodeShadedWithLines();
+	afx_msg void OnToolsRendermodeShaded();
 	afx_msg void OnToolsRendermodeWireframe();
 	afx_msg void OnUpdateToolsRendermodeWireframe(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateToolsRendermodeGouraudWithLines(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateToolsRendermodeHiddenline(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateToolsRendermodeShadedWithLines(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateToolsRendermodeShaded(CCmdUI* pCmdUI);
 	afx_msg void OnWindowSelect(); 
 	afx_msg void OnUpdateWindowSelect(CCmdUI* pCmdUI);
 	afx_msg void OnCreateSphere();
