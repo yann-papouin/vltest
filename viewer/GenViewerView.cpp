@@ -44,7 +44,6 @@
 #elif defined VL
 	#include <vlCore/Colors.hpp>
 	#include <vlCore/Sphere.hpp>
-	#include <vlcore/ResourceDatabase.hpp>
 
 	#include <vlGraphics/Rendering.hpp>
 	#include <vlGraphics/Geometry.hpp>
@@ -209,6 +208,48 @@ int CGenViewerView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CGenViewerView::OnInitialUpdate()
 {
 	CMFCView::OnInitialUpdate();
+
+	// Only load the logo once
+	if (m_logoWidth == 0 || m_logoHeight == 0)
+	{
+		GetParentFrame()->RecalcLayout();
+		HBITMAP hBitmap = (HBITMAP)LoadImage(
+			GetModuleHandle(NULL),
+			MAKEINTRESOURCE(IDB_LOGO),
+			IMAGE_BITMAP,
+			0, 0,
+			LR_DEFAULTSIZE | LR_DEFAULTCOLOR | LR_CREATEDIBSECTION);
+
+		m_hLogo.Attach(hBitmap);
+		BITMAP bmap;
+		m_hLogo.GetBitmap(&bmap);
+		// Record the logo's size
+		m_logoWidth = bmap.bmWidth;
+		m_logoHeight = bmap.bmHeight;
+	}
+
+	m_pDC = new CClientDC(this);
+
+	// Initialize the renderer, informing it of the pixel size of the view, the
+	// view's handle, and the device context of its client area
+	CRect rect;
+	GetClientRect(rect);
+	// Get Filename from DocumentOpen Dialog
+	CGenViewerDoc* pDoc = GetDocument();
+	if (NULL!=pDoc)
+	{
+		ViewerRenderer* pRenderer = pDoc->GetRenderer();
+		if (NULL  != pRenderer)
+		{
+			pRenderer->Initialize(m_hWnd, m_pDC, rect.right, rect.top);
+
+#ifdef OSG
+			// Start the thread to do OSG Rendering
+			//mThreadHandle = (HANDLE)_beginthread(&ViewerOsgRenderer::Render, 0, pRenderer); 
+#endif	
+		}
+	}
+
 #ifdef HOOPS
 	// TODO: Add your specialized code here and/or call the base class
 	m_pHSolidView = new HGenViewerView(GetDocument()->m_pHBaseModel,0,"opengl",0, m_hWnd,NULL);
@@ -236,93 +277,43 @@ void CGenViewerView::OnInitialUpdate()
 	m_pHSolidView->GetEventManager()->RegisterHandler((HMouseListener*)m_pDefaultViewOp, HMouseListener::GetType(), HLISTENER_PRIORITY_NORMAL);
 #endif
 
-	// Only load the logo once
-	if (m_logoWidth == 0 || m_logoHeight == 0)
-	{
-		GetParentFrame()->RecalcLayout();
-		HBITMAP hBitmap = (HBITMAP)LoadImage(
-			GetModuleHandle(NULL),
-			MAKEINTRESOURCE(IDB_LOGO),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_DEFAULTSIZE | LR_DEFAULTCOLOR | LR_CREATEDIBSECTION);
-
-		m_hLogo.Attach(hBitmap);
-		BITMAP bmap;
-		m_hLogo.GetBitmap(&bmap);
-		// Record the logo's size
-		m_logoWidth = bmap.bmWidth;
-		m_logoHeight = bmap.bmHeight;
-	}
-
-	Init();
-
-	// Get Filename from DocumentOpen Dialog
-	CGenViewerDoc* pDoc = GetDocument();
-	if (NULL!=pDoc)
-	{
-		ViewerRenderer* pRenderer = pDoc->GetRenderer();
-		if (NULL  != pRenderer)
-		{
-//				pRenderer->Initialize(this->GetSafeHwnd(), m_pDC, rect.right, rect.top);
-	//		pRenderer->OpenOsgFile(pDoc->GetFileName().GetString());
-#ifdef OSG
-		// Start the thread to do OSG Rendering
-		//mThreadHandle = (HANDLE)_beginthread(&ViewerOsgRenderer::Render, 0, pRenderer); 
-#endif	
-		}
-	}
-}
-
-void CGenViewerView::Init()
-{
-	m_pDC = new CClientDC(this);
-
-	// Initialize the renderer, informing it of the pixel size of the view, the
-	// view's handle, and the device context of its client area
-	CRect rect;
-	GetClientRect(rect);
-	CGenViewerDoc* pDoc = GetDocument();
-	if (NULL!=pDoc)
-	{
-		ViewerRenderer* pRenderer = pDoc->GetRenderer();
-		if (NULL  != pRenderer)
-		{
-			pRenderer->Initialize(m_hWnd, m_pDC, rect.right, rect.top);
-		}
-	}
-
-
 #ifdef VL
-	/* create a new vl::Rendering for this window */
-	mRendering = new vl::Rendering;
+	if (!m_bFlush)//first time
+	{
+		/* create a new vl::Rendering for this window */
+		//	mRendering = new vl::Rendering;
 
-	/* create the applet to be run */
-	mVLBaseView = new VLBaseView;
-	mVLBaseView->setRendering(mRendering.get());
+		/* create the applet to be run */
+		mVLBaseView = new VLBaseView;
+		//	mVLBaseView->setRendering(mRendering.get());
 
-	mRendering->renderer()->setFramebuffer(this->OpenGLContext::framebuffer());
-	
-	mVLBaseView->initialize();
+		mVLBaseView->initialize(this->OpenGLContext::framebuffer());
 
-	/* bind the applet so it receives all the GUI events related to the OpenGLContext */
-	this->OpenGLContext::addEventListener(mVLBaseView.get());
+		/* bind the applet so it receives all the GUI events related to the OpenGLContext */
+		this->OpenGLContext::addEventListener(mVLBaseView.get());
 
+		/* Initialize the OpenGL context and window properties */	
+		CRect r; 	
+		GetWindowRect(&r);
+		vl::OpenGLContextFormat format;
+		format.setDoubleBuffer(true);
+		format.setRGBABits( 8,8,8,0 );
+		format.setDepthBufferBits(24);
+		format.setStencilBufferBits(8);
+		format.setFullscreen(false);
+		format.setMultisampleSamples(16);
+		format.setMultisample(true);
+		Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
 
-	/* Initialize the OpenGL context and window properties */	
-	CRect r; 	
-	GetWindowRect(&r);
-	vl::OpenGLContextFormat format;
-	format.setDoubleBuffer(true);
-	format.setRGBABits( 8,8,8,0 );
-	format.setDepthBufferBits(24);
-	format.setStencilBufferBits(8);
-	format.setFullscreen(false);
-	format.setMultisampleSamples(16);
-	format.setMultisample(true);
-	Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
+		MakeCube();
+	}
+	else
+	{
+		if (NULL!=pDoc)
+		{
 
-	MakeCube();
+		}
+	}
 
 	mVLBaseView->SetViewMode(ViewIso,true);
 	update();
@@ -333,54 +324,7 @@ void CGenViewerView::Init()
 void CGenViewerView::MakeCube()
 {
 #ifdef VL
-	// allocate the Transform 
-	vl::ref<vl::Transform> mCubeTransform = new vl::Transform;
-	// bind the Transform with the transform tree of the rendring pipeline 
-	mVLBaseView->rendering()->as<vl::Rendering>()->transform()->addChild( mCubeTransform.get() );
-
-
-	// setup the effect to be used to render the cube 
-	vl::ref<vl::Effect> effect = new vl::Effect;
-	// enable depth test and lighting 
-	effect->shader()->enable(vl::EN_DEPTH_TEST);
-	// add a Light to the scene, since no Transform is associated to the Light it will follow the camera 
-
-	vl::ref<vl::Light> light = new vl::Light;
-	// since the fourth component is 0 OpenGL considers this a direction
-	light->setPosition(vl::fvec4(0, 0, 1,0)); 
-
-	effect->shader()->setRenderState( light.get(), 0 );
-	// enable the standard OpenGL lighting 
-	effect->shader()->enable(vl::EN_LIGHTING);
-
-	// "gocMaterial" stands for "get-or-create Material"
-	// set the front and back material color 
-	effect->shader()->gocLightModel()->setTwoSide(true);
-	effect->shader()->gocMaterial()->setDiffuse( vl::green );
-//	effect->shader()->gocMaterial()->setBackDiffuse(vl::green);
-
-	/* display mesh */
-#if defined(VL_OPENGL1)
-	effect->lod(0)->push_back( new Shader );
-	effect->shader(0,1)->setRenderState( new Light, 0 );
-	effect->shader(0,1)->enable(EN_LIGHTING);
-//	effect->shader(0,1)->gocLightModel()->setTwoSide(true);
-	effect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
-	effect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
-	effect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
-	effect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
-	effect->shader(0,1)->enable(EN_DEPTH_TEST);
-#endif
-
-	// create the cube's Geometry and compute its normals to support lighting 
-	vl::ref<vl::Geometry> model = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
-//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/stereo.stl")->get<vl::Geometry>(0);
-//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/turbine.stl")->get<vl::Geometry>(0);
-//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/body.dash.cowl.stl")->get<vl::Geometry>(0);
-
-	model->computeNormals();
-	mVLBaseView->sceneManager()->tree()->addActor( model.get(), effect.get(), mCubeTransform.get()  );
-
+	mVLBaseView->MakeCube();
 #endif
 }
 
@@ -1056,102 +1000,6 @@ void CGenViewerView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 
 }
 
-//void  CGenViewerView::OnFileOpen()
-//{
-//	CString filter = _T("");
-//	CString def_ext = _T(".hsf");
-//	def_ext = _T(".sldasm");
-//
-//#ifdef INTEROP
-//	/*filter  = _T("Catia V5 Files (*.CATPart;*.CATProduct;*.CATShape;*.cgr)|*.CATPart;*.CATProduct;*.CATShape;*.cgr|");*/
-//	filter += _T("Solidworks Assembly Files (*.sldasm)|*.sldasm|");
-//	filter += _T("Solidworks Part Files (*.sldprt)|*.sldprt|");
-//	filter += _T("ACIS Files (*.sat;*.asat)|*.sat;*.asat|");
-//	filter += _T("Catia V4 Files (*.model;*.session;*.exp)|*.model;*.session;*.exp|");
-//	filter += _T("ProE Files (*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*)|*.prt;*.prt.*;*.xpr;*.xpr.*;*.asm;*.asm.*;*.xas;*.xas.*|");
-//	filter += _T("IGES Files (*.igs;*.iges)|*.igs;*.iges|");
-//	filter += _T("STEP Files (*.stp;*.step)|*.stp;*.step|");
-//	filter += _T("VDA Files(*.vda)|*.VDA|");
-//	filter += _T("UG Files (*.prt)|*.prt|");
-//	filter += _T("Inventor Files (*.ipt;*.iam)|*.ipt;*.iam|");
-//	filter += _T("Parasolid Files (*.x_t*;*.xmt_*)|*.x_t*;*.xmt_*|");/**/
-//	filter += _T("All Files (*.*)|*.*|");/**/
-//#ifdef ACIS
-//	filter += _T("HOOPS Files (*.hsf)|*.hsf|");
-////	def_ext = _T(".sat;.asat");
-////	def_ext = _T(".sldasm");
-//	//filter += _T("AcisHOOPS Stream Files (*.asf)|*.asf|");
-//#endif // ACIS
-//#endif // INTEROP
-//
-//	CFileDialog file_dlg(TRUE, def_ext, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter , NULL);
-//
-//	if (file_dlg.DoModal() == IDOK)
-//	{
-//		CString pathname;
-//		pathname = file_dlg.GetPathName();
-//#if defined(InterOp) && defined(HOOPS)
-//		if (m_pHSolidView)
-//		{
-//			if(m_bFlush)
-//			{
-//				m_pHSolidView->FlushProgressBar();
-//				m_pHSolidView->Flush();
-//				m_pHSolidView->GetModel()->Flush();
-//				m_bFlush=false;
-//			}
-//			char* c_pathname=pathname.GetBuffer(0);
-//			put_Filename(c_pathname);
-//		}
-//#endif
-//	}
-//}
-
-void  CGenViewerView::put_Filename(char* c_pathname)
-{
-	if (c_pathname)
-	{
-		TCHAR error_msg[256] = {_T("")};
-		TCHAR error_fmt[] = {_T("An error occured reading %s\nThe error code was %s.")};
-#if defined(HOOPS) && defined(ACIS)
-		HFileInputResult result = m_pHSolidView->GetModel()->Read(c_pathname, m_pHSolidView);
-		switch(result)
-		{
-		case InputOK:
-			{
-				m_pHSolidView->FitWorld();
-				m_pHSolidView->GetModel()->CleanIncludes();
-				m_pHSolidView->Update();
-				m_bFlush=true;
-			}
-			break;
-		case InputVersionMismatch:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("InputVersionMismatch"));
-			break;
-		case InputFail:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("InputFail"));
-			break;
-		case InputNotHandled:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("InputNotHandled"));
-			break;
-		case InputBadFileName:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("InputBadFileName"));
-			break;
-		case InputBadOptions:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("InputBadOptions"));
-			break;
-		default:
-			wsprintf(error_msg, error_fmt, c_pathname, _T("Unknown error"));
-			break;
-		}
-		if(result != InputOK)
-		{
-			::MessageBox(NULL, error_msg, _T("ERROR!"), MB_OK);
-		}
-#endif
-	}
-}
-
 void CGenViewerView::OnWindowSelect() 
 {
 #ifdef HOOPS
@@ -1274,8 +1122,11 @@ void CGenViewerView::OnDestroy()
 		pRenderer->Terminate();
 	}
 
-	if (m_pDC)
+	if (m_pDC != NULL)
+	{
 		delete m_pDC;
+		m_pDC = NULL;
+	}
 
 	WaitForSingleObject(mThreadHandle, 1000);
 
@@ -1300,4 +1151,29 @@ BOOL CGenViewerView::OnEraseBkgnd(CDC* pDC)
 		answer = FALSE;
 	}
 	return answer;
+}
+
+void CGenViewerView::DeleteContents()
+{
+#ifdef VL
+	if (mVLBaseView != NULL)
+	{
+		mVLBaseView->Flush();
+		m_bFlush = true;
+	}
+#endif
+}
+
+BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
+{
+	 std::string strPathName; 
+#ifdef UNICODE 
+	 std::wstring w;     
+	 w = lpszPathName;    
+	 strPathName = std::string(w.begin(), w.end()); // magic here 
+#else     
+	 strPathName = lpszPathName;
+#endif 
+	mVLBaseView->LoadResource(strPathName);
+	return TRUE;
 }

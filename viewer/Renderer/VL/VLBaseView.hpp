@@ -1,6 +1,8 @@
 #ifndef VLBASEVIEW_INCLUDE_ONCE
 #define VLBASEVIEW_INCLUDE_ONCE
 
+#include <vlCore/Transform.hpp>
+
 #include <vlGraphics/UIEventListener.hpp>
 #include <vlGraphics/TrackballManipulator.hpp>
 #include <vlGraphics/GhostCameraManipulator.hpp>
@@ -8,6 +10,7 @@
 #include <vlGraphics/Rendering.hpp>
 #include <vlGraphics/ReadPixels.hpp>
 #include <vlGraphics/EdgeRenderer.hpp>
+#include <vlGraphics/Effect.hpp>
 
 #include <Renderer/vl/OrthographicTrackballManipulator.hpp>
 #include <Renderer/vl/PerspectiveTrackballManipulator.hpp>
@@ -48,7 +51,7 @@ public:
 	 * Initializes the default rendering (with Rendering), the default scene manager (with SceneManagerActorTree) 
 	 * and camera manipulators (GhostCameraManipulator and TrackballManipulator). 
 	 */
-	void initialize();
+	void initialize(vl::Framebuffer* frameBuffer);
 
 	// --- UIEventListener ---
 
@@ -134,8 +137,13 @@ public:
 	void SetPerspective(bool val) { m_bPerspective = val; }
 	void SetOldBufferFrameSize(int cx,int cy);
 	void FitWorld();
+	void Flush();
 	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
 	void SetRenderMode(RenderMode eRenderMode);
+	void LoadResource( const std::string& strPathName );
+	void MakeCube();
+	vl::ref<vl::Transform> mTransform;
+	vl::ref<vl::Effect> mEffect;
 
 protected:
 	void bindManipulators(Camera* camera);
@@ -146,6 +154,7 @@ private:
 	ref<TrackballManipulator> mTrackball;
 	ref<SceneManagerActorTree> mSceneManagerActorTree;
 	ref<ReadPixels> mReadPixels;
+
 
 	String mMainAppletName;
 	double mStartTime;

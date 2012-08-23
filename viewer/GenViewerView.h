@@ -75,10 +75,10 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	CClientDC*  m_pDC;
-    void Init();
 	void DrawLogo();
 	void DrawScene();
+	void DeleteContents();
+	BOOL OnOpenDocument(LPCTSTR lpszPathName);
 
 protected:
 	CBitmap m_hLogo;
@@ -86,18 +86,15 @@ protected:
 	int m_logoHeight;
 	HANDLE mThreadHandle;
 	bool m_bPerspective;
+	CClientDC*  m_pDC;
+	bool    m_bFlush;
 
 #if defined(HOOPS)
 	HBaseOperator* m_pDefaultViewOp;
 #elif defined VL
-	vl::ref<vl::Rendering> mRendering;
 	vl::ref<VLBaseView> mVLBaseView;
-//	vl::ref<AxisApplet> mAxisApplet;
-
-	//ref<Renderer> mSolidRenderer;
-	//ref< EdgeRenderer > mEdgeRenderer;
-
 	void MakeCube();
+	//! Utility function that adds an Actor and binds it to the given Renderable, Effect and Transform.
 #endif
 // Generated message map functions
 protected:
@@ -150,14 +147,10 @@ public:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	//afx_msg void OnFileOpen();
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	void    put_Filename(char* pathname);
-	bool    m_bFlush;
-	void  SetWindowColor(COLORREF new_top_color, COLORREF new_bottom_color, bool emit_message = true);
 #ifdef HOOPS
 	unsigned long MapFlags(unsigned long state);
 	void  LocalSetOperator(HBaseOperator * NewOperator);	

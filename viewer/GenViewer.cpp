@@ -361,16 +361,23 @@ void CGenViewerApp::OnFileOpen()
 	filter = _T("ProE Files (*.prt;*.prt.*)|*.prt;*.prt.*|ProE Assemblies (*.asm;*.asm.*)|*.asm;*.asm.*|GraniteHOOPS Stream Files (*.gsf)|*.gsf|Parasolid Files (*.x_t;*.xmt_txt;x_b)|*.x_t;*.xmt_txt;*.xmb|IGES Files (*.igs)|*.igs|Acis Files (*.sat)|*.sat|STEP Files (*.stp;*.step)|*.stp;*.step|VDA Files (*.vda)|*.vda|Granite Neutral Files (*.g)|*.g|");
 	def_ext = _T(".prt");
 #elif defined VL
-	filter  = _T("STL Files (*.STL)|*.STL|");
-	filter += _T("Obj Files (*.obj)|*.obj|");
+	filter  = _T("stl Files (*.stl)|*.stl|");
+	filter += _T("obj Files (*.obj)|*.obj|");
+	filter += _T("ac3d Files (*.ac)|*.ac|");
+	filter += _T("3ds Files (*.3ds)|*.3ds|");
+	filter += _T("ply Files (*.ply)|*.ply|");
+//	filter += _T("vlx Files (*.vlt;*vlb)|*.vlt;*.vlb|");
 #endif
 
+#pragma region For Additional Formats
 	CreateAllFileTypesString(&filter,IOManager::Instance()->GetInputHandlerTypes());
 	filter += _T("|");
 
 	// this adds file types that have HIO handlers and appear in ProcessFilters()
 	ProcessFilters(&filter, IOManager::Instance()->GetInputHandlerTypes());
 	filter += _T("|");
+#pragma endregion For Additional Formats
+
 
 	TCHAR cur_dir[4096];
 	GetCurrentDirectory(4096, cur_dir);

@@ -9,7 +9,9 @@
 #include "GenViewer.h"
 #endif
 
+#include "MainFrm.h"
 #include "GenViewerDoc.h"
+#include "GenViewerView.h"
 
 #include "Renderer/ViewerRenderer.h"
 #ifdef HOOPS
@@ -96,6 +98,19 @@ BOOL CGenViewerDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 
+	// 8/23/2012 mwu :  
+	CMainFrame *pMainFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+	if(pMainFrame != NULL)
+	{
+		CGenViewerView *pView = (CGenViewerView*)pMainFrame->GetActiveView();
+		if (pView != NULL)
+		{
+			pView->OnOpenDocument(lpszPathName);
+			//pView->SetModify(FALSE);
+			//ASSERT(!pView->GetModify());
+		}
+	}
+
 	return TRUE;
 }
 
@@ -130,3 +145,21 @@ void CGenViewerDoc::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
+
+void CGenViewerDoc::DeleteContents()
+{
+	// TODO: Add your specialized code here and/or call the base class
+	CDocument::DeleteContents();
+
+	CMainFrame *pMainFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+	if(pMainFrame != NULL)
+	{
+		CGenViewerView *pView = (CGenViewerView*)pMainFrame->GetActiveView();
+		if (pView != NULL)
+		{
+			pView->DeleteContents();
+			//pView->SetModify(FALSE);
+			//ASSERT(!pView->GetModify());
+		}
+	}
+}
