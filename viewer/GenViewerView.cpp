@@ -437,7 +437,6 @@ void CGenViewerView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMFCView::OnLButtonDown(nFlags,point);
 }
 
-
 void CGenViewerView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 #ifdef HOOPS
