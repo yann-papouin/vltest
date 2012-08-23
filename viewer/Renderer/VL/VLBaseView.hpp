@@ -137,12 +137,11 @@ public:
 	void SetPerspective(bool val) { m_bPerspective = val; }
 	void SetOldBufferFrameSize(int cx,int cy);
 	void FitWorld();
-	void Flush();
+	void Flush(bool bUpdate = false);
 	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
 	void SetRenderMode(RenderMode eRenderMode);
 	void LoadResource( const std::string& strPathName );
-	void MakeCube();
-	vl::ref<vl::Transform> mTransform;
+	void makeBox();
 	vl::ref<vl::Effect> mEffect;
 
 protected:
