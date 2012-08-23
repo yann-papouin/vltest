@@ -4,11 +4,13 @@
 #include <vlCore/Say.hpp>
 #include <vlCore/Log.hpp>
 #include <vlCore/VisualizationLibrary.hpp>
+#include <vlcore/ResourceDatabase.hpp>
 
 #include <vlGraphics/Rendering.hpp>
 #include <vlGraphics/SceneManager.hpp>
 #include <vlGraphics/RenderQueue.hpp>
 #include <vlGraphics/FlatManipulator.hpp>
+#include <vlGraphics/GeometryPrimitives.hpp>
 
 #include "Renderer/VL/VLBaseView.hpp"
 #include "Renderer/VL/AxisRenderer.hpp"
@@ -28,8 +30,9 @@ VLBaseView::VLBaseView()
 //	m_bPerspective = true;
 
 }
+
 //-----------------------------------------------------------------------------
-void VLBaseView::initialize()
+void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 {
 	// if the user didn't provide one use the one installed by default
 	ref<Rendering> rend = rendering() && rendering()->as<Rendering>() ? rendering()->as<Rendering>() : new Rendering;
@@ -38,8 +41,41 @@ void VLBaseView::initialize()
 	/* set background */
 	rend->camera()->viewport()->setClearColor( vl::gray );
 
+	mTransform = new vl::Transform;
+	mEffect = new vl::Effect;
+	mEffect->shader()->enable(vl::EN_DEPTH_TEST);
+	// add a Light to the scene, since no Transform is associated to the Light it will follow the camera 
+
+	vl::ref<vl::Light> light = new vl::Light;
+	// since the fourth component is 0 OpenGL considers this a direction
+	light->setPosition(vl::fvec4(0, 0, 1,0)); 
+
+	mEffect->shader()->setRenderState( light.get(), 0 );
+	// enable the standard OpenGL lighting 
+	mEffect->shader()->enable(vl::EN_LIGHTING);
+
+	// "gocMaterial" stands for "get-or-create Material"
+	// set the front and back material color 
+	mEffect->shader()->gocLightModel()->setTwoSide(true);
+	mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
+	//	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::green);
+
+	/* display mesh */
+#if defined(VL_OPENGL1)
+	mEffect->lod(0)->push_back( new Shader );
+	mEffect->shader(0,1)->setRenderState( new Light, 0 );
+	mEffect->shader(0,1)->enable(EN_LIGHTING);
+	//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
+	mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
+	mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
+	mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
+	mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
+	mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
+#endif
+
 	/*solid renderer*/
 	mSolidRenderer = rend->renderer();
+	mSolidRenderer->setFramebuffer(frameBuffer);
 
 	/*edge renderer*/
 	mEdgeRenderer = new EdgeRenderer;
@@ -431,5 +467,40 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 	default:
 	    break;
 	}
+}
+
+//clear all actors
+void VLBaseView::Flush()
+{
+	ActorCollection actors;
+	sceneManager()->tree()->extractActors(actors);
+
+	for (int i=0;i<actors.size();i++)
+	{
+		sceneManager()->tree()->eraseActor(actors[i].get());	
+	}
+
+	openglContext()->update();
+}
+
+
+void VLBaseView::LoadResource( const std::string& strPathName )
+{
+	vl::ref<vl::Geometry> model = vl::loadResource(strPathName.c_str())->get<vl::Geometry>(0);
+	model->computeNormals();
+	
+	sceneManager()->tree()->addActor(model.get(),mEffect.get(),mTransform.get());
+}
+
+void VLBaseView::MakeCube()
+{
+	// create the cube's Geometry and compute its normals to support lighting 
+	vl::ref<vl::Geometry> model = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/stereo.stl")->get<vl::Geometry>(0);
+	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/turbine.stl")->get<vl::Geometry>(0);
+	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/body.dash.cowl.stl")->get<vl::Geometry>(0);
+
+	model->computeNormals();
+	sceneManager()->tree()->addActor( model.get(), mEffect.get(), mTransform.get()  );
 }
 //-----------------------------------------------------------------------------
