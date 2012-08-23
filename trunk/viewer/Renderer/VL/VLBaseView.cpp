@@ -41,7 +41,9 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	/* set background */
 	rend->camera()->viewport()->setClearColor( vl::gray );
 
-	mTransform = new vl::Transform;
+	ref<vl::Transform> mTransform = new vl::Transform;
+	rend->setTransform(mTransform.get());
+
 	mEffect = new vl::Effect;
 	mEffect->shader()->enable(vl::EN_DEPTH_TEST);
 	// add a Light to the scene, since no Transform is associated to the Light it will follow the camera 
@@ -469,7 +471,7 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 }
 
 //clear all actors
-void VLBaseView::Flush()
+void VLBaseView::Flush( bool bUpdate )
 {
 	ActorCollection actors;
 	sceneManager()->tree()->extractActors(actors);
@@ -479,27 +481,27 @@ void VLBaseView::Flush()
 		sceneManager()->tree()->eraseActor(actors[i].get());	
 	}
 
-	openglContext()->update();
+	if (bUpdate)
+	{
+		openglContext()->update();
+	}
 }
-
 
 void VLBaseView::LoadResource( const std::string& strPathName )
 {
-	vl::ref<vl::Geometry> model = vl::loadResource(strPathName.c_str())->get<vl::Geometry>(0);
-	model->computeNormals();
-	
-	sceneManager()->tree()->addActor(model.get(),mEffect.get(),mTransform.get());
+	ref<ResourceDatabase> resDB = vl::loadResource(strPathName.c_str());
+	for (unsigned int i=0;i<resDB->count<Geometry>();i++)
+	{
+		ref<Geometry> model = resDB->get<Geometry>(i);
+		model->computeNormals();
+		sceneManager()->tree()->addActor(model.get(),mEffect.get());
+	}
 }
 
-void VLBaseView::MakeCube()
+void VLBaseView::makeBox()
 {
-	// create the cube's Geometry and compute its normals to support lighting 
 	vl::ref<vl::Geometry> model = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
-	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/stereo.stl")->get<vl::Geometry>(0);
-	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/turbine.stl")->get<vl::Geometry>(0);
-	//	vl::ref<vl::Geometry> model = vl::loadResource("D:/spa_demo/stl/body.dash.cowl.stl")->get<vl::Geometry>(0);
-
 	model->computeNormals();
-	sceneManager()->tree()->addActor( model.get(), mEffect.get(), mTransform.get()  );
+	sceneManager()->tree()->addActor( model.get(), mEffect.get());
 }
 //-----------------------------------------------------------------------------

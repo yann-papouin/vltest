@@ -164,7 +164,6 @@ CGenViewerView::CGenViewerView()
 	m_logoWidth = 0;
 	m_logoHeight = 0;
 
-	m_pDC = new CClientDC(this);
 
 	m_bPerspective = false;
 }
@@ -198,6 +197,7 @@ int CGenViewerView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// Initialize the renderer
 	//Init(); 
+	m_pDC = new CClientDC(this);
 
 	return 0;
 }
@@ -306,7 +306,7 @@ void CGenViewerView::OnInitialUpdate()
 		Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
 
 		// 8/23/2012 mwu : test  
-		mVLBaseView->MakeCube();
+		mVLBaseView->makeBox();
 	}
 
 	mVLBaseView->SetViewMode(ViewIso,true);
@@ -1128,6 +1128,7 @@ BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
 #else     
 	 strPathName = lpszPathName;
 #endif 
+	 
 	mVLBaseView->LoadResource(strPathName);
 	return TRUE;
 }
