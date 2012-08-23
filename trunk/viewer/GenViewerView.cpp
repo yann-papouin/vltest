@@ -161,9 +161,10 @@ CGenViewerView::CGenViewerView()
 	m_pDefaultViewOp = NULL;
 #endif
 
-	m_pDC = NULL;
 	m_logoWidth = 0;
 	m_logoHeight = 0;
+
+	m_pDC = new CClientDC(this);
 
 	m_bPerspective = false;
 }
@@ -228,7 +229,6 @@ void CGenViewerView::OnInitialUpdate()
 		m_logoHeight = bmap.bmHeight;
 	}
 
-	m_pDC = new CClientDC(this);
 
 	// Initialize the renderer, informing it of the pixel size of the view, the
 	// view's handle, and the device context of its client area
@@ -305,27 +305,14 @@ void CGenViewerView::OnInitialUpdate()
 		format.setMultisample(true);
 		Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
 
-		MakeCube();
-	}
-	else
-	{
-		if (NULL!=pDoc)
-		{
-
-		}
+		// 8/23/2012 mwu : test  
+		mVLBaseView->MakeCube();
 	}
 
 	mVLBaseView->SetViewMode(ViewIso,true);
 	update();
 
 #endif // VL
-}
-
-void CGenViewerView::MakeCube()
-{
-#ifdef VL
-	mVLBaseView->MakeCube();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -622,7 +609,6 @@ BOOL CGenViewerView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 	CMFCView::OnMouseWheel(nFlags,zDelta,pt);
 
-
 	return TRUE;
 }
 
@@ -718,22 +704,7 @@ void CGenViewerView::OnToolsRendermodeShadedWithLines()
 	m_pHSolidView->RenderGouraudWithLines();
 	m_pHSolidView->Update();
 #elif defined VL
-	//mSolidRenderer->setEnableMask(0xFFFFFFFF);
-
-	///*edge renderer*/
-	//mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
-	//mEdgeRenderer->setEnableMask(0xFFFFFFFF);
-
-	//mEdgeRenderer->setShowHiddenLines(false);
-	//mEdgeRenderer->setShowCreases(true);
-
-	//// style options
-	//mEdgeRenderer->setLineWidth(1.0f);
-	//mEdgeRenderer->setSmoothLines(true);
-	//mEdgeRenderer->setDefaultLineColor(black);
-
 	mVLBaseView->SetRenderMode(RenderShadedWithLines);
-
 	update();
 #endif
 }
@@ -755,10 +726,7 @@ void CGenViewerView::OnToolsRendermodeShaded() //SHADED WITHOUT LINE
 	m_pHSolidView->SetRenderMode(HRenderHiddenLine, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	//mSolidRenderer->setEnableMask(0xFFFFFFFF);
-	//mEdgeRenderer->setEnableMask(0);
 	mVLBaseView->SetRenderMode(RenderShaded);
-
 	update();
 #endif
 }
@@ -779,21 +747,7 @@ void CGenViewerView::OnToolsRendermodeWireframe()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	//mSolidRenderer->setEnableMask(0);
-
-	///*edge renderer*/
-	//mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
-	//mEdgeRenderer->setEnableMask(0xFFFFFFFF);
-
-	//mEdgeRenderer->setShowHiddenLines(false);
-	//mEdgeRenderer->setShowCreases(true);
-
-	//// style options
-	//mEdgeRenderer->setLineWidth(1.5f);
-	//mEdgeRenderer->setSmoothLines(true);
-	//mEdgeRenderer->setDefaultLineColor(black);
 	mVLBaseView->SetRenderMode(RenderWireframe);
-
 	update();
 #endif
 }

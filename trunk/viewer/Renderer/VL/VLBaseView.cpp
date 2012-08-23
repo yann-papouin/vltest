@@ -463,7 +463,6 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 		mEdgeRenderer->setDefaultLineColor(black);
 
 		break;
-
 	default:
 	    break;
 	}
