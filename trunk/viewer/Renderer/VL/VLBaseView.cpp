@@ -490,11 +490,14 @@ void VLBaseView::Flush( bool bUpdate )
 void VLBaseView::LoadResource( const std::string& strPathName )
 {
 	ref<ResourceDatabase> resDB = vl::loadResource(strPathName.c_str());
-	for (unsigned int i=0;i<resDB->count<Geometry>();i++)
+	if (resDB!=NULL)
 	{
-		ref<Geometry> model = resDB->get<Geometry>(i);
-		model->computeNormals();
-		sceneManager()->tree()->addActor(model.get(),mEffect.get());
+		for (unsigned int i=0;i<resDB->count<Geometry>();i++)
+		{
+			ref<Geometry> model = resDB->get<Geometry>(i);
+			model->computeNormals();
+			sceneManager()->tree()->addActor(model.get(),mEffect.get());
+		}	
 	}
 }
 
