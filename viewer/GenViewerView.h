@@ -59,6 +59,7 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CPindockView)
 public:
+	virtual void OnInitialUpdate();
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
@@ -93,7 +94,6 @@ protected:
 	HBaseOperator* m_pDefaultViewOp;
 #elif defined VL
 	vl::ref<VLBaseView> mVLBaseView;
-	void MakeCube();
 	//! Utility function that adds an Actor and binds it to the given Renderable, Effect and Transform.
 #endif
 // Generated message map functions
@@ -107,6 +107,7 @@ protected:
 	afx_msg void OnViewBack();
 	afx_msg void OnViewLeft();
 	afx_msg void OnViewRight();
+
 	afx_msg void OnViewPerspective();
 	afx_msg void OnUpdateViewPerspective(CCmdUI* pCmdUI);
 
@@ -120,12 +121,14 @@ protected:
 	afx_msg void OnUpdateZoomToExtents(CCmdUI* pCmdUI);
 	afx_msg void OnZoomToWindow();
 	afx_msg void OnUpdateZoomToWindow(CCmdUI* pCmdUI);
+
 	afx_msg void OnToolsRendermodeShadedWithLines();
 	afx_msg void OnToolsRendermodeShaded();
 	afx_msg void OnToolsRendermodeWireframe();
 	afx_msg void OnUpdateToolsRendermodeWireframe(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateToolsRendermodeShadedWithLines(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateToolsRendermodeShaded(CCmdUI* pCmdUI);
+
 	afx_msg void OnWindowSelect(); 
 	afx_msg void OnUpdateWindowSelect(CCmdUI* pCmdUI);
 	afx_msg void OnCreateSphere();
@@ -138,8 +141,10 @@ public:
 	HSolidView* m_pHSolidView;
 #endif
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	virtual void OnInitialUpdate();
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnPaint();
+	afx_msg void OnDestroy();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
@@ -148,9 +153,6 @@ public:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnDestroy();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 #ifdef HOOPS
 	unsigned long MapFlags(unsigned long state);
 	void  LocalSetOperator(HBaseOperator * NewOperator);	
