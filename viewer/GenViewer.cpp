@@ -326,8 +326,6 @@ void CGenViewerApp::CreateAllFileTypesString(CString * filters, const char * fil
 
 void CGenViewerApp::OnFileOpen()
 {
-	// TODO: Add your command handler code here
-
 	CString filter = _T("");
 	CString def_ext = _T(".hsf");
 
@@ -366,7 +364,7 @@ void CGenViewerApp::OnFileOpen()
 	filter += _T("ac3d Files (*.ac)|*.ac|");
 	filter += _T("3ds Files (*.3ds)|*.3ds|");
 	filter += _T("ply Files (*.ply)|*.ply|");
-//	filter += _T("vlx Files (*.vlt;*vlb)|*.vlt;*.vlb|");
+	filter += _T("vlx Files (*.vlt;*vlb)|*.vlt;*.vlb|");
 #endif
 
 #pragma region For Additional Formats
