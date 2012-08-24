@@ -97,6 +97,8 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	rend->sceneManagers()->push_back(sceneManager());
 
 	mFly = new GhostCameraManipulator;
+	mFly->setEnabled(false);
+
 	if (m_bPerspective == true)
 	{
 		mTrackball = new PerspectiveTrackballManipulator(this);
@@ -105,10 +107,34 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	{
 		mTrackball = new OrthographicTrackballManipulator(this);
 	}
-	mFly->setEnabled(false);
 	mTrackball->setEnabled(true);
 
 	bindManipulators( rend->camera() );
+}
+
+//-----------------------------------------------------------------------------
+void VLBaseView::bindManipulators(Camera* camera)
+{
+	mFly->setCamera( camera );
+	mTrackball->setCamera( camera );
+	mTrackball->setTransform( NULL );
+	mTrackball->setPivot( vec3(0,0,0) );
+}
+//-----------------------------------------------------------------------------
+void VLBaseView::initEvent()
+{
+	Rendering* rend = cast<Rendering>(rendering());
+	if (rend)
+	{
+		if (m_bPerspective)
+		{
+			rend->camera()->setProjectionPerspective();
+		}
+		else
+		{
+			rend->camera()->setProjectionOrtho();
+		}
+	}
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::updateEvent()
@@ -195,14 +221,6 @@ void VLBaseView::resizeEvent(int w, int h)
 	}
 }
 //-----------------------------------------------------------------------------
-void VLBaseView::bindManipulators(Camera* camera)
-{
-	mFly->setCamera( camera );
-	mTrackball->setCamera( camera );
-	mTrackball->setTransform( NULL );
-	mTrackball->setPivot( vec3(0,0,0) );
-}
-//-----------------------------------------------------------------------------
 void VLBaseView::addedListenerEvent(OpenGLContext* ogl_context)
 {
 	VL_CHECK(ogl_context)
@@ -218,6 +236,10 @@ void VLBaseView::removedListenerEvent(OpenGLContext* ogl_context)
 {
 	ogl_context->removeEventListener( mTrackball.get() );
 	ogl_context->removeEventListener( mFly.get() );
+}
+//-----------------------------------------------------------------------------
+void VLBaseView::keyPressEvent( unsigned short, EKey key)
+{
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::destroyEvent()
@@ -386,26 +408,6 @@ void VLBaseView::SetViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 			}
 			break;
 		default: break;
-		}
-	}
-}
-
-void VLBaseView::keyPressEvent( unsigned short, EKey key)
-{
-}
-
-void VLBaseView::initEvent()
-{
-	Rendering* rend = cast<Rendering>(rendering());
-	if (rend)
-	{
-		if (m_bPerspective)
-		{
-			rend->camera()->setProjectionPerspective();
-		}
-		else
-		{
-			rend->camera()->setProjectionOrtho();
 		}
 	}
 }
