@@ -122,12 +122,17 @@ BEGIN_MESSAGE_MAP(CGenViewerView, CMFCView)
 	ON_UPDATE_COMMAND_UI(ID_PAN_OPT, &CGenViewerView::OnUpdatePanOpt)
 	ON_COMMAND(ID_ZOOM_OPT,&CGenViewerView::OnZoomOpt)
 	ON_UPDATE_COMMAND_UI(ID_ZOOM_OPT, &CGenViewerView::OnUpdateZoomOpt)
-	ON_COMMAND(ID_TOOLS_RENDERMODE_SHADEDWITHLINES, OnToolsRendermodeShadedWithLines)
-	ON_COMMAND(ID_TOOLS_RENDERMODE_SHADED, OnToolsRendermodeShaded)
-	ON_COMMAND(ID_TOOLS_RENDERMODE_WIREFRAME, OnToolsRendermodeWireframe)
-	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_WIREFRAME, OnUpdateToolsRendermodeWireframe)
-	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_SHADEDWITHLINES, OnUpdateToolsRendermodeShadedWithLines)
-	ON_UPDATE_COMMAND_UI(ID_TOOLS_RENDERMODE_SHADED, OnUpdateToolsRendermodeShaded)
+
+	ON_COMMAND(ID_VIEW_RENDER_WIREFRAME,OnViewRenderWireframe)
+	ON_COMMAND(ID_VIEW_RENDER_GOURAUD,OnViewRenderGouraud)
+	ON_COMMAND(ID_VIEW_RENDER_HIDDENLINE,OnViewRenderHiddenLine)
+	ON_COMMAND(ID_VIEW_RENDER_WIREFRAME_WITH_SILHOUETTE,OnViewRenderWireframeWithSilhouette)
+	ON_COMMAND(ID_VIEW_RENDER_TRIANGULATION,OnViewRenderTriangulation)
+	ON_COMMAND(ID_VIEW_RENDER_GOURAUD_WITH_EDGES,OnViewRenderGouraudWithEdges)
+	ON_COMMAND(ID_VIEW_RENDER_PHONG,OnViewRenderPhong)
+	ON_COMMAND(ID_VIEW_RENDER_PHONG_WITH_EDGES,OnViewRenderPhongWithEdges)
+
+
 	ON_COMMAND(ID_ZOOM_TO_EXTENTS, OnZoomToExtents)
 	ON_COMMAND(ID_ZOOM_TO_WINDOW, OnZoomToWindow)
 	ON_UPDATE_COMMAND_UI(ID_ZOOM_TO_WINDOW, OnUpdateZoomToWindow)
@@ -693,50 +698,8 @@ void CGenViewerView::OnUpdateZoomToWindow(CCmdUI* pCmdUI)
 #endif
 }
 
-void CGenViewerView::OnToolsRendermodeShadedWithLines() 
-{
-#ifdef HOOPS
-	m_pHSolidView->RenderGouraudWithLines();
-	m_pHSolidView->Update();
-#elif defined VL
-	mVLBaseView->SetRenderMode(RenderShadedWithLines);
-	update();
-#endif
-}
 
-void CGenViewerView::OnUpdateToolsRendermodeShadedWithLines(CCmdUI* pCmdUI) 
-{
-#ifdef HOOPS
-	if (m_pHSolidView->GetRenderMode() == HRenderGouraudWithLines)
-		pCmdUI->SetCheck (1);
-	else
-		pCmdUI->SetCheck (0);
-#endif
-}
-
-
-void CGenViewerView::OnToolsRendermodeShaded() //SHADED WITHOUT LINE
-{
-#ifdef HOOPS
-	m_pHSolidView->SetRenderMode(HRenderHiddenLine, true);
-	m_pHSolidView->Update();
-#elif defined VL
-	mVLBaseView->SetRenderMode(RenderShaded);
-	update();
-#endif
-}
-
-void CGenViewerView::OnUpdateToolsRendermodeShaded(CCmdUI* pCmdUI) 
-{
-#ifdef HOOPS
-	if (m_pHSolidView->GetRenderMode() == HRenderHiddenLine || m_pHSolidView->GetRenderMode() == HRenderHiddenLineHOOPS)
-		pCmdUI->SetCheck (1);
-	else
-		pCmdUI->SetCheck (0);
-#endif
-}
-
-void CGenViewerView::OnToolsRendermodeWireframe() 
+void CGenViewerView::OnViewRenderWireframe() 
 {
 #ifdef HOOPS
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
@@ -747,13 +710,80 @@ void CGenViewerView::OnToolsRendermodeWireframe()
 #endif
 }
 
-void CGenViewerView::OnUpdateToolsRendermodeWireframe(CCmdUI* pCmdUI) 
+void CGenViewerView::OnViewRenderGouraud()
 {
 #ifdef HOOPS
-	if (m_pHSolidView->GetRenderMode() == HRenderWireframe)
-		pCmdUI->SetCheck (1);
-	else
-		pCmdUI->SetCheck (0);
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderGouraud);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderHiddenLine()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderHiddenLine);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderWireframeWithSilhouette()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderWireframeWithSilhouette);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderTriangulation()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderTriangulation);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderGouraudWithEdges()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderGouraudWithEdges);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderPhong()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderPhong);
+	update();
+#endif
+}
+
+void CGenViewerView::OnViewRenderPhongWithEdges()
+{
+#ifdef HOOPS
+	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
+	m_pHSolidView->Update();
+#elif defined VL
+	mVLBaseView->SetRenderMode(RenderPhongWithEdges);
+	update();
 #endif
 }
 

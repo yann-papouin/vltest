@@ -43,6 +43,16 @@ BEGIN
     BUTTON      ID_VIEW_RIGHT
 END
 
+IDR_VIEW_RENDER_BAR TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_VIEW_RENDER_WIREFRAME
+    BUTTON      ID_VIEW_RENDER_GOURAUD
+    BUTTON      ID_VIEW_RENDER_HIDDENLINE
+    BUTTON      ID_VIEW_RENDER_WIREFRAME_WITH_SILHOUETTE
+    BUTTON      ID_VIEW_RENDER_TRIANGULATION
+    BUTTON      ID_VIEW_RENDER_GOURAUD_WITH_EDGES
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -52,6 +62,7 @@ END
 IDB_BITMAP2             BITMAP                  "res\\Untitled.bmp"
 IDB_LOGO                BITMAP                  "res\\logo.bmp"
 IDR_VIEW_BAR            BITMAP                  "res\\ViewBar.bmp"
+IDR_VIEW_RENDER_BAR     BITMAP                  "res\\toolbar1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -226,12 +237,6 @@ BEGIN
     BUTTON      ID_ZOOM_TO_WINDOW
     SEPARATOR
     BUTTON      ID_VIEW_PERSPECTIVE
-    BUTTON      ID_TOOLS_RENDERMODE_SHADEDWITHLINES
-    BUTTON      ID_TOOLS_RENDERMODE_SHADED
-    BUTTON      ID_TOOLS_RENDERMODE_WIREFRAME
-    SEPARATOR
-    BUTTON      ID_WINDOW_SELECT
-    BUTTON      ID_CREATE_SPHERE
     SEPARATOR
     BUTTON      ID_APP_ABOUT
 END
@@ -386,7 +391,7 @@ EXSTYLE WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT
 CAPTION "Loading File... (0%)"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "",IDD_IOP_FILE_TRANSLATION_PROGRESS_OUTPUT,"RichEdit20W",ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_BORDER | WS_VSCROLL,4,7,172,49
+    CONTROL         "",IDD_IOP_FILE_TRANSLATION_PROGRESS_OUTPUT,"RichEdit20W",WS_BORDER | WS_VSCROLL | 0x844,4,7,172,49
     CONTROL         "",IDD_IOP_FILE_TRANSLATION_PROGRESS_PROGRESS,
                     "msctls_progress32",PBS_SMOOTH | WS_BORDER,4,62,172,14
 END

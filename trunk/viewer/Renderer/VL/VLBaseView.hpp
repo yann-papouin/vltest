@@ -34,9 +34,15 @@ enum ViewMode
 
 enum RenderMode
 {
-	RenderShaded,
-	RenderShadedWithLines,
-	RenderWireframe
+	RenderWireframe = 1,       //!< edges/lines only
+	RenderGouraud = 2,         //!< gouraud (smooth) shading
+	RenderHiddenLine = 3,      //!< hidden line removal
+	RenderWireframeWithSilhouette =4,
+	RenderTriangulation = 5,   //!< edges and non-lit faces
+	RenderGouraudWithEdges = 6,//!< gouraud (smooth) shading with edges turned on
+	RenderPhong = 7,          //!< phong shading
+	RenderPhongWithEdges = 8,          //!< phong shading with edges  turned on
+	RenderUnkonwn = 0
 };
 
 class VLBaseView: public UIEventListener

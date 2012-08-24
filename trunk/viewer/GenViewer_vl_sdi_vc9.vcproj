@@ -776,11 +776,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\toolbar1.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\Untitled.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\view.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\view_render_bar.bmp"
 				>
 			</File>
 			<File

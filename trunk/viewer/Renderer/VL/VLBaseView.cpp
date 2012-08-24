@@ -28,7 +28,6 @@ VLBaseView::VLBaseView()
 	mMainAppletName = "MainAppletNoName";
 	m_bPerspective = false;
 //	m_bPerspective = true;
-
 }
 
 //-----------------------------------------------------------------------------
@@ -60,7 +59,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	// set the front and back material color 
 	mEffect->shader()->gocLightModel()->setTwoSide(true);
 	mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
-	//	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::green);
+	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::red);
 
 	/* display mesh */
 #if defined(VL_OPENGL1)
@@ -90,7 +89,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	rend->renderers().push_back( mAxisRenderer.get() );
 
 	/* set render mode */
-	SetRenderMode(RenderShadedWithLines);
+	SetRenderMode(RenderGouraudWithEdges);
 
 	// installs a SceneManagerActorTree as the default scene manager
 	mSceneManagerActorTree = new SceneManagerActorTree;
@@ -260,6 +259,12 @@ void VLBaseView::FitWorld()
 		const vl::Sphere bs = sceneManager()->boundingSphere();
 		vl::vec3 new_at = bs.center();
 		mTrackball->setPivot(new_at);
+
+
+		// 8/24/2012 mwu :  
+		//vl::vec3 eye,at,up,right;
+		//rend->camera()->getViewMatrixAsLookAt(eye,at,up,right);
+		//mTrackball->adjustView(sceneManager(),at,up);
 
 		//Set projection matrix
 		float w = (float) rend->camera()->viewport()->width();
@@ -431,12 +436,46 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 {
 	switch(eRenderMode)
 	{
-	case RenderShaded:
+	case RenderWireframe:
+		mSolidRenderer->setEnableMask(0);
+
+		/*edge renderer*/
+		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
+		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+
+		mEdgeRenderer->setShowHiddenLines(false);
+		mEdgeRenderer->setShowCreases(true);
+
+		// style options
+		mEdgeRenderer->setLineWidth(1.5f);
+		mEdgeRenderer->setSmoothLines(true);
+		mEdgeRenderer->setDefaultLineColor(black);	
+	
+	case RenderGouraud:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
 		mEdgeRenderer->setEnableMask(0);
 
 		break;
-	case RenderShadedWithLines:
+
+	case RenderHiddenLine:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
+
+		break;
+
+	case RenderWireframeWithSilhouette:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
+
+		break;
+
+	case RenderTriangulation:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
+
+		break;
+
+	case RenderGouraudWithEdges:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
 		/*edge renderer*/
 		mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
@@ -451,20 +490,19 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 		mEdgeRenderer->setDefaultLineColor(black);
 
 		break;
-	case RenderWireframe:
-		mSolidRenderer->setEnableMask(0);
 
-		/*edge renderer*/
-		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
-		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
 
-		mEdgeRenderer->setShowHiddenLines(false);
-		mEdgeRenderer->setShowCreases(true);
+	case RenderPhong:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
 
-		// style options
-		mEdgeRenderer->setLineWidth(1.5f);
-		mEdgeRenderer->setSmoothLines(true);
-		mEdgeRenderer->setDefaultLineColor(black);
+		break;
+
+	case RenderPhongWithEdges:
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
+
+		break;
 
 		break;
 	default:
@@ -491,22 +529,24 @@ void VLBaseView::Flush( bool bUpdate )
 
 void VLBaseView::LoadResource( const std::string& strPathName )
 {
-	ref<ResourceDatabase> resDB = vl::loadResource(strPathName.c_str());
-	if (resDB!=NULL)
+	ref<ResourceDatabase> res_db = loadResource(strPathName.c_str());
+	if (!res_db)
+		return;
+
+	// compute normals
+	for(unsigned i=0, count=res_db->count<Geometry>(); i<count; ++i)
 	{
-		for (unsigned int i=0;i<resDB->count<Geometry>();i++)
-		{
-			ref<Geometry> model = resDB->get<Geometry>(i);
-			model->computeNormals();
-			sceneManager()->tree()->addActor(model.get(),mEffect.get());
-		}	
+		ref<Geometry> geom = res_db->get<Geometry>(i);
+		geom->computeNormals();
+
+		sceneManager()->tree()->addActor(geom.get(),mEffect.get());
 	}
 }
 
 void VLBaseView::makeBox()
 {
-	vl::ref<vl::Geometry> model = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
-	model->computeNormals();
-	sceneManager()->tree()->addActor( model.get(), mEffect.get());
+	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+	geom->computeNormals();
+	sceneManager()->tree()->addActor( geom.get(), mEffect.get());
 }
 //-----------------------------------------------------------------------------
