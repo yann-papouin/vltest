@@ -113,9 +113,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CXTPCommandBar* pMenuBar = pCommandBars->SetMenu(_T("Menu Bar"), IDR_MAINFRAME);
 	pMenuBar->SetFlags(xtpFlagAddMDISysPopup);
 
-	CXTPToolBar* pCommandBar = (CXTPToolBar*)pCommandBars->Add(_T("Standard"), xtpBarTop);
-	if (!pCommandBar ||
-		!pCommandBar->LoadToolBar(IDR_MAINFRAME))
+	CXTPToolBar* pStandardBar = (CXTPToolBar*)pCommandBars->Add(_T("Standard"), xtpBarTop);
+	if (!pStandardBar ||
+		!pStandardBar->LoadToolBar(IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
 		return -1;
@@ -128,7 +128,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create view toolbar\n");
 		return -1;
 	}
-	DockRightOf(pViewBar, pCommandBar);
+	DockRightOf(pViewBar, pStandardBar);
+
+	CXTPToolBar* pViewRenderBar = (CXTPToolBar*)pCommandBars->Add(_T("View Render Bar"), xtpBarTop);
+	if (!pViewRenderBar ||
+		!pViewRenderBar->LoadToolBar(IDR_VIEW_RENDER_BAR))
+	{
+		TRACE0("Failed to create view render toolbar\n");
+		return -1;
+	}
+	DockRightOf(pViewRenderBar, pViewBar);//You need to clear the registry HKEY_CURRENT_USER\Software\Local AppWizard-Generated Applications when adding a new toolbar 
 
 	// Load the previous state for toolbars and menus.
 	LoadCommandBars(_T("CommandBars"));

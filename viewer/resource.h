@@ -43,6 +43,7 @@
 #define IDC_ANNO_REPORT                 238
 #define IDB_LOGO                        239
 #define IDR_VIEW_BAR                    240
+#define IDR_VIEW_RENDER_BAR             242
 #define IDR_PANE_MODEL                  21446
 #define IDR_PANE_VIEW                   21447
 #define IDR_PANE_ANNO                   21448
@@ -53,10 +54,15 @@
 #define ID_PAN_OPT                      32775
 #define ID_EXPLORER_SEARCH              32777
 #define ID_ZOOM_OPT                     32781
-#define ID_WINDOW_SELECT                32795
-#define ID_TOOLS_RENDERMODE_SHADEDWITHLINES 32796
-#define ID_TOOLS_RENDERMODE_SHADED  32797
-#define ID_TOOLS_RENDERMODE_WIREFRAME   32798
+#define ID_WINDOW_SELECT                32794
+#define ID_VIEW_RENDER_WIREFRAME        32795
+#define ID_VIEW_RENDER_GOURAUD          32796
+#define ID_VIEW_RENDER_HIDDENLINE       32797
+#define ID_VIEW_RENDER_WIREFRAME_WITH_SILHOUETTE 32798
+#define ID_VIEW_RENDER_TRIANGULATION    32799
+#define ID_VIEW_RENDER_GOURAUD_WITH_EDGES 32800
+#define ID_VIEW_RENDER_PHONG            32801
+#define ID_VIEW_RENDER_PHONG_WITH_EDGES 32802
 #define ID_ZOOM_TO_WINDOW               32803
 #define ID_ZOOM_TO_EXTENTS              32806
 #define ID_VIEW_ISO                     32807
@@ -72,8 +78,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        242
-#define _APS_NEXT_COMMAND_VALUE         32821
+#define _APS_NEXT_RESOURCE_VALUE        244
+#define _APS_NEXT_COMMAND_VALUE         32823
 #define _APS_NEXT_CONTROL_VALUE         203
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

@@ -122,12 +122,14 @@ protected:
 	afx_msg void OnZoomToWindow();
 	afx_msg void OnUpdateZoomToWindow(CCmdUI* pCmdUI);
 
-	afx_msg void OnToolsRendermodeShadedWithLines();
-	afx_msg void OnToolsRendermodeShaded();
-	afx_msg void OnToolsRendermodeWireframe();
-	afx_msg void OnUpdateToolsRendermodeWireframe(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateToolsRendermodeShadedWithLines(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateToolsRendermodeShaded(CCmdUI* pCmdUI);
+	afx_msg void OnViewRenderWireframe();
+	afx_msg void OnViewRenderGouraud();
+	afx_msg void OnViewRenderHiddenLine();
+	afx_msg void OnViewRenderWireframeWithSilhouette();
+	afx_msg void OnViewRenderTriangulation();
+	afx_msg void OnViewRenderGouraudWithEdges();
+	afx_msg void OnViewRenderPhong();
+	afx_msg void OnViewRenderPhongWithEdges();
 
 	afx_msg void OnWindowSelect(); 
 	afx_msg void OnUpdateWindowSelect(CCmdUI* pCmdUI);
