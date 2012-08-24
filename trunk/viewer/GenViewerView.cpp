@@ -280,16 +280,12 @@ void CGenViewerView::OnInitialUpdate()
 #ifdef VL
 	if (!m_bFlush)//first time
 	{
-		/* create a new vl::Rendering for this window */
-		//	mRendering = new vl::Rendering;
-
 		/* create the applet to be run */
 		mVLBaseView = new VLBaseView;
 		//	mVLBaseView->setRendering(mRendering.get());
 
-		mVLBaseView->initialize(this->OpenGLContext::framebuffer());
-
 		/* bind the applet so it receives all the GUI events related to the OpenGLContext */
+		mVLBaseView->initialize(this->OpenGLContext::framebuffer());
 		this->OpenGLContext::addEventListener(mVLBaseView.get());
 
 		/* Initialize the OpenGL context and window properties */	
@@ -991,7 +987,7 @@ void CGenViewerView::OnUpdateCreateSphere(CCmdUI* pCmdUI)
 
 void CGenViewerView::DrawLogo()
 {
-	if (m_logoWidth > 0 && m_logoHeight > 0)
+	if (!m_bFlush && m_logoWidth > 0 && m_logoHeight > 0)
 	{
 		CRect rc;
 		GetClientRect(rc);
@@ -1029,21 +1025,12 @@ void CGenViewerView::DrawScene()
 
 		bBusy = FALSE;
 	}
-
-
-
-	//glColor4f(1.f,.0f,.0f,1.0f);
-	//m_Xtext.text_out("x",axislength+0.01,0);
-	//glColor4f(0.f,1.0f,.0f,1.0f);
-	//m_Ytext.text_out("y",0,axislength+0.01);
-	//glColor4f(0.f,0.0f,1.0f,1.0f);
-	//m_Ztext.text_out("z",0,0,axislength+0.01);
 }
 
 void CGenViewerView::OnSize(UINT nType, int cx, int cy)
 {
 	// Save old framebuffer size
-	if (mVLBaseView)
+	if (mVLBaseView != NULL)
 	{
 		mVLBaseView->SetOldBufferFrameSize(this->OpenGLContext::framebuffer()->width(),
 			this->OpenGLContext::framebuffer()->height());
@@ -1119,14 +1106,16 @@ void CGenViewerView::DeleteContents()
 
 BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
 {
-	 std::string strPathName; 
-#ifdef UNICODE 
-	 std::wstring w;     
-	 w = lpszPathName;    
-	 strPathName = std::string(w.begin(), w.end()); // magic here 
-#else     
-	 strPathName = lpszPathName;
-#endif 
+//	 std::string strPathName; 
+//#ifdef UNICODE 
+//	 std::wstring w;     
+//	 w = lpszPathName;    
+//	 strPathName = std::string(w.begin(), w.end()); // magic here 
+//#else     
+//	 strPathName = lpszPathName;
+//#endif 
+
+	 std::string strPathName = CT2A( lpszPathName ); 
 	 
 	mVLBaseView->LoadResource(strPathName);
 	return TRUE;
