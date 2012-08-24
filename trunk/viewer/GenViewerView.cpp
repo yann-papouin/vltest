@@ -310,7 +310,7 @@ void CGenViewerView::OnInitialUpdate()
 		mVLBaseView->makeBox();
 	}
 
-	mVLBaseView->SetViewMode(ViewIso,true);
+	mVLBaseView->setViewMode(ViewIso,true);
 	update();
 
 #endif // VL
@@ -674,7 +674,7 @@ void CGenViewerView::OnZoomToExtents()
 	m_pHSolidView->ZoomToExtents();
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->FitWorld();
+	mVLBaseView->fitWorld();
 	update();
 #endif
 }
@@ -705,7 +705,7 @@ void CGenViewerView::OnViewRenderWireframe()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderWireframe);
+	mVLBaseView->setRenderMode(RenderWireframe);
 	update();
 #endif
 }
@@ -716,7 +716,7 @@ void CGenViewerView::OnViewRenderGouraud()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderGouraud);
+	mVLBaseView->setRenderMode(RenderGouraud);
 	update();
 #endif
 }
@@ -727,7 +727,7 @@ void CGenViewerView::OnViewRenderHiddenLine()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderHiddenLine);
+	mVLBaseView->setRenderMode(RenderHiddenLine);
 	update();
 #endif
 }
@@ -738,7 +738,7 @@ void CGenViewerView::OnViewRenderWireframeWithSilhouette()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderWireframeWithSilhouette);
+	mVLBaseView->setRenderMode(RenderWireframeWithSilhouette);
 	update();
 #endif
 }
@@ -749,7 +749,7 @@ void CGenViewerView::OnViewRenderTriangulation()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderTriangulation);
+	mVLBaseView->setRenderMode(RenderTriangulation);
 	update();
 #endif
 }
@@ -760,7 +760,7 @@ void CGenViewerView::OnViewRenderGouraudWithEdges()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderGouraudWithEdges);
+	mVLBaseView->setRenderMode(RenderGouraudWithEdges);
 	update();
 #endif
 }
@@ -771,7 +771,7 @@ void CGenViewerView::OnViewRenderPhong()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderPhong);
+	mVLBaseView->setRenderMode(RenderPhong);
 	update();
 #endif
 }
@@ -782,7 +782,7 @@ void CGenViewerView::OnViewRenderPhongWithEdges()
 	m_pHSolidView->SetRenderMode(HRenderWireframe, true);
 	m_pHSolidView->Update();
 #elif defined VL
-	mVLBaseView->SetRenderMode(RenderPhongWithEdges);
+	mVLBaseView->setRenderMode(RenderPhongWithEdges);
 	update();
 #endif
 }
@@ -809,7 +809,7 @@ void CGenViewerView::OnViewIso()
 
 	RedrawWindow();
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewIso);
+	mVLBaseView->setViewMode(ViewIso);
 	update();
 #endif
 }
@@ -837,7 +837,7 @@ void CGenViewerView::OnViewTop()
 	RedrawWindow();
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewXY);
+	mVLBaseView->setViewMode(ViewXY);
 	update();
 #endif
 }
@@ -853,7 +853,7 @@ void CGenViewerView::OnViewBottom()
 #endif
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewYX);
+	mVLBaseView->setViewMode(ViewYX);
 	update();
 #endif
 }
@@ -881,7 +881,7 @@ void CGenViewerView::OnViewFront()
 	RedrawWindow();
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewYZ);
+	mVLBaseView->setViewMode(ViewYZ);
 	update();
 #endif
 }
@@ -897,7 +897,7 @@ void CGenViewerView::OnViewBack()
 #endif
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewZY);
+	mVLBaseView->setViewMode(ViewZY);
 	update();
 #endif
 
@@ -914,7 +914,7 @@ void CGenViewerView::OnViewLeft()
 #endif
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewXZ);
+	mVLBaseView->setViewMode(ViewXZ);
 	update();
 #endif
 }
@@ -942,7 +942,7 @@ void CGenViewerView::OnViewRight()
 	RedrawWindow();
 
 #ifdef VL
-	mVLBaseView->SetViewMode(ViewZX);
+	mVLBaseView->setViewMode(ViewZX);
 	update();
 #endif
 }
@@ -1062,7 +1062,7 @@ void CGenViewerView::OnSize(UINT nType, int cx, int cy)
 	// Save old framebuffer size
 	if (mVLBaseView != NULL)
 	{
-		mVLBaseView->SetOldBufferFrameSize(this->OpenGLContext::framebuffer()->width(),
+		mVLBaseView->setOldBufferFrameSize(this->OpenGLContext::framebuffer()->width(),
 			this->OpenGLContext::framebuffer()->height());
 	}
 
@@ -1128,7 +1128,7 @@ void CGenViewerView::DeleteContents()
 #ifdef VL
 	if (mVLBaseView != NULL)
 	{
-		mVLBaseView->Flush();
+		mVLBaseView->flush();
 		m_bFlush = true;
 	}
 #endif
@@ -1147,6 +1147,6 @@ BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
 
 	 std::string strPathName = CT2A( lpszPathName ); 
 	 
-	mVLBaseView->LoadResource(strPathName);
+	mVLBaseView->loadResource(strPathName);
 	return TRUE;
 }

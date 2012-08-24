@@ -89,7 +89,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	rend->renderers().push_back( mAxisRenderer.get() );
 
 	/* set render mode */
-	SetRenderMode(RenderGouraudWithEdges);
+	setRenderMode(RenderGouraudWithEdges);
 
 	// installs a SceneManagerActorTree as the default scene manager
 	mSceneManagerActorTree = new SceneManagerActorTree;
@@ -194,7 +194,7 @@ void VLBaseView::keyReleaseEvent(unsigned short, EKey key)
 						rendering()->onFinishedCallbacks()->push_back( mReadPixels.get() );
 						mReadPixels->setRemoveAfterCall(true);
 						Time time;
-						String filename = Say( MainAppletName() + " - %n%02n%02n%02n%02n.png") << time.year() << time.month() << time.dayOfMonth() << time.hour() << time.second();
+						String filename = Say( mainAppletName() + " - %n%02n%02n%02n%02n.png") << time.year() << time.month() << time.dayOfMonth() << time.hour() << time.second();
 						mReadPixels->setSavePath( filename );
 						Log::print( Say("Saved screenshot: '%s'\n") << filename );
 						openglContext()->update();
@@ -249,7 +249,7 @@ void VLBaseView::destroyEvent()
 	mRendering = NULL;
 }
 
-void VLBaseView::FitWorld()
+void VLBaseView::fitWorld()
 {
 	Rendering* rend = cast<Rendering>(rendering());
 	if (rend)
@@ -317,7 +317,7 @@ void VLBaseView::FitWorld()
 	}
 }
 
-void VLBaseView::SetViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
+void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 {
 	mViewMode = eViewMode;
 
@@ -326,7 +326,7 @@ void VLBaseView::SetViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 
 	if (bFitWorld)
 	{
-		FitWorld();
+		fitWorld();
 	}
 
 	Rendering* rend = cast<Rendering>(rendering());
@@ -417,7 +417,7 @@ void VLBaseView::SetViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 	}
 }
 
-void VLBaseView::SetOldBufferFrameSize(int cx,int cy)
+void VLBaseView::setOldBufferFrameSize(int cx,int cy)
 {
 	OrthographicTrackballManipulator* pOrthoTM = dynamic_cast<OrthographicTrackballManipulator*>(trackball());
 	if (pOrthoTM)
@@ -432,7 +432,7 @@ void VLBaseView::SetOldBufferFrameSize(int cx,int cy)
 	}
 }
 
-void VLBaseView::SetRenderMode( RenderMode eRenderMode )
+void VLBaseView::setRenderMode( RenderMode eRenderMode )
 {
 	switch(eRenderMode)
 	{
@@ -511,7 +511,7 @@ void VLBaseView::SetRenderMode( RenderMode eRenderMode )
 }
 
 //clear all actors
-void VLBaseView::Flush( bool bUpdate )
+void VLBaseView::flush( bool bUpdate )
 {
 	ActorCollection actors;
 	sceneManager()->tree()->extractActors(actors);
@@ -527,9 +527,9 @@ void VLBaseView::Flush( bool bUpdate )
 	}
 }
 
-void VLBaseView::LoadResource( const std::string& strPathName )
+void VLBaseView::loadResource( const std::string& strPathName )
 {
-	ref<ResourceDatabase> res_db = loadResource(strPathName.c_str());
+	ref<ResourceDatabase> res_db = vl::loadResource(strPathName.c_str());
 	if (!res_db)
 		return;
 
