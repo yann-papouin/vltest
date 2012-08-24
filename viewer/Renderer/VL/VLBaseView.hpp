@@ -137,16 +137,16 @@ public:
 	void setMainAppletName(const String& app_name) { mMainAppletName = app_name; } 
 
 	/** The MainApplet name, used for the window title and for naming screenshots. */
-	const String& MainAppletName() const { return mMainAppletName; }
+	const String& mainAppletName() const { return mMainAppletName; }
 
-	bool GetPerspective() const { return m_bPerspective; }
-	void SetPerspective(bool val) { m_bPerspective = val; }
-	void SetOldBufferFrameSize(int cx,int cy);
-	void FitWorld();
-	void Flush(bool bUpdate = false);
-	void SetViewMode(ViewMode eViewMode,bool bFitWorld = true);
-	void SetRenderMode(RenderMode eRenderMode);
-	void LoadResource( const std::string& strPathName );
+	bool perspective() const { return m_bPerspective; }
+	void setPerspective(bool val) { m_bPerspective = val; }
+	void setOldBufferFrameSize(int cx,int cy);
+	void fitWorld();
+	void flush(bool bUpdate = false);
+	void setViewMode(ViewMode eViewMode,bool bFitWorld = true);
+	void setRenderMode(RenderMode eRenderMode);
+	void loadResource( const std::string& strPathName );
 	void makeBox();
 	vl::ref<vl::Effect> mEffect;
 
