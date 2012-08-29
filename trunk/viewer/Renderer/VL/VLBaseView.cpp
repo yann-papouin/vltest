@@ -63,15 +63,19 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 
 	/* display mesh */
 #if defined(VL_OPENGL1)
-	mEffect->lod(0)->push_back( new Shader );
-	mEffect->shader(0,1)->setRenderState( new Light, 0 );
-	mEffect->shader(0,1)->enable(EN_LIGHTING);
-	//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
-	mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
-	mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
-	mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
-	mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
-	mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
+
+	if (mRenderMode == RenderTriangulation)
+	{
+		mEffect->lod(0)->push_back( new Shader );
+		mEffect->shader(0,1)->setRenderState( new Light, 0 );
+		mEffect->shader(0,1)->enable(EN_LIGHTING);
+		//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
+		mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
+		mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
+		mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
+		mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
+		mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
+	}
 #endif
 
 	/*solid renderer*/
@@ -459,6 +463,9 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 
 	case RenderHiddenLine:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+
+
+
 		mEdgeRenderer->setEnableMask(0);
 
 		break;
@@ -472,6 +479,16 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 	case RenderTriangulation:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
 		mEdgeRenderer->setEnableMask(0);
+
+		mEffect->lod(0)->push_back( new Shader );
+		mEffect->shader(0,1)->setRenderState( new Light, 0 );
+		mEffect->shader(0,1)->enable(EN_LIGHTING);
+		//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
+		mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
+		mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
+		mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
+		mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
+		mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
 
 		break;
 
@@ -508,6 +525,8 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 	default:
 	    break;
 	}
+
+	//this->openglContext()->update();
 }
 
 //clear all actors
