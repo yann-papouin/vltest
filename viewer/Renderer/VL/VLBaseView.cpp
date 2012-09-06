@@ -29,7 +29,6 @@ VLBaseView::VLBaseView()
 	m_bPerspective = false;
 //	m_bPerspective = true;
 }
-
 //-----------------------------------------------------------------------------
 void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 {
@@ -61,30 +60,28 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
 	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::red);
 
-	/* display mesh */
-#if defined(VL_OPENGL1)
-
-	if (mRenderMode == RenderTriangulation)
-	{
-		mEffect->lod(0)->push_back( new Shader );
-		mEffect->shader(0,1)->setRenderState( new Light, 0 );
-		mEffect->shader(0,1)->enable(EN_LIGHTING);
-		//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
-		mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
-		mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
-		mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
-		mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
-		mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
-	}
-#endif
-
 	/*solid renderer*/
 	mSolidRenderer = rend->renderer();
 	mSolidRenderer->setFramebuffer(frameBuffer);
 
 	/*edge renderer*/
 	mEdgeRenderer = new EdgeRenderer;
-	mEdgeRenderer->setFramebuffer( mSolidRenderer->framebuffer());
+
+	mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
+	// target the same opengl window
+	mEdgeRenderer->setFramebuffer(mSolidRenderer->framebuffer());
+	// enqueue the EdgeRenderer in the rendering, will be executed after mSolidRenderer
+
+	// hidden line and crease options
+	mEdgeRenderer->setShowHiddenLines(true);
+	mEdgeRenderer->setShowCreases(true);
+	mEdgeRenderer->setCreaseAngle(35.0f);
+
+	// style options
+	mEdgeRenderer->setLineWidth(1.0f);
+	mEdgeRenderer->setSmoothLines(true);
+	mEdgeRenderer->setDefaultLineColor(black);
+
 	rend->renderers().push_back( mEdgeRenderer.get() );
 
 	/*axis renderer*/
@@ -114,7 +111,6 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 
 	bindManipulators( rend->camera() );
 }
-
 //-----------------------------------------------------------------------------
 void VLBaseView::bindManipulators(Camera* camera)
 {
@@ -313,10 +309,14 @@ void VLBaseView::fitWorld()
 		else
 		{
 			// TODO: 7/19/2012 mwu Doesn't work  
-			//rend->camera()->setProjectionMatrix(
-			//	// compute directly an orthographic projection & center the scene on the screen
-			//	rend->camera()->projectionMatrix() *
-			//	vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0),PMT_PerspectiveProjection);
+			rend->camera()->setProjectionMatrix(
+// 				// compute directly an orthographic projection & center the scene on the screen
+// 				rend->camera()->projectionMatrix() *
+// 				vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0),PMT_PerspectiveProjection);
+			vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
+				* vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) 
+				,PMT_PerspectiveProjection) ;
+
 		}
 	}
 }
@@ -438,23 +438,20 @@ void VLBaseView::setOldBufferFrameSize(int cx,int cy)
 
 void VLBaseView::setRenderMode( RenderMode eRenderMode )
 {
+	if(mEffect->lod(0)->size() > 1)
+	{
+		mEffect->lod(0)->pop_back();
+	}
+
 	switch(eRenderMode)
 	{
 	case RenderWireframe:
 		mSolidRenderer->setEnableMask(0);
-
-		/*edge renderer*/
 		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
 		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
 
-		mEdgeRenderer->setShowHiddenLines(false);
-		mEdgeRenderer->setShowCreases(true);
+		break;
 
-		// style options
-		mEdgeRenderer->setLineWidth(1.5f);
-		mEdgeRenderer->setSmoothLines(true);
-		mEdgeRenderer->setDefaultLineColor(black);	
-	
 	case RenderGouraud:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
 		mEdgeRenderer->setEnableMask(0);
@@ -462,33 +459,37 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 		break;
 
 	case RenderHiddenLine:
-		mSolidRenderer->setEnableMask(0xFFFFFFFF);
-
-
-
-		mEdgeRenderer->setEnableMask(0);
+		mSolidRenderer->setEnableMask(0);
+		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
+		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setShowHiddenLines(false);
 
 		break;
 
 	case RenderWireframeWithSilhouette:
-		mSolidRenderer->setEnableMask(0xFFFFFFFF);
-		mEdgeRenderer->setEnableMask(0);
+		mSolidRenderer->setEnableMask(0);
+		mEdgeRenderer->setClearFlags(CF_CLEAR_COLOR_DEPTH);
+		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setShowHiddenLines(true);
 
 		break;
 
 	case RenderTriangulation:
-		mSolidRenderer->setEnableMask(0xFFFFFFFF);
-		mEdgeRenderer->setEnableMask(0);
 
+		/* display mesh */
+#if defined(VL_OPENGL)
 		mEffect->lod(0)->push_back( new Shader );
 		mEffect->shader(0,1)->setRenderState( new Light, 0 );
 		mEffect->shader(0,1)->enable(EN_LIGHTING);
-		//	mEffect->shader(0,1)->gocLightModel()->setTwoSide(true);
 		mEffect->shader(0,1)->gocMaterial()->setDiffuse(vl::blue);
 		mEffect->shader(0,1)->gocPolygonMode()->set(vl::PM_LINE, vl::PM_LINE);
-		mEffect->shader(0,1)->gocPolygonOffset()->set(-0.5f, 0);
+		mEffect->shader(0,1)->gocPolygonOffset()->set(-1.0f, 0);
 		mEffect->shader(0,1)->enable(vl::EN_POLYGON_OFFSET_LINE);
 		mEffect->shader(0,1)->enable(EN_DEPTH_TEST);
+#endif
+
+		mSolidRenderer->setEnableMask(0xFFFFFFFF);
+		mEdgeRenderer->setEnableMask(0);
 
 		break;
 
@@ -497,17 +498,9 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 		/*edge renderer*/
 		mEdgeRenderer->setClearFlags(CF_CLEAR_DEPTH);
 		mEdgeRenderer->setEnableMask(0xFFFFFFFF);
-
 		mEdgeRenderer->setShowHiddenLines(false);
-		mEdgeRenderer->setShowCreases(true);
-
-		// style options
-		mEdgeRenderer->setLineWidth(1.0f);
-		mEdgeRenderer->setSmoothLines(true);
-		mEdgeRenderer->setDefaultLineColor(black);
 
 		break;
-
 
 	case RenderPhong:
 		mSolidRenderer->setEnableMask(0xFFFFFFFF);
@@ -525,8 +518,6 @@ void VLBaseView::setRenderMode( RenderMode eRenderMode )
 	default:
 	    break;
 	}
-
-	//this->openglContext()->update();
 }
 
 //clear all actors
@@ -546,7 +537,7 @@ void VLBaseView::flush( bool bUpdate )
 	}
 }
 
-void VLBaseView::loadResource( const std::string& strPathName )
+void VLBaseView::loadModel( const std::string& strPathName )
 {
 	ref<ResourceDatabase> res_db = vl::loadResource(strPathName.c_str());
 	if (!res_db)
@@ -564,7 +555,10 @@ void VLBaseView::loadResource( const std::string& strPathName )
 
 void VLBaseView::makeBox()
 {
-	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+//	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+
+	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
+
 	geom->computeNormals();
 	sceneManager()->tree()->addActor( geom.get(), mEffect.get());
 }

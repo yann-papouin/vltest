@@ -39,7 +39,7 @@ void drawCNString(const char* str) {
 	// 将混合字符转化为宽字符
 	wstring = (wchar_t*)malloc((len+1) * sizeof(wchar_t));
 	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, str, -1, wstring, len);
-	wstring[len] = L'/0';
+	wstring[len] = L'\0';
 
 	// 逐个输出字符
 	for(i=0; i<len; ++i)
@@ -105,7 +105,7 @@ const RenderQueue* AxisRenderer::render(const RenderQueue* render_queue, Camera*
 
   dAspectRatio  = 1.0;
   int h = 100;
-  int w = (int)h*dAspectRatio;
+  int w = (int)(h*dAspectRatio);
 
   glViewport(0,0,w,h);
   glMatrixMode (GL_PROJECTION);		
