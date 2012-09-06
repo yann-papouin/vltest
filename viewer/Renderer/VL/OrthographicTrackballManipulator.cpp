@@ -18,6 +18,8 @@ mZoomFactor(50)
 {
 	m_pVLBaseView = pVLBaseView;
 	m_bShift = false;
+
+	setZoomButton(NoButton);
 }
 
 void OrthographicTrackballManipulator::resizeEvent( int w, int h )
