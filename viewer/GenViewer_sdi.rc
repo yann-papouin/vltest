@@ -43,6 +43,32 @@ BEGIN
     BUTTON      ID_VIEW_RIGHT
 END
 
+IDR_MAINFRAME TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      IDR_PANE_MODEL
+    BUTTON      IDR_PANE_VIEW
+    BUTTON      IDR_PANE_ANNO
+    BUTTON      ID_ORBIT_OPT
+    BUTTON      ID_PAN_OPT
+    BUTTON      ID_ZOOM_OPT
+    BUTTON      ID_ZOOM_TO_EXTENTS
+    BUTTON      ID_ZOOM_TO_WINDOW
+    SEPARATOR
+    BUTTON      ID_VIEW_PERSPECTIVE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
 IDR_VIEW_RENDER_BAR TOOLBAR  16, 15
 BEGIN
     BUTTON      ID_VIEW_RENDER_WIREFRAME
@@ -62,7 +88,103 @@ END
 IDB_BITMAP2             BITMAP                  "res\\Untitled.bmp"
 IDB_LOGO                BITMAP                  "res\\logo.bmp"
 IDR_VIEW_BAR            BITMAP                  "res\\ViewBar.bmp"
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 IDR_VIEW_RENDER_BAR     BITMAP                  "res\\toolbar1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "Annotation Bar",              IDR_PANE_ANNO
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About GenViewer...",         ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_MENU MENU 
+BEGIN
+    POPUP "PopUp"
+    BEGIN
+        MENUITEM "等轴测",                         ID_VIEW_ISO
+        MENUITEM "顶部",                          ID_VIEW_TOP
+        MENUITEM "底部",                          ID_VIEW_BOTTOM
+        MENUITEM "前",                           ID_VIEW_FRONT
+        MENUITEM "后",                           ID_VIEW_BACK
+        MENUITEM "左",                           ID_VIEW_LEFT
+        MENUITEM "右",                           ID_VIEW_RIGHT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "FileDescription", "GenViewer MFC Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "GenViewer"
+            VALUE "LegalCopyright", "Copyright (C) 2003"
+            VALUE "OriginalFilename", "GenViewer.EXE"
+            VALUE "ProductName", "GenViewer Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -212,43 +334,10 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Toolbar
-//
-
-IDR_MAINFRAME TOOLBAR  16, 16
-BEGIN
-    BUTTON      ID_FILE_NEW
-    BUTTON      ID_FILE_OPEN
-    BUTTON      ID_FILE_SAVE
-    SEPARATOR
-    BUTTON      ID_EDIT_CUT
-    BUTTON      ID_EDIT_COPY
-    BUTTON      ID_EDIT_PASTE
-    SEPARATOR
-    BUTTON      ID_FILE_PRINT
-    SEPARATOR
-    BUTTON      IDR_PANE_MODEL
-    BUTTON      IDR_PANE_VIEW
-    BUTTON      IDR_PANE_ANNO
-    BUTTON      ID_ORBIT_OPT
-    BUTTON      ID_PAN_OPT
-    BUTTON      ID_ZOOM_OPT
-    BUTTON      ID_ZOOM_TO_EXTENTS
-    BUTTON      ID_ZOOM_TO_WINDOW
-    SEPARATOR
-    BUTTON      ID_VIEW_PERSPECTIVE
-    SEPARATOR
-    BUTTON      ID_APP_ABOUT
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Bitmap
 //
 
 IDB_FALGS               BITMAP                  "res\\falgs.bmp"
-IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 IDB_TAB                 BITMAP                  "res\\tab.bmp"
 IDR_EXPLORER_BAR        BITMAP                  "res\\explorerbar.bmp"
 IDB_VIEW                BITMAP                  "res\\view.bmp"
@@ -301,49 +390,6 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GenViewer.ico"
 IDR_PINDOCTYPE          ICON                    "res\\GenViewerDoc.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu
-//
-
-IDR_MAINFRAME MENU 
-BEGIN
-    POPUP "&File"
-    BEGIN
-        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
-        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
-        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
-        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
-        MENUITEM SEPARATOR
-        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
-        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
-        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
-        MENUITEM SEPARATOR
-        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
-        MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_APP_EXIT
-    END
-    POPUP "&Edit"
-    BEGIN
-        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
-        MENUITEM SEPARATOR
-        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
-        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
-        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
-    END
-    POPUP "&View"
-    BEGIN
-        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
-        MENUITEM "Annotation Bar",              IDR_PANE_ANNO
-    END
-    POPUP "&Help"
-    BEGIN
-        MENUITEM "&About GenViewer...",         ID_APP_ABOUT
-    END
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -416,44 +462,6 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,95,41,50,14
     CONTROL         "Pro/Engineer",IDC_RADIO_IOP_PROE,"Button",BS_AUTORADIOBUTTON,18,18,57,10
     CONTROL         "Unigraphics",IDC_RADIO_IOP_UG,"Button",BS_AUTORADIOBUTTON,90,18,53,10
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Version
-//
-
-VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
- FILEFLAGSMASK 0x3fL
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x1L
- FILESUBTYPE 0x0L
-BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904b0"
-        BEGIN
-            VALUE "FileDescription", "GenViewer MFC Application"
-            VALUE "FileVersion", "1, 0, 0, 1"
-            VALUE "InternalName", "GenViewer"
-            VALUE "LegalCopyright", "Copyright (C) 2003"
-            VALUE "OriginalFilename", "GenViewer.EXE"
-            VALUE "ProductName", "GenViewer Application"
-            VALUE "ProductVersion", "1, 0, 0, 1"
-        END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1200
-    END
 END
 
 #endif    // English (U.S.) resources

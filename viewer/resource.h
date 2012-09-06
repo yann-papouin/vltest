@@ -44,6 +44,7 @@
 #define IDB_LOGO                        239
 #define IDR_VIEW_BAR                    240
 #define IDR_VIEW_RENDER_BAR             242
+#define IDR_POPUP_MENU                  244
 #define IDR_PANE_MODEL                  21446
 #define IDR_PANE_VIEW                   21447
 #define IDR_PANE_ANNO                   21448
@@ -73,13 +74,19 @@
 #define ID_VIEW_LEFT                    32812
 #define ID_VIEW_RIGHT                   32813
 #define ID_VIEW_PERSPECTIVE             32817
+#define ID_POPUP_32823                  32823
+#define ID_POPUP_32824                  32824
+#define ID_POPUP_32825                  32825
+#define ID_POPUP_32826                  32826
+#define ID_POPUP_32827                  32827
+#define ID_POPUP_32828                  32828
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        244
-#define _APS_NEXT_COMMAND_VALUE         32823
+#define _APS_NEXT_RESOURCE_VALUE        245
+#define _APS_NEXT_COMMAND_VALUE         32829
 #define _APS_NEXT_CONTROL_VALUE         203
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
