@@ -537,8 +537,7 @@ void CGenViewerView::OnRButtonDown(UINT nFlags, CPoint point)
 	ASSERT(pPopup != NULL);
 
 	ClientToScreen(&point);	
-	CXTPCommandBars::TrackPopupMenu(pPopup, TPM_RIGHTBUTTON,
-		point.x, point.y, AfxGetMainWnd(), 0, 0,NULL);
+	CXTPCommandBars::TrackPopupMenu(pPopup, TPM_RIGHTBUTTON,point.x, point.y, this, 0, 0,NULL);
 
 	CMFCView::OnRButtonDown(nFlags,point);
 }
@@ -665,6 +664,10 @@ void CGenViewerView::OnPanOpt()
 {
 #ifdef HOOPS
 	LocalSetOperator(new HOpCameraPan(m_pHSolidView));
+#endif
+#elif defined VL
+	mVLBaseView->trackball()->setRotationButton();
+	update();
 #endif
 }
 
