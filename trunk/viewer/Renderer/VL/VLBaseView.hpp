@@ -146,7 +146,7 @@ public:
 	void flush(bool bUpdate = false);
 	void setViewMode(ViewMode eViewMode,bool bFitWorld = true);
 	void setRenderMode(RenderMode eRenderMode);
-	void loadResource( const std::string& strPathName );
+	void loadModel( const std::string& strPathName );
 	void makeBox();
 	vl::ref<vl::Effect> mEffect;
 

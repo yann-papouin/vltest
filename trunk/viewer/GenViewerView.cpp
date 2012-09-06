@@ -1147,6 +1147,6 @@ BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
 
 	 std::string strPathName = CT2A( lpszPathName ); 
 	 
-	mVLBaseView->loadResource(strPathName);
+	mVLBaseView->loadModel(strPathName);
 	return TRUE;
 }
