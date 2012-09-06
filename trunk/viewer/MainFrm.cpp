@@ -144,7 +144,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	XTPImageManager()->SetIcons(IDR_MAINFRAME);
 
-
 	m_paneManager.InstallDockingPanes(this);
 	m_paneManager.SetCustomTheme(new CDockingPanePaintManager());
 

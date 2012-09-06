@@ -529,6 +529,17 @@ void CGenViewerView::OnRButtonDown(UINT nFlags, CPoint point)
 			CMFCView::OnRButtonDown(nFlags, point);
 	}
 #endif
+
+	CMenu popupMenu;
+	VERIFY(popupMenu.LoadMenu(IDR_POPUP_MENU));
+
+	CMenu* pPopup = popupMenu.GetSubMenu(0);
+	ASSERT(pPopup != NULL);
+
+	ClientToScreen(&point);	
+	CXTPCommandBars::TrackPopupMenu(pPopup, TPM_RIGHTBUTTON,
+		point.x, point.y, AfxGetMainWnd(), 0, 0,NULL);
+
 	CMFCView::OnRButtonDown(nFlags,point);
 }
 

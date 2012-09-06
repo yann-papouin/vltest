@@ -57,9 +57,9 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	// "gocMaterial" stands for "get-or-create Material"
 	// set the front and back material color 
 	mEffect->shader()->gocLightModel()->setTwoSide(true);
-	//mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
+	//mEffect->shader()->gocMaterial()->setDiffuse( vl::green );//use default
 	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::red);
-//	mEffect->shader()->gocShadeModel()->set(SM_FLAT);
+//	mEffect->shader()->gocShadeModel()->set(SM_FLAT);//default is smooth
 
 	/*solid renderer*/
 	mSolidRenderer = rend->renderer();
@@ -350,7 +350,7 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 		float length = (eye-at).length();
 
 		at = bs.center();
-		length = 25.0f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation
+		length = 10.0f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation
 
 		switch(mViewMode)
 		{
@@ -440,6 +440,8 @@ void VLBaseView::setOldBufferFrameSize(int cx,int cy)
 
 void VLBaseView::setRenderMode( RenderMode eRenderMode )
 {
+	// disable the shader for render lines
+	// mEffect->lod(0)->push_back( new Shader );
 	if(mEffect->lod(0)->size() > 1)
 	{
 		mEffect->lod(0)->pop_back();
