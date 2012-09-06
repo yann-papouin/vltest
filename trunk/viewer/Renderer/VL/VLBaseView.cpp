@@ -57,8 +57,9 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	// "gocMaterial" stands for "get-or-create Material"
 	// set the front and back material color 
 	mEffect->shader()->gocLightModel()->setTwoSide(true);
-	mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
+	//mEffect->shader()->gocMaterial()->setDiffuse( vl::green );
 	mEffect->shader()->gocMaterial()->setBackDiffuse(vl::red);
+//	mEffect->shader()->gocShadeModel()->set(SM_FLAT);
 
 	/*solid renderer*/
 	mSolidRenderer = rend->renderer();
@@ -75,7 +76,6 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	// hidden line and crease options
 	mEdgeRenderer->setShowHiddenLines(true);
 	mEdgeRenderer->setShowCreases(true);
-	mEdgeRenderer->setCreaseAngle(35.0f);
 
 	// style options
 	mEdgeRenderer->setLineWidth(1.0f);
@@ -350,7 +350,7 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 		float length = (eye-at).length();
 
 		at = bs.center();
-		length = 1.1f*bs.radius();
+		length = 25.0f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation
 
 		switch(mViewMode)
 		{
@@ -419,6 +419,8 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 		default: break;
 		}
 	}
+
+	openglContext()->update();
 }
 
 void VLBaseView::setOldBufferFrameSize(int cx,int cy)
@@ -537,20 +539,39 @@ void VLBaseView::flush( bool bUpdate )
 	}
 }
 
-void VLBaseView::loadModel( const std::string& strPathName )
+void VLBaseView::loadFile(const std::string& strPathName )
 {
-	ref<ResourceDatabase> res_db = vl::loadResource(strPathName.c_str());
-	if (!res_db)
+	// resets the scene
+	sceneManager()->tree()->actors()->clear();
+
+	ref<ResourceDatabase> resource_db = vl::loadResource(strPathName.c_str());
+	if (!resource_db)
 		return;
 
-	// compute normals
-	for(unsigned i=0, count=res_db->count<Geometry>(); i<count; ++i)
+	std::vector< ref<Actor> > actors;
+	resource_db->get<Actor>(actors);
+	for(unsigned i=0; i<actors.size(); ++i)
 	{
-		ref<Geometry> geom = res_db->get<Geometry>(i);
-		geom->computeNormals();
+		ref<Actor> actor = actors[i].get();
 
-		sceneManager()->tree()->addActor(geom.get(),mEffect.get());
+		// compute normals
+		vl::ref<vl::Geometry> geom = cast<vl::Geometry>(actor->lod(0));
+		if (geom)
+		{
+			geom->computeNormals();
+		}
+
+		// define a reasonable Shader
+		actor->effect()->shader()->setRenderState( new Light, 0 );
+		actor->effect()->shader()->enable(EN_DEPTH_TEST);
+		actor->effect()->shader()->enable(EN_LIGHTING);
+		actor->effect()->shader()->gocLightModel()->setTwoSide(true);
+		// add the actor to the scene
+		sceneManager()->tree()->addActor( actor.get() );
 	}
+
+	setViewMode(ViewIso,true);
+
 }
 
 void VLBaseView::makeBox()
@@ -559,7 +580,50 @@ void VLBaseView::makeBox()
 
 	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
+	// compute normals
 	geom->computeNormals();
+
 	sceneManager()->tree()->addActor( geom.get(), mEffect.get());
+}
+
+void VLBaseView::fileDroppedEvent( const std::vector<String>& files )
+{
+	// resets the scene
+	sceneManager()->tree()->actors()->clear();
+	// resets the EdgeRenderer cache
+	mEdgeRenderer->clearCache();
+
+	for(unsigned int i=0; i<files.size(); ++i)
+	{
+		ref<ResourceDatabase> resource_db = loadResource(files[i],true);
+
+		if (!resource_db || resource_db->count<Actor>() == 0)
+		{
+			Log::error("No data found.\n");
+			continue;
+		}
+
+		std::vector< ref<Actor> > actors;
+		resource_db->get<Actor>(actors);
+		for(unsigned i=0; i<actors.size(); ++i)
+		{
+			ref<Actor> actor = actors[i].get();
+
+			// compute normals
+			vl::ref<vl::Geometry> geom = cast<vl::Geometry>(actor->lod(0));
+			if (geom)
+			{
+				geom->computeNormals();
+			}
+			// define a reasonable Shader
+			actor->effect()->shader()->setRenderState( new Light, 0 );
+			actor->effect()->shader()->enable(EN_DEPTH_TEST);
+			actor->effect()->shader()->enable(EN_LIGHTING);
+			actor->effect()->shader()->gocLightModel()->setTwoSide(true);
+			// add the actor to the scene
+			sceneManager()->tree()->addActor( actor.get() );
+		}
+	}
+	setViewMode(ViewIso,true);
 }
 //-----------------------------------------------------------------------------

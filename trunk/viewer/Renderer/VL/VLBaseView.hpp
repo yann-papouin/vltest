@@ -87,7 +87,7 @@ public:
 
 	virtual void keyPressEvent(unsigned short, EKey);
 
-	virtual void fileDroppedEvent(const std::vector<String>&) {}
+	virtual void fileDroppedEvent(const std::vector<String>&);
 
 	virtual void visibilityEvent(bool) {}
 
@@ -146,7 +146,7 @@ public:
 	void flush(bool bUpdate = false);
 	void setViewMode(ViewMode eViewMode,bool bFitWorld = true);
 	void setRenderMode(RenderMode eRenderMode);
-	void loadModel( const std::string& strPathName );
+	void loadFile( const std::string& strPathName );
 	void makeBox();
 	vl::ref<vl::Effect> mEffect;
 
