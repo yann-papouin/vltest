@@ -167,6 +167,22 @@ void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, in
 
 	if (btn == MiddleButton)
 	{
+
+		// 9/7/2012 mwu : test 
+
+		const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
+			(1 / std::abs(mZoomFactor));
+
+		float tx =1.0f * (x - mMouseStart.x()) /zoomFactor ;
+		float ty = -1.0f * (y - mMouseStart.y())/zoomFactor;
+		tx *= translationSpeed();
+		ty *= translationSpeed();	
+
+		this->camera()->setProjectionMatrix(
+			// compute directly an orthographic projection & center the scene on the screen
+			mProjMatrixBeforePan*
+			vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
+
 		m_pVLBaseView->sceneManager()->tree()->eraseActor( mCrossActor);
 		openglContext()->update();
 	}

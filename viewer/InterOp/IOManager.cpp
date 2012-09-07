@@ -17,9 +17,9 @@ IOManager* IOManager::Instance()
 
 const char* IOManager::GetInputHandlerTypes()
 {
-#ifdef VL
-	vl::defLoadWriterManager();
-#endif
+//#ifdef VL
+//	vl::defLoadWriterManager();
+//#endif
 
 	return NULL;
 }

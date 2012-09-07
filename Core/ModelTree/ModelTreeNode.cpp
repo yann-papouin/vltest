@@ -4,9 +4,8 @@
 // ModelTreeNode.cpp: implementation of the ModelTreeNode class.
 //
 //////////////////////////////////////////////////////////////////////
-#include "stdafx.h"
-
 #include "ModelTreeNode.h"
+using namespace gv;
 
 #ifdef XERCES
 //////////////////////////////////////////////////////////////////////
@@ -20,23 +19,23 @@ ModelTreeNode::ModelTreeNode()
 	m_nodeName = NULL;
 	m_fileName = NULL;
 	m_srcfileName = NULL;
-	m_positionMatrix = new float[16];
-	m_positionMatrix[0]=1.0f;
-	m_positionMatrix[1]=0.0f;
-	m_positionMatrix[2]=0.0f;
-	m_positionMatrix[3]=0.0f;
-	m_positionMatrix[4]=0.0f;
-	m_positionMatrix[5]=1.0f;
-	m_positionMatrix[6]=0.0f;
-	m_positionMatrix[7]=0.0f;
-	m_positionMatrix[8]=0.0f;
-	m_positionMatrix[9]=0.0f;
-	m_positionMatrix[10]=1.0f;
-	m_positionMatrix[11]=0.0f;
-	m_positionMatrix[12]=0.0f;
-	m_positionMatrix[13]=0.0f;
-	m_positionMatrix[14]=0.0f;
-	m_positionMatrix[15]=1.0f;
+	m_mat4x4 = new double[16];
+	m_mat4x4[0]=1.0;
+	m_mat4x4[1]=0.0;
+	m_mat4x4[2]=0.0;
+	m_mat4x4[3]=0.0;
+	m_mat4x4[4]=0.0;
+	m_mat4x4[5]=1.0;
+	m_mat4x4[6]=0.0;
+	m_mat4x4[7]=0.0;
+	m_mat4x4[8]=0.0;
+	m_mat4x4[9]=0.0;
+	m_mat4x4[10]=1.0;
+	m_mat4x4[11]=0.0;
+	m_mat4x4[12]=0.0;
+	m_mat4x4[13]=0.0;
+	m_mat4x4[14]=0.0;
+	m_mat4x4[15]=1.0;
 
 	m_ppChildList = NULL;
 }
@@ -46,35 +45,35 @@ ModelTreeNode::ModelTreeNode(const int sizeOfChild,
 							 const wchar_t* fileName/* = NULL*/,
 							 const wchar_t* srcfileName/* = NULL*/,
 							 const wchar_t* referenceId /* = NULL*/,
-							 const float* positionMatrix/* = NULL*/
+							 const float* mat4x4/* = NULL*/
 							 ):m_sizeOfChild(sizeOfChild),m_ppChildList(NULL),m_nodeName(NULL),m_fileName(NULL),m_srcfileName(NULL),m_referenceId(NULL),m_key(-1L)
 {
-	m_positionMatrix = new float[16];
-	if(positionMatrix != NULL)
+	m_mat4x4 = new double[16];
+	if(mat4x4 != NULL)
 	{
 		for(int i=0;i<16;i++)
 		{
-			m_positionMatrix[i]=positionMatrix[i];
+			m_mat4x4[i]=mat4x4[i];
 		}
 	}
 	else
 	{
-		m_positionMatrix[0]=1.0f;
-		m_positionMatrix[1]=0.0f;
-		m_positionMatrix[2]=0.0f;
-		m_positionMatrix[3]=0.0f;
-		m_positionMatrix[4]=0.0f;
-		m_positionMatrix[5]=1.0f;
-		m_positionMatrix[6]=0.0f;
-		m_positionMatrix[7]=0.0f;
-		m_positionMatrix[8]=0.0f;
-		m_positionMatrix[9]=0.0f;
-		m_positionMatrix[10]=1.0f;
-		m_positionMatrix[11]=0.0f;
-		m_positionMatrix[12]=0.0f;
-		m_positionMatrix[13]=0.0f;
-		m_positionMatrix[14]=0.0f;
-		m_positionMatrix[15]=1.0f;
+		m_mat4x4[0]=1.0;
+		m_mat4x4[1]=0.0;
+		m_mat4x4[2]=0.0;
+		m_mat4x4[3]=0.0;
+		m_mat4x4[4]=0.0;
+		m_mat4x4[5]=1.0;
+		m_mat4x4[6]=0.0;
+		m_mat4x4[7]=0.0;
+		m_mat4x4[8]=0.0;
+		m_mat4x4[9]=0.0;
+		m_mat4x4[10]=1.0;
+		m_mat4x4[11]=0.0;
+		m_mat4x4[12]=0.0;
+		m_mat4x4[13]=0.0;
+		m_mat4x4[14]=0.0;
+		m_mat4x4[15]=1.0;
 	}
 
 	if(NULL == nodeName)
@@ -151,10 +150,10 @@ ModelTreeNode::~ModelTreeNode()
 		m_srcfileName = NULL;
 	}
 
-	if(NULL != m_positionMatrix)
+	if(NULL != m_mat4x4)
 	{
-		delete[] m_positionMatrix;
-		m_positionMatrix = NULL;
+		delete[] m_mat4x4;
+		m_mat4x4 = NULL;
 	}
 
 	if(NULL != m_referenceId)
@@ -199,10 +198,10 @@ ModelTreeNode& ModelTreeNode::operator= (const ModelTreeNode& pNode)
 	if(this == &pNode)
 		return *this;
 
-	if(NULL != m_positionMatrix)
+	if(NULL != m_mat4x4)
 	{
-		delete[] m_positionMatrix;
-		m_positionMatrix = NULL;
+		delete[] m_mat4x4;
+		m_mat4x4 = NULL;
 	}
 
 	if(NULL != m_nodeName)
