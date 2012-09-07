@@ -79,6 +79,8 @@ public:
 	void DrawLogo();
 	void DrawScene();
 	void DeleteContents();
+	void UpdateDockPanes();
+
 	BOOL OnOpenDocument(LPCTSTR lpszPathName);
 
 protected:
@@ -92,13 +94,16 @@ protected:
 
 #if defined(HOOPS)
 	HBaseOperator* m_pDefaultViewOp;
+#if defined(ACIS) 
+	HSolidView* m_pHSolidView;
+#endif
 #elif defined VL
 	vl::ref<VLBaseView> mVLBaseView;
 	//! Utility function that adds an Actor and binds it to the given Renderable, Effect and Transform.
 #endif
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CPindockView)
+	//{{AFX_MSG(CGenViewerView)
 		// NOTE - the ClassWizard will add and remove member functions here.
 	afx_msg void OnViewIso();
 	afx_msg void OnViewTop();
@@ -133,15 +138,14 @@ protected:
 
 	afx_msg void OnWindowSelect(); 
 	afx_msg void OnUpdateWindowSelect(CCmdUI* pCmdUI);
+
 	afx_msg void OnCreateSphere();
 	afx_msg void OnUpdateCreateSphere(CCmdUI* pCmdUI);
 		//    DO NOT EDIT what you see in these blocks of generated code !
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-#if defined(HOOPS) && defined(ACIS) 
-	HSolidView* m_pHSolidView;
-#endif
+
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnPaint();
@@ -155,13 +159,14 @@ public:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnDropFiles(HDROP hDropInfo);
 #ifdef HOOPS
 	unsigned long MapFlags(unsigned long state);
 	void  LocalSetOperator(HBaseOperator * NewOperator);	
 #endif	
 };
 
-#ifndef _DEBUG  // debug version in pindockView.cpp
+#ifndef _DEBUG  // debug version in GenViewerView.cpp
 inline CGenViewerDoc* CGenViewerView::GetDocument()
    { return (CGenViewerDoc*)m_pDocument; }
 #endif

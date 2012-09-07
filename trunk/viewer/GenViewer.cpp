@@ -368,11 +368,13 @@ void CGenViewerApp::OnFileOpen()
 #endif
 
 #pragma region For Additional Formats
-	CreateAllFileTypesString(&filter,IOManager::Instance()->GetInputHandlerTypes());
+//	CreateAllFileTypesString(&filter,IOManager::Instance()->GetInputHandlerTypes());
+	CreateAllFileTypesString(&filter,NULL);
 	filter += _T("|");
 
 	// this adds file types that have HIO handlers and appear in ProcessFilters()
-	ProcessFilters(&filter, IOManager::Instance()->GetInputHandlerTypes());
+//	ProcessFilters(&filter, IOManager::Instance()->GetInputHandlerTypes());
+	ProcessFilters(&filter, NULL);
 	filter += _T("|");
 #pragma endregion For Additional Formats
 

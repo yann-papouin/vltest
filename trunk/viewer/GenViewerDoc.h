@@ -29,11 +29,11 @@ public:
 	{
 		return m_renderer;
 	}
-    CString GetFileName() const { return m_csFileName; }
+ //   CString GetFileName() const { return m_csFileName; }
 
 protected:
 	ViewerRenderer*	m_renderer;
-	CString m_csFileName;
+//	CString m_csFileName;
 // Operations
 public:
 

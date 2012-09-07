@@ -2,24 +2,25 @@
 /*    Copyright (c) 2003-2008 by Spatial Corp.                     */
 /*******************************************************************/
 
-#if !defined(AH_ASM_TREE_NODE_H_)
-#define AH_ASM_TREE_NODE_H_
+#if !defined(_TREE_NODE_H_)
+#define _TREE_NODE_H_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
+#include "..\gvCore.h"
 #include <stdlib.h>
 #include <string.h>
 
 #ifdef XERCES
-
+namespace gv
+{
 /**
  * Class ModelTreeNode.
  *<b>Role</b>: Describe Role of Class.
  *
  */
-class ModelTreeNode
+class GVCORE_EXPORT ModelTreeNode
 {
 public:
 /**
@@ -59,9 +60,9 @@ public:
 /**
  * Returns const float*.
  */
-	const float* GetPositionMatrix() const
+	const double* GetPositionMatrix() const
 	{
-		return m_positionMatrix;
+		return m_mat4x4;
 	};
 
 /**
@@ -121,13 +122,14 @@ private:
 	wchar_t* m_fileName;//including full path
 	wchar_t* m_srcfileName;//including full path 
 	wchar_t* m_referenceId; // Bashi Add
-	float* m_positionMatrix;
+	double* m_mat4x4;
 
 	long m_key;//record the key of the corresponding segment
 
 	int m_sizeOfChild;
 	ModelTreeNode** m_ppChildList;
 };
+}
 
 #endif // ifdef XERCES
 #endif // !defined(AH_ASM_TREE_NODE_H_)

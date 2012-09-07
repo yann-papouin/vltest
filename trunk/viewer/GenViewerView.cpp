@@ -154,6 +154,7 @@ BEGIN_MESSAGE_MAP(CGenViewerView, CMFCView)
 	ON_WM_DESTROY()
 	ON_WM_SIZE()
 	ON_WM_ERASEBKGND()
+	ON_WM_DROPFILES()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -664,10 +665,9 @@ void CGenViewerView::OnPanOpt()
 {
 #ifdef HOOPS
 	LocalSetOperator(new HOpCameraPan(m_pHSolidView));
-#endif
 #elif defined VL
-	mVLBaseView->trackball()->setRotationButton();
-	update();
+	//mVLBaseView->trackball()->setRotationButton();
+	//update();
 #endif
 }
 
@@ -1162,5 +1162,22 @@ BOOL CGenViewerView::OnOpenDocument( LPCTSTR lpszPathName )
 	 std::string strPathName = CT2A( lpszPathName ); 
 	 
 	mVLBaseView->loadFile(strPathName);
+
 	return TRUE;
+}
+
+void CGenViewerView::OnDropFiles(HDROP hDropInfo)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	// Update tree item
+
+	MDIWindow::OnDropFiles(hDropInfo);
+}
+
+// Updating the tree views, include model/view/annotation
+void CGenViewerView::UpdateDockPanes()
+{
+	//Get the actors, and add to the model view
+
 }

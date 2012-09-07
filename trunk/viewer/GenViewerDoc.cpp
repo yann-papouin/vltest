@@ -93,7 +93,7 @@ BOOL CGenViewerDoc::OnNewDocument()
 
 BOOL CGenViewerDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-	m_csFileName = lpszPathName;
+//	m_csFileName = lpszPathName;
 
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
@@ -158,8 +158,6 @@ void CGenViewerDoc::DeleteContents()
 		if (pView != NULL)
 		{
 			pView->DeleteContents();
-			//pView->SetModify(FALSE);
-			//ASSERT(!pView->GetModify());
 		}
 	}
 }

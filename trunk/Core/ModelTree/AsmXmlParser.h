@@ -9,13 +9,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//---------- ACIS Kernel ----------
-
-//---------- AGM_HUSK ----------
-
-//---------- AGM_ACIS ----------
-
-//---------- AH_MFC ----------
 #include "ModelTreeNode.h"
 
 #ifdef XERCES
