@@ -40,7 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="XERCES;GVCore_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="D:\spa_instdir\VizLib_svn\src;D:\spa_instdir\VizLib_vc9_x86\src;D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos;D:\spa_instdir\VizLib_svn\src\3rdparty\freetype\include"
+				PreprocessorDefinitions="XERCES;GVCORE_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -162,6 +163,14 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\factory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\factory.h"
+				>
+			</File>
 			<Filter
 				Name="ModelTree"
 				>
@@ -174,6 +183,90 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Geometry"
+				>
+				<File
+					RelativePath=".\geometry\rep.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\rep.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\rep3d.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\rep3d.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="sceneGraph"
+				>
+				<File
+					RelativePath=".\sceneGraph\attributes.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\attributes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\selectionset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\selectionset.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structinstance.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structinstance.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structoccurence.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structoccurence.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structreference.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\structreference.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\world.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\world.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\worldhandle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\worldhandle.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="shading"
+				>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -181,7 +274,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\gvCore.h"
+				RelativePath=".\config.h"
 				>
 			</File>
 		</Filter>

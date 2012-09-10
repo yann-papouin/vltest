@@ -1,14 +1,10 @@
-/*******************************************************************/
-/*    Copyright (c) 2003-2008 by Spatial Corp.                     */
-/*******************************************************************/
-
-#if !defined(_TREE_NODE_H_)
-#define _TREE_NODE_H_
+#if !defined(MODEL_TREE_NODE_H_)
+#define MODEL_TREE_NODE_H_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-#include "..\gvCore.h"
+#include "..\config.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -132,4 +128,4 @@ private:
 }
 
 #endif // ifdef XERCES
-#endif // !defined(AH_ASM_TREE_NODE_H_)
+#endif // !defined(MODEL_TREE_NODE_H_)
