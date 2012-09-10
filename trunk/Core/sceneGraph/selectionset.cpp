@@ -54,12 +54,12 @@ int SelectionSet::count() const
 std::vector<StructOccurence*> SelectionSet::occurencesList() const
 {
 	std::vector<StructOccurence*> listOfOccurence;
-	tr1::unordered_map<unsigned int, StructOccurence*>::const_iterator iOcc= m_OccurenceHash.begin();
+	stdext::hash_map<unsigned int, StructOccurence*>::const_iterator iOcc= m_OccurenceHash.begin();
 	while (m_OccurenceHash.end() != iOcc)
 	{
-		if (!m_InstanceToPrimitiveId.contains(iOcc.key()))
+		if (m_InstanceToPrimitiveId.find(iOcc.key()==m_InstanceToPrimitiveId.end())
 		{
-			listOfOccurence.append(iOcc.value());
+			listOfOccurence.push_back(iOcc.value());
 		}
 		++iOcc;
 	}
@@ -72,7 +72,7 @@ std::vector<StructOccurence*> SelectionSet::occurencesListWithSelectedPrimitive(
 	tr1::unordered_map<unsigned int, std::set<unsigned int> >::const_iterator iOcc= m_InstanceToPrimitiveId.begin();
 	while (m_InstanceToPrimitiveId.end() != iOcc)
 	{
-		listOfOccurence.append(m_OccurenceHash.value(iOcc.key()));
+		listOfOccurence.push_back(m_OccurenceHash[iOcc.key()]);
 		++iOcc;
 	}
 	return listOfOccurence;

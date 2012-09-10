@@ -67,14 +67,14 @@ public:
 
 	//! Return true if the specified occurence id is in this world
 	inline bool containsOccurence(unsigned int id) const
-	{return m_OccurenceHash.contains(id);}
+	{return m_OccurenceHash.find(id) != m_OccurenceHash.end();}
 
 	//! Return the occurence specified by an id
 	/*! Id must be a valid identifier*/
 	inline StructOccurence* getOccurence(unsigned int id) const
 	{
-		assert(m_OccurenceHash.contains(id));
-		return m_OccurenceHash.value(id);
+		assert(m_OccurenceHash.find(id) != m_OccurenceHash.end());
+		return m_OccurenceHash[id];
 	}
 
 	//! Return the list off occurences

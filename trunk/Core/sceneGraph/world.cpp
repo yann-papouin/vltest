@@ -25,6 +25,7 @@
 #include "world.h"
 #include "structinstance.h"
 #include "structreference.h"
+#include <iostream>
 
 // Default constructor
 World::World()

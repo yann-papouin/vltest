@@ -88,7 +88,7 @@ public:
 
 	//! Return true if this selection set contains the given occurence id
 	bool contains(unsigned int occurenceId) const
-	{return m_OccurenceHash.contains(occurenceId);}
+	{return m_OccurenceHash.find(occurenceId) != m_OccurenceHash.end();}
 
 //@}
 //////////////////////////////////////////////////////////////////////

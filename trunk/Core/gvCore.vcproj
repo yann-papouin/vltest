@@ -263,10 +263,6 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="shading"
-				>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
