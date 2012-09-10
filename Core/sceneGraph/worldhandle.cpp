@@ -26,9 +26,9 @@
 
 WorldHandle::WorldHandle()
 //: m_Collection()
-m_NumberOfWorld(1)
+: m_NumberOfWorld(1)
 , m_OccurenceHash()
-, m_UpVector(0,0,1,0)
+, m_UpVector(0,0,1)
 , m_SelectionSet(this)
 {
 
