@@ -279,6 +279,14 @@
 				RelativePath=".\glc_object.h"
 				>
 			</File>
+			<File
+				RelativePath=".\glc_state.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\glc_state.h"
+				>
+			</File>
 			<Filter
 				Name="sceneGraph"
 				>
@@ -448,6 +456,30 @@
 				</File>
 				<File
 					RelativePath=".\geometry\glc_geometry.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_meshdata.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_meshdata.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_rep.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_rep.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_wiredata.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_wiredata.h"
 					>
 				</File>
 			</Filter>
