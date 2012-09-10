@@ -283,6 +283,22 @@
 				Name="sceneGraph"
 				>
 				<File
+					RelativePath=".\sceneGraph\glc_3dviewcollection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_3dviewcollection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_3dviewinstance.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_3dviewinstance.h"
+					>
+				</File>
+				<File
 					RelativePath=".\sceneGraph\glc_attributes.cpp"
 					>
 				</File>
@@ -432,6 +448,58 @@
 				</File>
 				<File
 					RelativePath=".\geometry\glc_geometry.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="shading"
+				>
+				<File
+					RelativePath=".\shading\glc_light.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_light.h"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_material.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_material.h"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_renderproperties.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_renderproperties.h"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_selectionmaterial.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_selectionmaterial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_shader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_texture.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shading\glc_texture.h"
 					>
 				</File>
 			</Filter>
