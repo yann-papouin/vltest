@@ -50,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;XERCES;_CRT_SECURE_NO_WARNINGS;VL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

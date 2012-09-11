@@ -22,7 +22,7 @@
 
 //! \file glc_geometry.cpp Implementation of the GLC_Geometry class.
 
-#include "../shading/glc_selectionmaterial.h"
+//#include "../shading/glc_selectionmaterial.h"
 //#include "../glc_openglexception.h"
 #include "../glc_state.h"
 #include "glc_geometry.h"
@@ -246,7 +246,7 @@ void GLC_Geometry::glLoadTexture(void)
     while (iMaterial != m_MaterialHash.constEnd())
     {
         // Load texture of mesh materials
-        iMaterial.value()->glLoadTexture();
+  //      iMaterial.value()->glLoadTexture();
         ++iMaterial;
     }
 }
@@ -310,7 +310,7 @@ void GLC_Geometry::glPropGeom(const GLC_RenderProperties& renderProperties)
 		}
 		else
 		{
-			GLC_SelectionMaterial::glExecute();
+	//		GLC_SelectionMaterial::glExecute();
 		}
 	}
 	else if (m_MaterialHash.size() == 1)
@@ -318,15 +318,15 @@ void GLC_Geometry::glPropGeom(const GLC_RenderProperties& renderProperties)
 		GLC_Material* pCurrentMaterial= m_MaterialHash.begin().value();
 		if (pCurrentMaterial->hasTexture())
 		{
-			glEnable(GL_LIGHTING);
-			pCurrentMaterial->glExecute();
-			if (renderProperties.isSelected()) GLC_SelectionMaterial::glExecute();
+// 			glEnable(GL_LIGHTING);
+// 			pCurrentMaterial->glExecute();
+	//		if (renderProperties.isSelected()) GLC_SelectionMaterial::glExecute();
 		}
 		else
 		{
-			glEnable(GL_LIGHTING);
-			if (renderProperties.isSelected()) GLC_SelectionMaterial::glExecute();
-			else pCurrentMaterial->glExecute();
+// 			glEnable(GL_LIGHTING);
+// 			if (renderProperties.isSelected()) GLC_SelectionMaterial::glExecute();
+// 			else pCurrentMaterial->glExecute();
 		}
 	}
 }

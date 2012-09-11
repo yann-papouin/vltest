@@ -203,8 +203,8 @@ public:
 	{m_pWorldHandle->setUpVector(vect);}
 
 	//! Set the attached viewport of this world
-	inline void setAttachedViewport(GLC_Viewport* pViewport)
-	{m_pWorldHandle->setAttachedViewport(pViewport);}
+	inline void setAttachedViewport(vl::Camera* pCamera)
+	{m_pWorldHandle->setAttachedViewport(pCamera);}
 
 	//! Select the given occurence
 	/*! The given occurence must belong to the world handle of this world*/

@@ -163,7 +163,7 @@ private:
 	void writeMaterialToCatMaterialRef(const GLC_Material* pMat, unsigned int* id);
 
 	//! Add the given texture to 3DXML with the given name
-	void addImageTextureTo3dxml(const QImage& image, const QString& fileName);
+//	void addImageTextureTo3dxml(const QImage& image, const QString& fileName);
 
 	//! Transform the given name to the 3DXML name (no double)
 	QString xmlFileName(QString fileName);

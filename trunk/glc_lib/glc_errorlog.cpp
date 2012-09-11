@@ -26,6 +26,8 @@
 #include <QDir>
 #include "glc_global.h"
 #include <QMutexLocker>
+#include <QApplication>
+#include <QDate>
 
 GLC_ErrorLog* GLC_ErrorLog::m_pErrorLog= NULL;
 QMutex GLC_ErrorLog::m_Mutex;

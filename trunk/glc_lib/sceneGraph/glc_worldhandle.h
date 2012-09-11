@@ -31,6 +31,8 @@
 
 #include "../glc_config.h"
 
+#include "vlGraphics/Viewport.hpp"
+
 //////////////////////////////////////////////////////////////////////
 //! \class GLC_WorldHandle
 /*! \brief GLC_WorldHandle : Handle of shared GLC_World*/
@@ -138,8 +140,8 @@ public:
 	{m_UpVector= vect;}
 
 	//! Set the attached viewport of this world handle
-	inline void setAttachedViewport(GLC_Viewport* pViewport)
-	{m_Collection.setAttachedViewport(pViewport);}
+	inline void setAttachedViewport(vl::Camera* pCamera)
+	{m_Collection.setAttachedViewport(pCamera);}
 
 	//! Select the given occurence id
 	/*! The given occurence id must belong to this worldhandle*/

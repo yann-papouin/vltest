@@ -90,7 +90,7 @@ GLC_WireData::~GLC_WireData()
 	// Delete Main Vbo ID
 	if (0 != m_VboId)
 	{
-		glDeleteBuffers(1, &m_VboId);
+//		glDeleteBuffers(1, &m_VboId);
 		m_VboId= 0;
 	}
 }
@@ -111,14 +111,14 @@ GLfloatVector GLC_WireData::positionVector() const
 	{
 		// VBO created get data from VBO
 		const int sizeOfVbo= m_PositionSize;
-		const GLsizeiptr dataSize= sizeOfVbo * sizeof(float);
+	//	const GLsizeiptr dataSize= sizeOfVbo * sizeof(float);
 		GLfloatVector positionVector(sizeOfVbo);
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_VboId);
-		GLvoid* pVbo = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
-		memcpy(positionVector.data(), pVbo, dataSize);
-		glUnmapBuffer(GL_ARRAY_BUFFER);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+// 		glBindBuffer(GL_ARRAY_BUFFER, m_VboId);
+// 		GLvoid* pVbo = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+// 		memcpy(positionVector.data(), pVbo, dataSize);
+// 		glUnmapBuffer(GL_ARRAY_BUFFER);
+// 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return positionVector;
 	}
 	else
@@ -226,71 +226,71 @@ void GLC_WireData::finishVbo()
 
 void GLC_WireData::useVBO(bool use)
 {
-	if (use)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_VboId);	}
-	else
-	{
-		// Unbind VBO
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+// 	if (use)
+// 	{
+// 		glBindBuffer(GL_ARRAY_BUFFER, m_VboId);	}
+// 	else
+// 	{
+// 		// Unbind VBO
+// 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+// 	}
 }
 
-void GLC_WireData::glDraw(const GLC_RenderProperties&, GLenum mode)
-{
-	Q_ASSERT(!isEmpty());
-	const bool vboIsUsed= GLC_State::vboUsed();
-
-	if (vboIsUsed && ((m_PositionSize == 0) || (0 == m_VboId)))
-	{
-		finishVbo();
-	}
-	else if (m_PositionSize == 0)
-	{
-		m_PositionSize= m_Positions.size();
-	}
-
-	// Activate VBO or Vertex Array
-	if (vboIsUsed)
-	{
-		useVBO(true);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-	}
-	else
-	{
-		glVertexPointer(3, GL_FLOAT, 0, m_Positions.data());
-	}
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	// Render polylines
-	for (int i= 0; i < m_VerticeGroupCount; ++i)
-	{
-		glDrawArrays(mode, m_VerticeGroupOffset.at(i), m_VerticeGrouprSizes.at(i));
-	}
-
-	// Desactivate VBO or Vertex Array
-	if (vboIsUsed)
-	{
-		useVBO(false);
-	}
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-}
+ void GLC_WireData::glDraw(const GLC_RenderProperties&, GLenum mode)
+ {
+ 	//Q_ASSERT(!isEmpty());
+ 	//const bool vboIsUsed= GLC_State::vboUsed();
+ 
+ 	//if (vboIsUsed && ((m_PositionSize == 0) || (0 == m_VboId)))
+ 	//{
+ 	//	finishVbo();
+ 	//}
+ 	//else if (m_PositionSize == 0)
+ 	//{
+ 	//	m_PositionSize= m_Positions.size();
+ 	//}
+ 
+ 	//// Activate VBO or Vertex Array
+ 	//if (vboIsUsed)
+ 	//{
+ 	//	useVBO(true);
+ 	//	glVertexPointer(3, GL_FLOAT, 0, 0);
+ 	//}
+ 	//else
+ 	//{
+ 	//	glVertexPointer(3, GL_FLOAT, 0, m_Positions.data());
+ 	//}
+ 	//glEnableClientState(GL_VERTEX_ARRAY);
+ 
+ 	//// Render polylines
+ 	//for (int i= 0; i < m_VerticeGroupCount; ++i)
+ 	//{
+ 	//	glDrawArrays(mode, m_VerticeGroupOffset.at(i), m_VerticeGrouprSizes.at(i));
+ 	//}
+ 
+ 	//// Desactivate VBO or Vertex Array
+ 	//if (vboIsUsed)
+ 	//{
+ 	//	useVBO(false);
+ 	//}
+ 
+ 	//glDisableClientState(GL_VERTEX_ARRAY);
+ }
 
 void GLC_WireData::createVBOs()
 {
 	// Create position VBO
-	if (0 == m_VboId)
-	{
-		glGenBuffers(1, &m_VboId);
-	}
+// 	if (0 == m_VboId)
+// 	{
+// 		glGenBuffers(1, &m_VboId);
+// 	}
 }
 
 void GLC_WireData::fillVBOs()
 {
-	const GLsizei dataNbr= static_cast<GLsizei>(m_Positions.size());
-	const GLsizeiptr dataSize= dataNbr * sizeof(GLfloat);
-	glBufferData(GL_ARRAY_BUFFER, dataSize, m_Positions.data(), GL_STATIC_DRAW);
+// 	const GLsizei dataNbr= static_cast<GLsizei>(m_Positions.size());
+// 	const GLsizeiptr dataSize= dataNbr * sizeof(GLfloat);
+// 	glBufferData(GL_ARRAY_BUFFER, dataSize, m_Positions.data(), GL_STATIC_DRAW);
 }
 
 QDataStream &operator<<(QDataStream &stream, const GLC_WireData &wireData)

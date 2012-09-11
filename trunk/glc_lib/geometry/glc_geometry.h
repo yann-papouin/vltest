@@ -24,8 +24,8 @@
 
 #ifndef GLC_GEOMETRY_H_
 #define GLC_GEOMETRY_H_
-#include "../shading/glc_material.h"
-#include "../shading/glc_renderproperties.h"
+//#include "../shading/glc_material.h"
+//#include "../shading/glc_renderproperties.h"
 #include "glc_wiredata.h"
 #include "../glc_boundingbox.h"
 

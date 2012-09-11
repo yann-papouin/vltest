@@ -29,6 +29,7 @@
 #include "../geometry/glc_mesh.h"
 
 #include <QFileInfo>
+#include <QCoreApplication>
 
 GLC_WorldTo3dxml::GLC_WorldTo3dxml(const GLC_World& world, bool threaded)
 : QObject()
@@ -974,19 +975,19 @@ void GLC_WorldTo3dxml::writeImageFileIn3dxml(const QList<GLC_Material*>& materia
 		if (!pTexture->fileName().isEmpty())
 		{
 			// Try to load the texture
-			QImage textureImage(pTexture->fileName());
-			if (! textureImage.isNull())
-			{
-				addImageTextureTo3dxml(textureImage, imageName);
-			}
-			else
-			{
-				addImageTextureTo3dxml(pTexture->imageOfTexture(), imageName);
-			}
+// 			QImage textureImage(pTexture->fileName());
+// 			if (! textureImage.isNull())
+// 			{
+//				addImageTextureTo3dxml(textureImage, imageName);
+	//		}
+// 			else
+// 			{
+// //				addImageTextureTo3dxml(pTexture->imageOfTexture(), imageName);
+// 			}
 		}
 		else
 		{
-			addImageTextureTo3dxml(pTexture->imageOfTexture(), imageName);
+//			addImageTextureTo3dxml(pTexture->imageOfTexture(), imageName);
 		}
 	}
 
@@ -1066,44 +1067,44 @@ void GLC_WorldTo3dxml::writeMaterialToCatMaterialRef(const GLC_Material* pMat, u
 	m_pOutStream->writeEndElement(); // MaterialDomainInstance
 }
 
-void GLC_WorldTo3dxml::addImageTextureTo3dxml(const QImage& image, const QString& fileName)
-{
-	delete m_pOutStream;
-	m_pOutStream= NULL;
-
-	bool success= false;
-	if (NULL != m_p3dxmlArchive)
-	{
-		if (NULL != m_pCurrentZipFile)
-		{
-			m_pCurrentZipFile->close();
-			delete m_pOutStream;
-			delete m_pCurrentZipFile;
-		}
-		QuaZipNewInfo quazipNewInfo(fileName);
-		m_pCurrentZipFile= new QuaZipFile(m_p3dxmlArchive);
-		success= m_pCurrentZipFile->open(QIODevice::WriteOnly, quazipNewInfo);
-		if (success)
-		{
-			image.save(m_pCurrentZipFile, QFileInfo(fileName).suffix().toAscii().constData());
-			m_pCurrentZipFile->close();
-			delete m_pCurrentZipFile;
-			m_pCurrentZipFile= NULL;
-		}
-	}
-	else
-	{
-		delete m_pCurrentFile;
-		m_pCurrentFile= new QFile(m_AbsolutePath + fileName);
-		success= m_pCurrentFile->open(QIODevice::WriteOnly);
-		if (success)
-		{
-			image.save(m_pCurrentFile, QFileInfo(fileName).suffix().toAscii().constData());
-			delete m_pCurrentFile;
-			m_pCurrentFile= NULL;
-		}
-	}
-}
+// void GLC_WorldTo3dxml::addImageTextureTo3dxml(const QImage& image, const QString& fileName)
+// {
+// 	delete m_pOutStream;
+// 	m_pOutStream= NULL;
+// 
+// 	bool success= false;
+// 	if (NULL != m_p3dxmlArchive)
+// 	{
+// 		if (NULL != m_pCurrentZipFile)
+// 		{
+// 			m_pCurrentZipFile->close();
+// 			delete m_pOutStream;
+// 			delete m_pCurrentZipFile;
+// 		}
+// 		QuaZipNewInfo quazipNewInfo(fileName);
+// 		m_pCurrentZipFile= new QuaZipFile(m_p3dxmlArchive);
+// 		success= m_pCurrentZipFile->open(QIODevice::WriteOnly, quazipNewInfo);
+// 		if (success)
+// 		{
+// 			image.save(m_pCurrentZipFile, QFileInfo(fileName).suffix().toAscii().constData());
+// 			m_pCurrentZipFile->close();
+// 			delete m_pCurrentZipFile;
+// 			m_pCurrentZipFile= NULL;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		delete m_pCurrentFile;
+// 		m_pCurrentFile= new QFile(m_AbsolutePath + fileName);
+// 		success= m_pCurrentFile->open(QIODevice::WriteOnly);
+// 		if (success)
+// 		{
+// 			image.save(m_pCurrentFile, QFileInfo(fileName).suffix().toAscii().constData());
+// 			delete m_pCurrentFile;
+// 			m_pCurrentFile= NULL;
+// 		}
+// 	}
+// }
 
 QString GLC_WorldTo3dxml::xmlFileName(QString fileName)
 {

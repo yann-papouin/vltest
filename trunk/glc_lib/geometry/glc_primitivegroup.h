@@ -295,7 +295,7 @@ private:
 	QList<GLC_uint> m_FansId;
 
 	//! Flag to know if the group is finish
-	int m_IsFinished;
+	bool m_IsFinished;
 
 	//! Flag to know if there is triangles
 	int m_TrianglesIndexSize;

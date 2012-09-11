@@ -24,6 +24,7 @@
 
 
 #include "glc_lod.h"
+#include <QDataStream>
 
 // Class chunk id
 quint32 GLC_Lod::m_ChunkId= 0xA708;
@@ -82,7 +83,7 @@ GLC_Lod::~GLC_Lod()
 	// Delete IBO
 	if (0 != m_IboId)
 	{
-		glDeleteBuffers(1, &m_IboId);
+//		glDeleteBuffers(1, &m_IboId);
 	}
 }
 
@@ -102,14 +103,14 @@ QVector<GLuint> GLC_Lod::indexVector() const
 	{
 		// VBO created get data from VBO
 		const int sizeOfIbo= m_IndexSize;
-		const GLsizeiptr dataSize= sizeOfIbo * sizeof(GLuint);
+//		const GLsizeiptr dataSize= sizeOfIbo * sizeof(GLuint);
 		QVector<GLuint> indexVector(sizeOfIbo);
 
 		useIBO();
-		GLvoid* pIbo = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
-		memcpy(indexVector.data(), pIbo, dataSize);
-		glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//GLvoid* pIbo = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
+		//memcpy(indexVector.data(), pIbo, dataSize);
+// 		glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		return indexVector;
 	}
 	else
@@ -138,9 +139,9 @@ void GLC_Lod::releaseIboClientSide(bool update)
 			useIBO();
 
 			const GLsizei indexNbr= static_cast<GLsizei>(m_IndexVector.size());
-			const GLsizeiptr indexSize = indexNbr * sizeof(GLuint);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, m_IndexVector.data(), GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+// 			const GLsizeiptr indexSize = indexNbr * sizeof(GLuint);
+// 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, m_IndexVector.data(), GL_STATIC_DRAW);
+// 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 		m_IndexVector.clear();
 	}

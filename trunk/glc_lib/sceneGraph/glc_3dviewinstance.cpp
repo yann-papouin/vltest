@@ -23,10 +23,12 @@
 //! \file glc_instance.cpp implementation of the GLC_3DViewInstance class.
 
 #include "glc_3dviewinstance.h"
-#include "../shading/glc_selectionmaterial.h"
-#include "../viewport/glc_viewport.h"
+//#include "../shading/glc_selectionmaterial.h"
+//#include "../viewport/glc_viewport.h"
 #include <QMutexLocker>
 #include "../glc_state.h"
+
+#include "vlCore/Vector3.hpp"
 
 //! A Mutex
 QMutex GLC_3DViewInstance::m_Mutex;
@@ -285,7 +287,7 @@ GLC_3DViewInstance& GLC_3DViewInstance::resetMatrix(void)
 //////////////////////////////////////////////////////////////////////
 
 // Display the instance
-void GLC_3DViewInstance::render(glc::RenderFlag renderFlag, bool useLod, GLC_Viewport* pView)
+void GLC_3DViewInstance::render(glc::RenderFlag renderFlag, bool useLod, vl::Camera* pCamera)
 {
 	//qDebug() << "GLC_3DViewInstance::render render properties= " << m_RenderProperties.renderingMode();
 	if (m_3DRep.isEmpty()) return;
@@ -312,13 +314,13 @@ void GLC_3DViewInstance::render(glc::RenderFlag renderFlag, bool useLod, GLC_Vie
 		glColor3ubv(m_colorId); // D'ont use Alpha component
 	}
 
-	if (useLod && (NULL != pView))
+	if (useLod && (NULL != pCamera))
 	{
 		for (int i= 0; i < bodyCount; ++i)
 		{
 			if (m_ViewableGeomFlag.at(i))
 			{
-				const int lodValue= choseLod(m_3DRep.geomAt(i)->boundingBox(), pView, useLod);
+				const int lodValue= choseLod(m_3DRep.geomAt(i)->boundingBox(), pCamera, useLod);
 				if (lodValue <= 100)
 				{
 					m_3DRep.geomAt(i)->setCurrentLod(lodValue);
@@ -335,9 +337,9 @@ void GLC_3DViewInstance::render(glc::RenderFlag renderFlag, bool useLod, GLC_Vie
 			if (m_ViewableGeomFlag.at(i))
 			{
 				int lodValue= 0;
-				if (GLC_State::isPixelCullingActivated() && (NULL != pView))
+				if (GLC_State::isPixelCullingActivated() && (NULL != pCamera))
 				{
-					lodValue= choseLod(m_3DRep.geomAt(i)->boundingBox(), pView, useLod);
+					lodValue= choseLod(m_3DRep.geomAt(i)->boundingBox(), pCamera, useLod);
 				}
 
 				if (lodValue <= 100)
@@ -469,24 +471,29 @@ void GLC_3DViewInstance::clear()
 }
 
 // Compute LOD
-int GLC_3DViewInstance::choseLod(const GLC_BoundingBox& boundingBox, GLC_Viewport* pView, bool useLod)
+int GLC_3DViewInstance::choseLod(const GLC_BoundingBox& boundingBox, vl::Camera* pCamera, bool useLod)
 {
-	if (NULL == pView) return 0;
+	if (NULL == pCamera) return 0;
 	double pixelCullingRatio= 0.0;
 	if (useLod)
 	{
-		pixelCullingRatio= pView->minimumDynamicPixelCullingRatio();
+//		pixelCullingRatio= pView->minimumDynamicPixelCullingRatio();
 	}
 	else
 	{
-		pixelCullingRatio= pView->minimumStaticPixelCullingRatio();
+//		pixelCullingRatio= pView->minimumStaticPixelCullingRatio();
 	}
 
 	const double diameter= boundingBox.boundingSphereRadius() * 2.0 * m_AbsoluteMatrix.scalingX();
-	GLC_Vector3d center(m_AbsoluteMatrix * boundingBox.center());
+	vl::vec3 center(m_AbsoluteMatrix * boundingBox.center());
 
-	const double dist= (center - pView->cameraHandle()->eye()).length();
-	const double cameraCover= dist * pView->viewTangent();
+	vl::vec3 eye,at,up,right;
+	pCamera->getViewMatrixAsLookAt(eye,at,up,right);
+
+	const double dist= (center - eye).length();
+
+	double viewTangent = tan(glc::toRadian(pCamera->fov()));
+	const double cameraCover= dist * viewTangent;
 
 	double ratio= diameter / cameraCover * 100.0;
 	if (ratio > 100.0) ratio= 100.0;

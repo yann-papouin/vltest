@@ -32,17 +32,20 @@
 #include <QSet>
 #include <QDateTime>
 #include "../maths/glc_matrix4x4.h"
-#include "../sceneGraph/glc_3dviewinstance.h"
+#include "../geometry/glc_3drep.h"
+//#include "../sceneGraph/glc_3dviewinstance.h"
 
 #include "../glc_config.h"
 
 class GLC_World;
-class QGLContext;
+// class QGLContext;
 class QuaZip;
 class QuaZipFile;
 class GLC_StructReference;
 class GLC_StructInstance;
 class GLC_Mesh;
+class GLC_RenderProperties;
+class GLC_Material;
 
 //////////////////////////////////////////////////////////////////////
 //! \class GLC_3dxmlToWorld

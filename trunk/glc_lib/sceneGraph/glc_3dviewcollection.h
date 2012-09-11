@@ -29,14 +29,14 @@
 #include <QHash>
 #include "glc_3dviewinstance.h"
 #include "../glc_global.h"
-#include "../viewport/glc_frustum.h"
+//#include "../viewport/glc_frustum.h"
 
 #include "../glc_config.h"
 
-class GLC_SpacePartitioning;
+//class GLC_SpacePartitioning;
 class GLC_Material;
-class GLC_Shader;
-class GLC_Viewport;
+//class GLC_Shader;
+//class vl::Viewport;
 
 //! GLC_3DViewInstance Hash table
 typedef QHash< GLC_uint, GLC_3DViewInstance> ViewInstancesHash;
@@ -145,13 +145,13 @@ public:
 	//! Return the number of used shading group
 	int numberOfUsedShadingGroup() const;
 
-	//! Return true if the space partitioning is used
-	inline bool spacePartitioningIsUsed() const
-	{return m_UseSpacePartitioning;}
+	////! Return true if the space partitioning is used
+	//inline bool spacePartitioningIsUsed() const
+	//{return m_UseSpacePartitioning;}
 
-	//! Return an handle to  the space partitioning
-	inline GLC_SpacePartitioning* spacePartitioningHandle()
-	{return m_pSpacePartitioning;}
+	////! Return an handle to  the space partitioning
+	//inline GLC_SpacePartitioning* spacePartitioningHandle()
+	//{return m_pSpacePartitioning;}
 
 
 //@}
@@ -226,21 +226,21 @@ public:
 	{m_IsInShowSate= !m_IsInShowSate;}
 
 	//! Set the LOD usage
-	inline void setLodUsage(const bool usage, GLC_Viewport* pView)
+	inline void setLodUsage(const bool usage, vl::Camera* pCamera)
 	{
 		m_UseLod= usage;
-		m_pViewport= pView;
+		m_pCamera= pCamera;
 	}
 
-	//! Bind the space partitioning
-	void bindSpacePartitioning(GLC_SpacePartitioning*);
+	////! Bind the space partitioning
+	//void bindSpacePartitioning(GLC_SpacePartitioning*);
 
-	//! Unbind the space partitioning
-	void unbindSpacePartitioning();
+	////! Unbind the space partitioning
+	//void unbindSpacePartitioning();
 
 	//! Use the space partitioning
-	inline void setSpacePartitionningUsage(bool use)
-	{m_UseSpacePartitioning= use;}
+	//inline void setSpacePartitionningUsage(bool use)
+	//{m_UseSpacePartitioning= use;}
 
 	//! Update the instance viewable state
 	/*! Update the frustrum culling from the viewport
@@ -248,11 +248,11 @@ public:
 	void updateInstanceViewableState(GLC_Matrix4x4* pMatrix= NULL);
 
 	//! Update the instance viewable state with the specified frustum
-	void updateInstanceViewableState(const GLC_Frustum&);
+	void updateInstanceViewableState(const vl::Frustum&);
 
 	//! Set the attached viewport of this collection
-	inline void setAttachedViewport(GLC_Viewport* pViewport)
-	{m_pViewport= pViewport;}
+	inline void setAttachedViewport(vl::Camera* pCamera)
+	{m_pCamera= pCamera;}
 //@}
 
 //////////////////////////////////////////////////////////////////////
@@ -312,13 +312,13 @@ private:
 	bool m_UseLod;
 
 	//! The viewport associted to the collection for LOD Usage
-	GLC_Viewport* m_pViewport;
+	vl::Camera* m_pCamera;
 
-	//! The space partitioning
-	GLC_SpacePartitioning* m_pSpacePartitioning;
+	////! The space partitioning
+	//GLC_SpacePartitioning* m_pSpacePartitioning;
 
-	//! The space partition usage
-	bool m_UseSpacePartitioning;
+	////! The space partition usage
+	//bool m_UseSpacePartitioning;
 
 
 };
@@ -342,7 +342,7 @@ void GLC_3DViewCollection::glDrawInstancesOf(PointerViewInstanceHash* pHash, glc
 			pCurInstance= iEntry.value();
 			if ((pCurInstance->viewableFlag() != GLC_3DViewInstance::NoViewable) && (pCurInstance->isVisible() == m_IsInShowSate))
 			{
-				pCurInstance->render(renderFlag, m_UseLod, m_pViewport);
+				pCurInstance->render(renderFlag, m_UseLod, m_pCamera);
 			}
 			++iEntry;
 		}
@@ -358,7 +358,7 @@ void GLC_3DViewCollection::glDrawInstancesOf(PointerViewInstanceHash* pHash, glc
 				{
 					if (!pCurInstance->isTransparent() || pCurInstance->renderPropertiesHandle()->isSelected() || (renderFlag == glc::WireRenderFlag))
 					{
-						pCurInstance->render(renderFlag, m_UseLod, m_pViewport);
+						pCurInstance->render(renderFlag, m_UseLod, m_pCamera);
 					}
 				}
 
@@ -375,7 +375,7 @@ void GLC_3DViewCollection::glDrawInstancesOf(PointerViewInstanceHash* pHash, glc
 				{
 					if (pCurInstance->hasTransparentMaterials())
 					{
-						pCurInstance->render(renderFlag, m_UseLod, m_pViewport);
+						pCurInstance->render(renderFlag, m_UseLod, m_pCamera);
 					}
 				}
 

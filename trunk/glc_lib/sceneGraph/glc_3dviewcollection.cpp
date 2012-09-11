@@ -26,11 +26,13 @@
 #include "glc_3dviewcollection.h"
 #include "../shading/glc_material.h"
 //#include "../glc_openglexception.h"
-#include "../shading/glc_selectionmaterial.h"
+//#include "../shading/glc_selectionmaterial.h"
 #include "../glc_state.h"
-#include "../shading/glc_shader.h"
-#include "../viewport/glc_viewport.h"
-#include "glc_spacepartitioning.h"
+//#include "../shading/glc_shader.h"
+//#include "../viewport/glc_viewport.h"
+//#include "glc_spacepartitioning.h"
+
+#include "vlGraphics/Viewport.hpp"
 
 #include <QtDebug>
 
@@ -46,9 +48,9 @@ GLC_3DViewCollection::GLC_3DViewCollection()
 , m_MainInstances()
 , m_IsInShowSate(true)
 , m_UseLod(false)
-, m_pViewport(NULL)
-, m_pSpacePartitioning(NULL)
-, m_UseSpacePartitioning(false)
+, m_pCamera(NULL)
+//, m_pSpacePartitioning(NULL)
+//, m_UseSpacePartitioning(false)
 {
 }
 
@@ -277,7 +279,7 @@ void GLC_3DViewCollection::clear(void)
     m_3DViewInstanceHash.clear();
 
 	// delete the space partitioning
-	delete m_pSpacePartitioning;
+//	delete m_pSpacePartitioning;
 }
 
 bool GLC_3DViewCollection::select(GLC_uint key, bool primitive)
@@ -442,43 +444,43 @@ void GLC_3DViewCollection::hideAll()
 
 }
 
-void GLC_3DViewCollection::bindSpacePartitioning(GLC_SpacePartitioning* pSpacePartitioning)
-{
-	Q_ASSERT(NULL != pSpacePartitioning);
-	Q_ASSERT(pSpacePartitioning->collectionHandle() == this);
-
-	delete m_pSpacePartitioning;
-	m_pSpacePartitioning= pSpacePartitioning;
-}
-
-void GLC_3DViewCollection::unbindSpacePartitioning()
-{
-	delete m_pSpacePartitioning;
-	m_pSpacePartitioning= NULL;
-	m_UseSpacePartitioning= false;
-
-	ViewInstancesHash::iterator iEntry= m_3DViewInstanceHash.begin();
-    while (iEntry != m_3DViewInstanceHash.constEnd())
-    {
-    	// Update Instance viewable flag
-    	iEntry.value().setViewable(GLC_3DViewInstance::FullViewable);
-    	iEntry++;
-    }
-
-}
+//void GLC_3DViewCollection::bindSpacePartitioning(GLC_SpacePartitioning* pSpacePartitioning)
+//{
+//	Q_ASSERT(NULL != pSpacePartitioning);
+//	Q_ASSERT(pSpacePartitioning->collectionHandle() == this);
+//
+//	delete m_pSpacePartitioning;
+//	m_pSpacePartitioning= pSpacePartitioning;
+//}
+//
+//void GLC_3DViewCollection::unbindSpacePartitioning()
+//{
+//	delete m_pSpacePartitioning;
+//	m_pSpacePartitioning= NULL;
+//	m_UseSpacePartitioning= false;
+//
+//	ViewInstancesHash::iterator iEntry= m_3DViewInstanceHash.begin();
+//    while (iEntry != m_3DViewInstanceHash.constEnd())
+//    {
+//    	// Update Instance viewable flag
+//    	iEntry.value().setViewable(GLC_3DViewInstance::FullViewable);
+//    	iEntry++;
+//    }
+//
+//}
 
 void GLC_3DViewCollection::updateInstanceViewableState(GLC_Matrix4x4* pMatrix)
 {
-	if ((NULL != m_pViewport) && m_UseSpacePartitioning && (NULL != m_pSpacePartitioning))
+	if ((NULL != m_pCamera) /*&& m_UseSpacePartitioning && (NULL != m_pSpacePartitioning)*/)
 	{
-		if (m_pViewport->updateFrustum(pMatrix))
-			m_pSpacePartitioning->updateViewableInstances(m_pViewport->frustum());
+		//if (m_pCamera->updateFrustum(pMatrix))
+		//	m_pSpacePartitioning->updateViewableInstances(m_pCamera->frustum());
 	}
 }
 
-void GLC_3DViewCollection::updateInstanceViewableState(const GLC_Frustum& frustum)
+void GLC_3DViewCollection::updateInstanceViewableState(const vl::Frustum& frustum)
 {
-	m_pSpacePartitioning->updateViewableInstances(frustum);
+//	m_pSpacePartitioning->updateViewableInstances(frustum);
 }
 
 QList<GLC_3DViewInstance*> GLC_3DViewCollection::instancesHandle()
@@ -649,56 +651,56 @@ void GLC_3DViewCollection::renderShaderGroup(glc::RenderFlag renderFlag)
 void GLC_3DViewCollection::glDraw(GLuint groupId, glc::RenderFlag renderFlag)
 {
 	// Set render Mode and OpenGL state
-	if (!GLC_State::isInSelectionMode() && (groupId == 0))
-	{
-		if (renderFlag == glc::TransparentRenderFlag)
-		{
-	        glEnable(GL_BLEND);
-	        glDepthMask(GL_FALSE);
-	        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//if (!GLC_State::isInSelectionMode() && (groupId == 0))
+	//{
+	//	if (renderFlag == glc::TransparentRenderFlag)
+	//	{
+	//        glEnable(GL_BLEND);
+	//        glDepthMask(GL_FALSE);
+	//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		}
-		else
-		{
-		    glDisable(GL_BLEND);
-		    glDepthMask(GL_TRUE);
-		    glEnable(GL_DEPTH_TEST);
-		}
-	}
+	//	}
+	//	else
+	//	{
+	//	    glDisable(GL_BLEND);
+	//	    glDepthMask(GL_TRUE);
+	//	    glEnable(GL_DEPTH_TEST);
+	//	}
+	//}
 
-	// Normal GLC_3DViewInstance
-	if ((groupId == 0) && !m_MainInstances.isEmpty())
-	{
-		glDrawInstancesOf(&m_MainInstances, renderFlag);
+	//// Normal GLC_3DViewInstance
+	//if ((groupId == 0) && !m_MainInstances.isEmpty())
+	//{
+	//	glDrawInstancesOf(&m_MainInstances, renderFlag);
 
-	}
-	// Selected GLC_3DVIewInstance
-	else if ((groupId == 1) && !m_SelectedInstances.isEmpty())
-	{
-		if (GLC_State::selectionShaderUsed()) GLC_SelectionMaterial::useShader();
+	//}
+	//// Selected GLC_3DVIewInstance
+	//else if ((groupId == 1) && !m_SelectedInstances.isEmpty())
+	//{
+	//	if (GLC_State::selectionShaderUsed()) GLC_SelectionMaterial::useShader();
 
-		glDrawInstancesOf(&m_SelectedInstances, renderFlag);
+	//	glDrawInstancesOf(&m_SelectedInstances, renderFlag);
 
-		if (GLC_State::selectionShaderUsed()) GLC_SelectionMaterial::unUseShader();
-	}
-	// GLC_3DViewInstance with shader
-	else if (!m_ShadedPointerViewInstanceHash.isEmpty())
-	{
-	    if(m_ShadedPointerViewInstanceHash.contains(groupId) && !m_ShadedPointerViewInstanceHash.value(groupId)->isEmpty())
-	    {
-	    	PointerViewInstanceHash* pNodeHash= m_ShadedPointerViewInstanceHash.value(groupId);
+	//	if (GLC_State::selectionShaderUsed()) GLC_SelectionMaterial::unUseShader();
+	//}
+	//// GLC_3DViewInstance with shader
+	//else if (!m_ShadedPointerViewInstanceHash.isEmpty())
+	//{
+	//    if(m_ShadedPointerViewInstanceHash.contains(groupId) && !m_ShadedPointerViewInstanceHash.value(groupId)->isEmpty())
+	//    {
+	//    	PointerViewInstanceHash* pNodeHash= m_ShadedPointerViewInstanceHash.value(groupId);
 
-	    	GLC_Shader::use(groupId);
-	    	glDrawInstancesOf(pNodeHash, renderFlag);
-	    	GLC_Shader::unuse();
-	    }
-	}
+	//    	GLC_Shader::use(groupId);
+	//    	glDrawInstancesOf(pNodeHash, renderFlag);
+	//    	GLC_Shader::unuse();
+	//    }
+	//}
 
-	// Restore OpenGL state
-	if (renderFlag && !GLC_State::isInSelectionMode() && (groupId == 0))
-	{
-		glDisable(GL_BLEND);
-		glDepthMask(GL_TRUE);
-		glEnable(GL_DEPTH_TEST);
-	}
+	//// Restore OpenGL state
+	//if (renderFlag && !GLC_State::isInSelectionMode() && (groupId == 0))
+	//{
+	//	glDisable(GL_BLEND);
+	//	glDepthMask(GL_TRUE);
+	//	glEnable(GL_DEPTH_TEST);
+	//}
 }

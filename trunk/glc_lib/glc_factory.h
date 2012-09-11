@@ -27,7 +27,7 @@
 #define GLC_FACTORY_
 
 #include <QObject>
-#include <QtOpenGL>
+//#include <QtOpenGL>
 #include <QString>
 #include <QSet>
 
@@ -49,7 +49,7 @@
 #include "sceneGraph/glc_3dviewinstance.h"
 #include "glc_boundingbox.h"
 //#include "viewport/glc_movercontroller.h"
-#include "viewport/glc_viewport.h"
+//#include "viewport/glc_viewport.h"
 #include "io/glc_fileloader.h"
 
 // end of class to built
@@ -157,13 +157,13 @@ public:
 	GLC_Material* createMaterial(const QString &textureFullFileName) const;
 
 	//! create a material textured with a QImage
-	GLC_Material* createMaterial(const QImage &) const;
+	//GLC_Material* createMaterial(const QImage &) const;
 
 	//! Create a GLC_Texture
 	GLC_Texture* createTexture(const QString &textureFullFileName) const;
 
 	//! Create a GLC_Texture with a QImage
-	GLC_Texture* createTexture(const QImage &, const QString& imageFileName= QString()) const;
+	//GLC_Texture* createTexture(const QImage &, const QString& imageFileName= QString()) const;
 
 	//! Create the default mover controller
 	//GLC_MoverController createDefaultMoverController(const QColor&, GLC_Viewport*);

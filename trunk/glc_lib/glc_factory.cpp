@@ -42,6 +42,8 @@
 #include "maths/glc_geomtools.h"
 
 #include "glc_fileformatexception.h"
+#include <QCoreApplication>
+#include <QPluginLoader>
 
 // init static member
 GLC_Factory* GLC_Factory::m_pFactory= NULL;
@@ -290,23 +292,23 @@ GLC_Material* GLC_Factory::createMaterial(const QString &textureFullFileName) co
 	return createMaterial(pTexture);
 }
 
-GLC_Material* GLC_Factory::createMaterial(const QImage &image) const
-{
-	GLC_Texture* pTexture= createTexture(image);
-	return createMaterial(pTexture);
-}
+//GLC_Material* GLC_Factory::createMaterial(const QImage &image) const
+//{
+//	GLC_Texture* pTexture= createTexture(image);
+//	return createMaterial(pTexture);
+//}
 
 GLC_Texture* GLC_Factory::createTexture(const QString &textureFullFileName) const
 {
 	return new GLC_Texture(textureFullFileName);
 }
 
-GLC_Texture* GLC_Factory::createTexture(const QImage & image, const QString& imageFileName) const
-{
-	return new GLC_Texture(image, imageFileName);
-}
+//GLC_Texture* GLC_Factory::createTexture(const QImage & image, const QString& imageFileName) const
+//{
+//	return new GLC_Texture(image, imageFileName);
+//}
 
-//GLC_MoverController GLC_Factory::createDefaultMoverController(const QColor& color, GLC_Viewport* pViewport)
+//GLC_MoverController GLC_Factory::createDefaultMoverController(const QColor& color, vl::Viewport* pViewport)
 //{
 //	GLC_MoverController defaultController;
 //
