@@ -226,6 +226,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\glc_errorlog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\glc_errorlog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\glc_factory.cpp"
 				>
 			</File>
@@ -254,6 +262,14 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\glc_fileformatexception.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\glc_fileformatexception.h"
+				>
 			</File>
 			<File
 				RelativePath=".\glc_global.cpp"
@@ -315,6 +331,22 @@
 					>
 				</File>
 				<File
+					RelativePath=".\sceneGraph\glc_selectionset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_selectionset.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_spacepartitioning.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sceneGraph\glc_spacepartitioning.h"
+					>
+				</File>
+				<File
 					RelativePath=".\sceneGraph\glc_structinstance.cpp"
 					>
 				</File>
@@ -358,6 +390,108 @@
 			<Filter
 				Name="io"
 				>
+				<File
+					RelativePath=".\io\glc_3dxmltoworld.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\io\glc_3dxmltoworld.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_3dxmltoworld.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_3dxmltoworld.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\io\glc_bsreptoworld.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\io\glc_bsreptoworld.h"
+					>
+				</File>
+				<File
+					RelativePath=".\io\glc_fileloader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\io\glc_fileloader.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_fileloader.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_fileloader.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\io\glc_worldto3dxml.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\io\glc_worldto3dxml.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_worldto3dxml.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing glc_worldto3dxml.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCREATE_GLC_LIB_DLL -DLIB3DS_EXPORTS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -D_WINDLL &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\3rdparty\zlib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.\..\..\Qt\4.8.2\mkspecs\default&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\io\glc_xmlutil.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="math"
@@ -459,11 +593,35 @@
 					>
 				</File>
 				<File
+					RelativePath=".\geometry\glc_lod.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_lod.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_mesh.h"
+					>
+				</File>
+				<File
 					RelativePath=".\geometry\glc_meshdata.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\geometry\glc_meshdata.h"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_primitivegroup.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\geometry\glc_primitivegroup.h"
 					>
 				</File>
 				<File
@@ -492,14 +650,6 @@
 				</File>
 				<File
 					RelativePath=".\shading\glc_light.h"
-					>
-				</File>
-				<File
-					RelativePath=".\shading\glc_material.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\shading\glc_material.h"
 					>
 				</File>
 				<File
@@ -532,6 +682,34 @@
 				</File>
 				<File
 					RelativePath=".\shading\glc_texture.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="viewport"
+				>
+				<File
+					RelativePath=".\viewport\glc_camera.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\viewport\glc_camera.h"
+					>
+				</File>
+				<File
+					RelativePath=".\viewport\glc_frustum.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\viewport\glc_frustum.h"
+					>
+				</File>
+				<File
+					RelativePath=".\viewport\glc_viewport.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\viewport\glc_viewport.h"
 					>
 				</File>
 			</Filter>

@@ -23,7 +23,7 @@
 //! \file glc_geometry.cpp Implementation of the GLC_Geometry class.
 
 #include "../shading/glc_selectionmaterial.h"
-#include "../glc_openglexception.h"
+//#include "../glc_openglexception.h"
 #include "../glc_state.h"
 #include "glc_geometry.h"
 
@@ -283,8 +283,8 @@ void GLC_Geometry::render(const GLC_RenderProperties& renderProperties)
 		GLenum error= glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			GLC_OpenGlException OpenGlException("GLC_Geometry::glExecute " + name(), error);
-			throw(OpenGlException);
+			//GLC_OpenGlException OpenGlException("GLC_Geometry::glExecute " + name(), error);
+			//throw(OpenGlException);
 		}
 	}
 }

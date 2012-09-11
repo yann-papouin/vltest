@@ -26,6 +26,8 @@
 #include "glc_matrix4x4.h"
 
 #include <QtGlobal>
+#include <QHash>
+#include <QDebug>
 
 //////////////////////////////////////////////////////////////////////
 //Tools Functions

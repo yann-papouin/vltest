@@ -150,7 +150,7 @@ public:
 	static void setSpacePartionningUsage(const bool);
 
 	//! Set the default octree depth
-	static void setDefaultOctreeDepth(int);
+	//static void setDefaultOctreeDepth(int);
 
 	//! Set the frustum culling usage
 	static void setFrustumCullingUsage(bool);

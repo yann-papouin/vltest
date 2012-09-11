@@ -24,7 +24,7 @@
 
 #include "glc_state.h"
 #include "glc_ext.h"
-#include "sceneGraph/glc_octree.h"
+//#include "sceneGraph/glc_octree.h"
 
 #include <QGLFramebufferObject>
 
@@ -133,10 +133,10 @@ bool GLC_State::isSpacePartitionningActivated()
 	return m_IsSpacePartitionningActivated;
 }
 
-int GLC_State::defaultOctreeDepth()
-{
-	return GLC_Octree::defaultDepth();
-}
+//int GLC_State::defaultOctreeDepth()
+//{
+//	return GLC_Octree::defaultDepth();
+//}
 
 bool GLC_State::isFrustumCullingActivated()
 {
@@ -216,10 +216,10 @@ void GLC_State::setSpacePartionningUsage(const bool usage)
 	m_IsSpacePartitionningActivated= usage;
 }
 
-void GLC_State::setDefaultOctreeDepth(int depth)
-{
-	GLC_Octree::setDefaultDepth(depth);
-}
+//void GLC_State::setDefaultOctreeDepth(int depth)
+//{
+//	GLC_Octree::setDefaultDepth(depth);
+//}
 
 void GLC_State::setFrustumCullingUsage(bool usage)
 {
