@@ -23,7 +23,8 @@
 //! \file glc_global.cpp implementation of usefull utilities
 
 #include "glc_global.h"
-
+#include <QDir>
+#include <QFileInfo>
 QMutex glc::iDMutex;
 QMutex glc::geomIdMutex;
 QMutex glc::userIdMutex;

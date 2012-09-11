@@ -26,9 +26,12 @@
 #define GLC_TEXTURE_H_
 
 #include <QFile>
-#include <QtOpenGL>
+#include <QSize>
+#include <QHash>
+//#include <QtOpenGL>
 
 #include "../glc_config.h"
+#include "gl/mesa_gl.h"
 
 /////////////////////////////////////////////////////////////////////
 //! \class GLC_Texture
@@ -56,7 +59,7 @@ public:
 	GLC_Texture(const QFile&);
 
 	//! Constructor with QImage
-	GLC_Texture(const QImage&, const QString& fileName= QString());
+//	GLC_Texture(const QImage&, const QString& fileName= QString());
 
 	//! Copy constructor
 	GLC_Texture(const GLC_Texture& TextureToCopy);
@@ -74,8 +77,8 @@ public:
 //////////////////////////////////////////////////////////////////////
 public:
 	//! Return the QGLContext of the texture
-	inline QGLContext* context() const
-	{return m_pQGLContext;}
+	//inline QGLContext* context() const
+	//{return m_pQGLContext;}
 
 	//! Return the texture File Name
 	inline QString fileName() const
@@ -105,8 +108,8 @@ public:
 	{ return m_HasAlphaChannel;}
 
 	//! Return the an image of the texture
-	inline QImage imageOfTexture() const
-	{ return m_textureImage;}
+	//inline QImage imageOfTexture() const
+	//{ return m_textureImage;}
 
 
 //@}
@@ -126,7 +129,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 public:
 	//! Load the texture
-	void glLoadTexture(QGLContext* pContext= NULL);
+// 	void glLoadTexture(QGLContext* pContext= NULL);
 	//! Bind texture in 2D mode
 	void glcBindTexture(void);
 
@@ -137,7 +140,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 private:
 	//! Load the image of this texture from the given fileName and return resutling image
-	QImage loadFromFile(const QString& fileName);
+//	QImage loadFromFile(const QString& fileName);
 
 	//! Remove this Opengl texture id
 	void removeThisOpenGLTextureId();
@@ -153,7 +156,7 @@ private:
 
 private:
 	//! OpenGL Context
-	QGLContext *m_pQGLContext;
+//	QGLContext *m_pQGLContext;
 
 	//! Texture Name
 	QString m_FileName;
@@ -162,7 +165,7 @@ private:
 	GLuint	m_GlTextureID;
 
 	//! QImage off the texture
-	QImage m_textureImage;
+// 	QImage m_textureImage;
 
 	//! Size of the texture
 	QSize m_TextureSize;

@@ -25,6 +25,8 @@
 #include <QDir>
 #include "glc_global.h"
 #include <QMutexLocker>
+#include <QApplication>
+#include <QDate>
 
 GLC_TraceLog* GLC_TraceLog::m_pTraceLog= NULL;
 QMutex GLC_TraceLog::m_Mutex;

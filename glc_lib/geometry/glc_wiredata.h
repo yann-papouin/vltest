@@ -122,7 +122,7 @@ public:
 
 	//! Render this wire data using Opengl
 	/*! The mode can be : GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP GL_LINES*/
-	void glDraw(const GLC_RenderProperties&, GLenum mode);
+ 	void glDraw(const GLC_RenderProperties&, GLenum mode);
 
 private:
 	//! Create this wire data VBO id

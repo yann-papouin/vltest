@@ -28,13 +28,14 @@
 #include "../geometry/glc_mesh.h"
 #include "../geometry/glc_3drep.h"
 #include "glc_xmlutil.h"
+#include "shading/GLC_RenderProperties.h"
 
 // Quazip library
 #include "../3rdparty/quazip/quazip.h"
 #include "../3rdparty/quazip/quazipfile.h"
 
 #include <QString>
-#include <QGLContext>
+//#include <QGLContext>
 #include <QFileInfo>
 #include <QSet>
 #include <QMutexLocker>
@@ -2128,7 +2129,7 @@ void GLC_3dxmlToWorld::loadCatRepImage()
 GLC_Texture* GLC_3dxmlToWorld::loadTexture(QString fileName)
 {
 	QString format= QFileInfo(fileName).suffix().toUpper();
-	QImage resultImage;
+	//QImage resultImage;
 	QString resultImageFileName;
 	if (m_IsInArchive)
 	{
@@ -2150,7 +2151,7 @@ GLC_Texture* GLC_3dxmlToWorld::loadTexture(QString fileName)
 			clear();
 			throw(fileFormatException);
 	    }
-		resultImage.load(p3dxmlFile, format.toLocal8Bit());
+//		resultImage.load(p3dxmlFile, format.toLocal8Bit());
 		p3dxmlFile->close();
 		delete p3dxmlFile;
 		resultImageFileName= glc::builtArchiveString(m_FileName, fileName);
@@ -2176,22 +2177,22 @@ GLC_Texture* GLC_3dxmlToWorld::loadTexture(QString fileName)
 		{
 			m_SetOfAttachedFileName << resultImageFileName;
 		}
-		resultImage.load(pCurrentFile, format.toLocal8Bit());
+	//	resultImage.load(pCurrentFile, format.toLocal8Bit());
 		pCurrentFile->close();
 		delete pCurrentFile;
 	}
 
 	GLC_Texture* pTexture= NULL;
-	if (!resultImage.isNull())
-	{
-		pTexture= new GLC_Texture(resultImage, resultImageFileName);
-	}
-	else
-	{
-		QStringList stringList(m_CurrentFileName);
-		stringList.append("Unable to load " + resultImageFileName);
-		GLC_ErrorLog::addError(stringList);
-	}
+	//if (!resultImage.isNull())
+	//{
+	//	pTexture= new GLC_Texture(resultImage, resultImageFileName);
+	//}
+	//else
+	//{
+	//	QStringList stringList(m_CurrentFileName);
+	//	stringList.append("Unable to load " + resultImageFileName);
+	//	GLC_ErrorLog::addError(stringList);
+	//}
 
 	return pTexture;
 }

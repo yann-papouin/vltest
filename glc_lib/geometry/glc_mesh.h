@@ -35,7 +35,7 @@
 #include "glc_geometry.h"
 #include "glc_primitivegroup.h"
 #include "../glc_state.h"
-#include "../shading/glc_selectionmaterial.h"
+//#include "../shading/glc_selectionmaterial.h"
 
 #include "../glc_config.h"
 
@@ -775,7 +775,7 @@ void GLC_Mesh::vboDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCurrentGrou
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+					//GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					glDrawElements(GL_TRIANGLES, pCurrentGroup->trianglesIndexSizes().at(i), GL_UNSIGNED_INT, pCurrentGroup->trianglesGroupOffset().at(i));
 				}
@@ -818,7 +818,7 @@ void GLC_Mesh::vboDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCurrentGrou
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+					//GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					glDrawElements(GL_TRIANGLE_STRIP, pCurrentGroup->stripsSizes().at(i), GL_UNSIGNED_INT, pCurrentGroup->stripsOffset().at(i));
 				}
@@ -861,7 +861,7 @@ void GLC_Mesh::vboDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCurrentGrou
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+//					GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					glDrawElements(GL_TRIANGLE_FAN, pCurrentGroup->fansSizes().at(i), GL_UNSIGNED_INT, pCurrentGroup->fansOffset().at(i));
 				}
@@ -920,7 +920,7 @@ void GLC_Mesh::vertexArrayDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCur
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+//					GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					GLvoid* pOffset= &m_MeshData.indexVectorHandle(m_CurrentLod)->data()[pCurrentGroup->trianglesGroupOffseti().at(i)];
 					glDrawElements(GL_TRIANGLES, pCurrentGroup->trianglesIndexSizes().at(i), GL_UNSIGNED_INT, pOffset);
@@ -966,7 +966,7 @@ void GLC_Mesh::vertexArrayDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCur
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+//					GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					GLvoid* pOffset= &m_MeshData.indexVectorHandle(m_CurrentLod)->data()[pCurrentGroup->stripsOffseti().at(i)];
 					glDrawElements(GL_TRIANGLE_STRIP, pCurrentGroup->stripsSizes().at(i), GL_UNSIGNED_INT, pOffset);
@@ -1012,7 +1012,7 @@ void GLC_Mesh::vertexArrayDrawSelectedPrimitivesGroupOf(GLC_PrimitiveGroup* pCur
 			{
 				if (!isTransparent)
 				{
-					GLC_SelectionMaterial::glExecute();
+//					GLC_SelectionMaterial::glExecute();
 					pCurrentLocalMaterial= NULL;
 					GLvoid* pOffset= &m_MeshData.indexVectorHandle(m_CurrentLod)->data()[pCurrentGroup->fansOffseti().at(i)];
 					glDrawElements(GL_TRIANGLE_FAN, pCurrentGroup->fansSizes().at(i), GL_UNSIGNED_INT, pOffset);

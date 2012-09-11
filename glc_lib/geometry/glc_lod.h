@@ -140,13 +140,13 @@ public:
 	{
 		if (0 == m_IboId && !m_IndexVector.isEmpty())
 		{
-			glGenBuffers(1, &m_IboId);
+//			glGenBuffers(1, &m_IboId);
 		}
 	}
 
 	//! Ibo Usage
 	inline void useIBO() const
-	{glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IboId);}
+	{/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IboId);*/}
 
 //@}
 

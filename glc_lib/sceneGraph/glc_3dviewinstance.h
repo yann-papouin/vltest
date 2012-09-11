@@ -37,7 +37,9 @@
 
 #include "../glc_config.h"
 
-class GLC_Viewport;
+#include "vlGraphics/Camera.hpp"
+
+class Camera;
 
 //////////////////////////////////////////////////////////////////////
 //! \class GLC_3DViewInstance
@@ -282,7 +284,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 public:
 	//! Display the instance
-	void render(glc::RenderFlag renderFlag= glc::ShadingFlag, bool useLoad= false, GLC_Viewport* pView= NULL);
+	void render(glc::RenderFlag renderFlag= glc::ShadingFlag, bool useLoad= false, vl::Camera* pCamera= NULL);
 
 	//! Display the instance in Body selection mode
 	void renderForBodySelection();
@@ -315,7 +317,7 @@ private:
 	void clear();
 
 	//! Compute LOD
-	int choseLod(const GLC_BoundingBox&, GLC_Viewport*, bool);
+	int choseLod(const GLC_BoundingBox&, vl::Camera*, bool);
 
 //////////////////////////////////////////////////////////////////////
 // Private members

@@ -25,7 +25,7 @@
 #ifndef GLC_OBJECT_H_
 #define GLC_OBJECT_H_
 
-#include <QtOpenGL>
+//#include <QtOpenGL>
 #include <QString>
 #include <QUuid>
 #include <QMutex>

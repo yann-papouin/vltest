@@ -200,7 +200,7 @@ public:
 	inline void useIBO(bool use, const int currentLod= 0)
 	{
 		if (use) m_LodList.at(currentLod)->useIBO();
-		else glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//		else glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 	//! Fill the VBO of the given type

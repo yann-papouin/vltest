@@ -24,33 +24,38 @@
 #ifndef GLC_EXT_H_
 #define GLC_EXT_H_
 
-#include <QtOpenGL>
-#include "3rdparty/glext/glext.h"
+// #include <QtOpenGL>
+//#include "3rdparty/glext/glext.h"
+#include <QString>
+
+// #include "3rdparty\Khronos\GL\khronos_glext.h"
+
+#include "3rdparty/Khronos/gl/mesa_gl.h"
 
 // Buffer offset used by VBO
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
 
 #if !defined(Q_OS_MAC)
 // ARB_vertex_buffer_object
-extern PFNGLBINDBUFFERARBPROC			glBindBuffer;
-extern PFNGLDELETEBUFFERSARBPROC		glDeleteBuffers;
-extern PFNGLGENBUFFERSARBPROC			glGenBuffers;
-extern PFNGLISBUFFERARBPROC				glIsBuffer;
-extern PFNGLBUFFERDATAARBPROC			glBufferData;
-extern PFNGLBUFFERSUBDATAARBPROC		glBufferSubData;
-extern PFNGLGETBUFFERSUBDATAARBPROC		glGetBufferSubData;
-extern PFNGLMAPBUFFERARBPROC			glMapBuffer;
-extern PFNGLUNMAPBUFFERARBPROC			glUnmapBuffer;
-extern PFNGLGETBUFFERPARAMETERIVARBPROC	glGetBufferParameteriv;
-extern PFNGLGETBUFFERPOINTERVARBPROC	glGetBufferPointerv;
+//extern PFNGLBINDBUFFERARBPROC			glBindBuffer;
+//extern PFNGLDELETEBUFFERSARBPROC		glDeleteBuffers;
+//extern PFNGLGENBUFFERSARBPROC			glGenBuffers;
+//extern PFNGLISBUFFERARBPROC				glIsBuffer;
+//extern PFNGLBUFFERDATAARBPROC			glBufferData;
+//extern PFNGLBUFFERSUBDATAARBPROC		glBufferSubData;
+//extern PFNGLGETBUFFERSUBDATAARBPROC		glGetBufferSubData;
+//extern PFNGLMAPBUFFERARBPROC			glMapBuffer;
+//extern PFNGLUNMAPBUFFERARBPROC			glUnmapBuffer;
+//extern PFNGLGETBUFFERPARAMETERIVARBPROC	glGetBufferParameteriv;
+//extern PFNGLGETBUFFERPOINTERVARBPROC	glGetBufferPointerv;
 // glDrawRangElement
 //extern PFNGLDRAWRANGEELEMENTSPROC glDrawRangeElements;
 // glMultiDrawElement
-extern PFNGLMULTIDRAWELEMENTSPROC		glMultiDrawElements;
-
-// GL_point_parameters Point Sprite
-extern PFNGLPOINTPARAMETERFARBPROC  glPointParameterf;
-extern PFNGLPOINTPARAMETERFVARBPROC glPointParameterfv;
+//extern PFNGLMULTIDRAWELEMENTSPROC		glMultiDrawElements;
+//
+//// GL_point_parameters Point Sprite
+//extern PFNGLPOINTPARAMETERFARBPROC  glPointParameterf;
+//extern PFNGLPOINTPARAMETERFVARBPROC glPointParameterfv;
 
 #endif
 

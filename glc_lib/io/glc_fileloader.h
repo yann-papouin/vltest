@@ -36,7 +36,7 @@
 #include "../glc_config.h"
 
 class GLC_World;
-class QGLContext;
+// class QGLContext;
 
 //////////////////////////////////////////////////////////////////////
 //! \class GLC_FileLoader

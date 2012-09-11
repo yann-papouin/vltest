@@ -26,10 +26,11 @@
 #define GLC_GLOBAL_H_
 
 #include <QMutex>
-#include <QtOpenGL>
+//#include <QtOpenGL>
 #include <QList>
 #include <QVector>
 #include <QHash>
+#include "3rdparty/Khronos/GL/mesa_gl.h"
 
 #include "glc_config.h"
 

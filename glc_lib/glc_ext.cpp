@@ -23,32 +23,32 @@
 
 #include "glc_ext.h"
 #include <QString>
-#include <QGLContext>
+//#include <QGLContext>
 #include <QDebug>
-#include <QGLShaderProgram>
+//#include <QGLShaderProgram>
 
 #if !defined(Q_OS_MAC)
 // ARB_vertex_buffer_object
-PFNGLBINDBUFFERARBPROC				glBindBuffer			= NULL;
-PFNGLDELETEBUFFERSARBPROC			glDeleteBuffers			= NULL;
-PFNGLGENBUFFERSARBPROC				glGenBuffers			= NULL;
-PFNGLISBUFFERARBPROC				glIsBuffer				= NULL;
-PFNGLBUFFERDATAARBPROC				glBufferData			= NULL;
-PFNGLBUFFERSUBDATAARBPROC			glBufferSubData			= NULL;
-PFNGLGETBUFFERSUBDATAARBPROC		glGetBufferSubData		= NULL;
-PFNGLMAPBUFFERARBPROC				glMapBuffer				= NULL;
-PFNGLUNMAPBUFFERARBPROC				glUnmapBuffer			= NULL;
-PFNGLGETBUFFERPARAMETERIVARBPROC	glGetBufferParameteriv	= NULL;
-PFNGLGETBUFFERPOINTERVARBPROC		glGetBufferPointerv		= NULL;
-// glDrawRangElement
-//PFNGLDRAWRANGEELEMENTSPROC 			glDrawRangeElements		= NULL;
-
-// glMultiDrawElement
-PFNGLMULTIDRAWELEMENTSPROC			glMultiDrawElements		= NULL;
-
-// GL_point_parameters Point Sprite
-PFNGLPOINTPARAMETERFARBPROC			glPointParameterf		= NULL;
-PFNGLPOINTPARAMETERFVARBPROC		glPointParameterfv		= NULL;
+//PFNGLBINDBUFFERARBPROC				glBindBuffer			= NULL;
+//PFNGLDELETEBUFFERSARBPROC			glDeleteBuffers			= NULL;
+//PFNGLGENBUFFERSARBPROC				glGenBuffers			= NULL;
+//PFNGLISBUFFERARBPROC				glIsBuffer				= NULL;
+//PFNGLBUFFERDATAARBPROC				glBufferData			= NULL;
+//PFNGLBUFFERSUBDATAARBPROC			glBufferSubData			= NULL;
+//PFNGLGETBUFFERSUBDATAARBPROC		glGetBufferSubData		= NULL;
+//PFNGLMAPBUFFERARBPROC				glMapBuffer				= NULL;
+//PFNGLUNMAPBUFFERARBPROC				glUnmapBuffer			= NULL;
+//PFNGLGETBUFFERPARAMETERIVARBPROC	glGetBufferParameteriv	= NULL;
+//PFNGLGETBUFFERPOINTERVARBPROC		glGetBufferPointerv		= NULL;
+//// glDrawRangElement
+////PFNGLDRAWRANGEELEMENTSPROC 			glDrawRangeElements		= NULL;
+//
+//// glMultiDrawElement
+//PFNGLMULTIDRAWELEMENTSPROC			glMultiDrawElements		= NULL;
+//
+//// GL_point_parameters Point Sprite
+//PFNGLPOINTPARAMETERFARBPROC			glPointParameterf		= NULL;
+//PFNGLPOINTPARAMETERFVARBPROC		glPointParameterfv		= NULL;
 
 #endif
 
@@ -57,8 +57,9 @@ PFNGLPOINTPARAMETERFVARBPROC		glPointParameterfv		= NULL;
 // Return true if the extension is supported
 bool glc::extensionIsSupported(const QString& extension)
 {
-	QString glExtension(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS)));
-	return glExtension.contains(extension);
+// 	QString glExtension(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS)));
+// 	return glExtension.contains(extension);
+	return false;
 }
 
 // Return true if VBO extension is succesfully loaded
@@ -66,23 +67,23 @@ bool glc::loadVboExtension()
 {
 	bool result= true;
 #if !defined(Q_OS_MAC)
-	const QGLContext* pContext= QGLContext::currentContext();
-    glBindBuffer				= (PFNGLBINDBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glBindBuffer"));
-    glDeleteBuffers				= (PFNGLDELETEBUFFERSARBPROC)pContext->getProcAddress(QLatin1String("glDeleteBuffers"));
-    glGenBuffers				= (PFNGLGENBUFFERSARBPROC)pContext->getProcAddress(QLatin1String("glGenBuffers"));
-    glIsBuffer					= (PFNGLISBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glIsBuffer"));
-    glBufferData				= (PFNGLBUFFERDATAARBPROC)pContext->getProcAddress(QLatin1String("glBufferData"));
-    glBufferSubData				= (PFNGLBUFFERSUBDATAARBPROC)pContext->getProcAddress(QLatin1String("glBufferSubData"));
-    glGetBufferSubData			= (PFNGLGETBUFFERSUBDATAARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferSubData"));
-    glMapBuffer					= (PFNGLMAPBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glMapBuffer"));
-    glUnmapBuffer				= (PFNGLUNMAPBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glUnmapBuffer"));
-    glGetBufferParameteriv		= (PFNGLGETBUFFERPARAMETERIVARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferParameteriv"));
-    glGetBufferPointerv			= (PFNGLGETBUFFERPOINTERVARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferPointerv"));
-    //glDrawRangeElements			= (PFNGLDRAWRANGEELEMENTSPROC)pContext->getProcAddress(QLatin1String("glDrawRangeElements"));
-    glMultiDrawElements			= (PFNGLMULTIDRAWELEMENTSPROC)pContext->getProcAddress(QLatin1String("glMultiDrawElements"));
+	//const QGLContext* pContext= QGLContext::currentContext();
+ //   glBindBuffer				= (PFNGLBINDBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glBindBuffer"));
+ //   glDeleteBuffers				= (PFNGLDELETEBUFFERSARBPROC)pContext->getProcAddress(QLatin1String("glDeleteBuffers"));
+ //   glGenBuffers				= (PFNGLGENBUFFERSARBPROC)pContext->getProcAddress(QLatin1String("glGenBuffers"));
+ //   glIsBuffer					= (PFNGLISBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glIsBuffer"));
+ //   glBufferData				= (PFNGLBUFFERDATAARBPROC)pContext->getProcAddress(QLatin1String("glBufferData"));
+ //   glBufferSubData				= (PFNGLBUFFERSUBDATAARBPROC)pContext->getProcAddress(QLatin1String("glBufferSubData"));
+ //   glGetBufferSubData			= (PFNGLGETBUFFERSUBDATAARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferSubData"));
+ //   glMapBuffer					= (PFNGLMAPBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glMapBuffer"));
+ //   glUnmapBuffer				= (PFNGLUNMAPBUFFERARBPROC)pContext->getProcAddress(QLatin1String("glUnmapBuffer"));
+ //   glGetBufferParameteriv		= (PFNGLGETBUFFERPARAMETERIVARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferParameteriv"));
+ //   glGetBufferPointerv			= (PFNGLGETBUFFERPOINTERVARBPROC)pContext->getProcAddress(QLatin1String("glGetBufferPointerv"));
+ //   //glDrawRangeElements			= (PFNGLDRAWRANGEELEMENTSPROC)pContext->getProcAddress(QLatin1String("glDrawRangeElements"));
+ //   glMultiDrawElements			= (PFNGLMULTIDRAWELEMENTSPROC)pContext->getProcAddress(QLatin1String("glMultiDrawElements"));
 
-    result= glBindBuffer && glDeleteBuffers && glGenBuffers && glIsBuffer && glBufferData && glBufferSubData &&
-    glGetBufferSubData && glMapBuffer && glUnmapBuffer && glGetBufferParameteriv && glGetBufferPointerv && glMultiDrawElements;// and glDrawRangeElements;
+ //   result= glBindBuffer && glDeleteBuffers && glGenBuffers && glIsBuffer && glBufferData && glBufferSubData &&
+ //   glGetBufferSubData && glMapBuffer && glUnmapBuffer && glGetBufferParameteriv && glGetBufferPointerv && glMultiDrawElements;// and glDrawRangeElements;
 #endif
     return result;
 
@@ -91,23 +92,24 @@ bool glc::loadVboExtension()
 // Load GLSL extensions
 bool glc::loadGlSlExtension()
 {
-    return QGLShaderProgram::hasOpenGLShaderPrograms();
+ //   return QGLShaderProgram::hasOpenGLShaderPrograms();
+	return false;
 }
 
 // Load Point Sprite extension
 bool glc::loadPointSpriteExtension()
 {
 	bool result= true;
-#if !defined(Q_OS_MAC)
-	const QGLContext* pContext= QGLContext::currentContext();
-	glPointParameterf				= (PFNGLPOINTPARAMETERFARBPROC)pContext->getProcAddress(QLatin1String("glPointParameterf"));
-	if (!glPointParameterf) qDebug() << "not glPointParameterf";
-	glPointParameterfv				= (PFNGLPOINTPARAMETERFVARBPROC)pContext->getProcAddress(QLatin1String("glPointParameterfv"));
-	if (!glPointParameterfv) qDebug() << "not glPointParameterfv";
-
-	result= glPointParameterf && glPointParameterfv;
-
-#endif
+//#if !defined(Q_OS_MAC)
+//	const QGLContext* pContext= QGLContext::currentContext();
+//	glPointParameterf				= (PFNGLPOINTPARAMETERFARBPROC)pContext->getProcAddress(QLatin1String("glPointParameterf"));
+//	if (!glPointParameterf) qDebug() << "not glPointParameterf";
+//	glPointParameterfv				= (PFNGLPOINTPARAMETERFVARBPROC)pContext->getProcAddress(QLatin1String("glPointParameterfv"));
+//	if (!glPointParameterfv) qDebug() << "not glPointParameterfv";
+//
+//	result= glPointParameterf && glPointParameterfv;
+//
+//#endif
     return result;
 }
 

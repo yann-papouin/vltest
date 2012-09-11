@@ -193,7 +193,7 @@ void GLC_PrimitiveGroup::setTrianglesOffset(GLvoid* pOffset)
 	const int size= m_TrianglesGroupOffseti.size();
 	for (int i= 0; i < size; ++i)
 	{
-		m_TrianglesGroupOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_TrianglesGroupOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
+//		m_TrianglesGroupOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_TrianglesGroupOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
 	}
 	m_TrianglesGroupOffseti.clear();
 }
@@ -216,7 +216,7 @@ void GLC_PrimitiveGroup::setBaseTrianglesStripOffset(GLvoid* pOffset)
 	const int size= m_StripIndexOffseti.size();
 	for (int i= 0; i < size; ++i)
 	{
-		m_StripIndexOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_StripIndexOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
+//		m_StripIndexOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_StripIndexOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
 	}
 	m_StripIndexOffseti.clear();
 }
@@ -261,7 +261,7 @@ void GLC_PrimitiveGroup::setBaseTrianglesFanOffset(GLvoid* pOffset)
 	const int size= m_FanIndexOffseti.size();
 	for (int i= 0; i < size; ++i)
 	{
-		m_FanIndexOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_FanIndexOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
+//		m_FanIndexOffset.append(BUFFER_OFFSET(static_cast<GLsizei>(m_FanIndexOffseti[i]) * sizeof(GLuint) + reinterpret_cast<GLsizeiptr>(pOffset)));
 	}
 	m_FanIndexOffseti.clear();
 }
@@ -352,20 +352,20 @@ QDataStream &operator<<(QDataStream &stream, const GLC_PrimitiveGroup &primitive
 		const int triangleIndexOffsetSize= primitiveGroup.m_TrianglesGroupOffset.size();
 		for (int i= 0; i < triangleIndexOffsetSize; ++i)
 		{
-			trianglesGroupOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_TrianglesGroupOffset.at(i)) / sizeof(GLuint)));
+//			trianglesGroupOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_TrianglesGroupOffset.at(i)) / sizeof(GLuint)));
 		}
 
 		// Trips offsets
 		const int stripIndexOffsetSize= primitiveGroup.m_StripIndexOffset.size();
 		for (int i= 0; i < stripIndexOffsetSize; ++i)
 		{
-			stripIndexOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_StripIndexOffset.at(i)) / sizeof(GLuint)));
+//			stripIndexOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_StripIndexOffset.at(i)) / sizeof(GLuint)));
 		}
 		// Fans offsets
 		const int fanIndexOffsetSize= primitiveGroup.m_FanIndexOffset.size();
 		for (int i= 0; i < fanIndexOffsetSize; ++i)
 		{
-			fanIndexOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_FanIndexOffset.at(i)) / sizeof(GLuint)));
+//			fanIndexOffseti.append(static_cast<GLuint>(reinterpret_cast<GLsizeiptr>(primitiveGroup.m_FanIndexOffset.at(i)) / sizeof(GLuint)));
 		}
 	}
 	else

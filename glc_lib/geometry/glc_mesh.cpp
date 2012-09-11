@@ -212,7 +212,7 @@ QVector<GLuint> GLC_Mesh::getTrianglesIndex(int lod, GLC_uint materialId) const
 	int offset= 0;
 	if (GLC_State::vboUsed())
 	{
-		offset= static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->trianglesIndexOffset()) / sizeof(GLuint));
+//		offset= static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->trianglesIndexOffset()) / sizeof(GLuint));
 	}
 	else
 	{
@@ -263,7 +263,7 @@ QList<QVector<GLuint> > GLC_Mesh::getStripsIndex(int lod, GLC_uint materialId) c
 		stripsCount= pPrimitiveGroup->stripsOffset().size();
 		for (int i= 0; i < stripsCount; ++i)
 		{
-			offsets.append(static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->stripsOffset().at(i)) / sizeof(GLuint)));
+//			offsets.append(static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->stripsOffset().at(i)) / sizeof(GLuint)));
 			sizes.append(static_cast<int>(pPrimitiveGroup->stripsSizes().at(i)));
 		}
 	}
@@ -336,7 +336,7 @@ QList<QVector<GLuint> > GLC_Mesh::getFansIndex(int lod, GLC_uint materialId) con
 		fansCount= pPrimitiveGroup->fansOffset().size();
 		for (int i= 0; i < fansCount; ++i)
 		{
-			offsets.append(static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->fansOffset().at(i)) / sizeof(GLuint)));
+//			offsets.append(static_cast<int>(reinterpret_cast<GLsizeiptr>(pPrimitiveGroup->fansOffset().at(i)) / sizeof(GLuint)));
 			sizes.append(static_cast<int>(pPrimitiveGroup->fansSizes().at(i)));
 		}
 	}
@@ -802,152 +802,152 @@ void GLC_Mesh::saveToDataStream(QDataStream& stream) const
 // Virtual interface for OpenGL Geometry set up.
 void GLC_Mesh::glDraw(const GLC_RenderProperties& renderProperties)
 {
-	Q_ASSERT(m_GeometryIsValid || !m_MeshData.normalVectorHandle()->isEmpty());
-
-	const bool vboIsUsed= GLC_State::vboUsed();
-
-	if (m_IsSelected && (renderProperties.renderingMode() == glc::PrimitiveSelected) && !GLC_State::isInSelectionMode()
-	&& !renderProperties.setOfSelectedPrimitiveIdIsEmpty())
-	{
-		m_CurrentLod= 0;
-	}
-
-	if (vboIsUsed)
-	{
-		m_MeshData.createVBOs();
-
-		// Create VBO and IBO
-		if (!m_GeometryIsValid && !m_MeshData.positionVectorHandle()->isEmpty())
-		{
-			fillVbosAndIbos();
-		}
-		else if (!m_GeometryIsValid && !m_MeshData.normalVectorHandle()->isEmpty())
-		{
-			// Normals has been inversed update normal vbo
-			m_MeshData.useVBO(true, GLC_MeshData::GLC_Normal);
-
-			GLfloatVector* pNormalVector= m_MeshData.normalVectorHandle();
-			const GLsizei dataNbr= static_cast<GLsizei>(pNormalVector->size());
-			const GLsizeiptr dataSize= dataNbr * sizeof(GLfloat);
-			glBufferData(GL_ARRAY_BUFFER, dataSize, pNormalVector->data(), GL_STATIC_DRAW);
-			m_MeshData.normalVectorHandle()->clear();
-		}
-
-		// Activate mesh VBOs and IBO of the current LOD
-		activateVboAndIbo();
-	}
-	else
-	{
-		activateVertexArray();
-	}
-
-	if (GLC_State::isInSelectionMode())
-	{
-		if (renderProperties.renderingMode() == glc::PrimitiveSelection)
-		{
-			primitiveSelectionRenderLoop(vboIsUsed);
-		}
-		else if (renderProperties.renderingMode() == glc::BodySelection)
-		{
-			bodySelectionRenderLoop(vboIsUsed);
-		}
-		else
-		{
-			normalRenderLoop(renderProperties, vboIsUsed);
-		}
-	}
-	else if (m_IsSelected)
-	{
-		if (renderProperties.renderingMode() == glc::PrimitiveSelected)
-		{
-			if (!renderProperties.setOfSelectedPrimitiveIdIsEmpty())
-			{
-				primitiveSelectedRenderLoop(renderProperties, vboIsUsed);
-			}
-			else
-			{
-				m_IsSelected= false;
-				if ((m_CurrentLod == 0) && (renderProperties.savedRenderingMode() == glc::OverwritePrimitiveMaterial) && !renderProperties.hashOfOverwritePrimitiveMaterialsIsEmpty())
-					primitiveRenderLoop(renderProperties, vboIsUsed);
-				else
-					normalRenderLoop(renderProperties, vboIsUsed);
-				m_IsSelected= true;
-			}
-		}
-		else
-		{
-			normalRenderLoop(renderProperties, vboIsUsed);
-		}
-	}
-	else
-	{
-		// Choose the accurate render loop
-		switch (renderProperties.renderingMode())
-		{
-		case glc::NormalRenderMode:
-			normalRenderLoop(renderProperties, vboIsUsed);
-			break;
-		case glc::OverwriteMaterial:
-			OverwriteMaterialRenderLoop(renderProperties, vboIsUsed);
-			break;
-		case glc::OverwriteTransparency:
-			OverwriteTransparencyRenderLoop(renderProperties, vboIsUsed);
-			break;
-		case glc::OverwritePrimitiveMaterial:
-			if ((m_CurrentLod == 0) && !renderProperties.hashOfOverwritePrimitiveMaterialsIsEmpty())
-				primitiveRenderLoop(renderProperties, vboIsUsed);
-			else
-				normalRenderLoop(renderProperties, vboIsUsed);
-			break;
-		default:
-			Q_ASSERT(false);
-			break;
-		}
-	}
-
-
-	// Restore client state
-	if (vboIsUsed)
-	{
-		m_MeshData.useIBO(false);
-		m_MeshData.useVBO(false, GLC_MeshData::GLC_Normal);
-	}
-
-	if (m_ColorPearVertex && !m_IsSelected && !GLC_State::isInSelectionMode())
-	{
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisable(GL_COLOR_MATERIAL);
-	}
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	// Draw mesh's wire if necessary
-	if ((renderProperties.renderingFlag() == glc::WireRenderFlag) && !m_WireData.isEmpty() && !GLC_Geometry::typeIsWire())
-	{
-		if (!GLC_State::isInSelectionMode())
-		{
-			glDisable(GL_LIGHTING);
-			// Set polyline colors
-			GLfloat color[4]= {static_cast<float>(m_WireColor.redF()),
-									static_cast<float>(m_WireColor.greenF()),
-									static_cast<float>(m_WireColor.blueF()),
-									static_cast<float>(m_WireColor.alphaF())};
-
-			glColor4fv(color);
-			m_WireData.glDraw(renderProperties, GL_LINE_STRIP);
-			glEnable(GL_LIGHTING);
-		}
-		else
-		{
-			m_WireData.glDraw(renderProperties, GL_LINE_STRIP);
-		}
-	}
-
-	// Update statistics
-	//GLC_RenderStatistics::addBodies(1);
-	//GLC_RenderStatistics::addTriangles(m_MeshData.trianglesCount(m_CurrentLod));
+//	Q_ASSERT(m_GeometryIsValid || !m_MeshData.normalVectorHandle()->isEmpty());
+//
+//	const bool vboIsUsed= GLC_State::vboUsed();
+//
+//	if (m_IsSelected && (renderProperties.renderingMode() == glc::PrimitiveSelected) && !GLC_State::isInSelectionMode()
+//	&& !renderProperties.setOfSelectedPrimitiveIdIsEmpty())
+//	{
+//		m_CurrentLod= 0;
+//	}
+//
+//	if (vboIsUsed)
+//	{
+//		m_MeshData.createVBOs();
+//
+//		// Create VBO and IBO
+//		if (!m_GeometryIsValid && !m_MeshData.positionVectorHandle()->isEmpty())
+//		{
+//			fillVbosAndIbos();
+//		}
+//		else if (!m_GeometryIsValid && !m_MeshData.normalVectorHandle()->isEmpty())
+//		{
+//			// Normals has been inversed update normal vbo
+//			m_MeshData.useVBO(true, GLC_MeshData::GLC_Normal);
+//
+//			GLfloatVector* pNormalVector= m_MeshData.normalVectorHandle();
+//			const GLsizei dataNbr= static_cast<GLsizei>(pNormalVector->size());
+//			const GLsizeiptr dataSize= dataNbr * sizeof(GLfloat);
+//			glBufferData(GL_ARRAY_BUFFER, dataSize, pNormalVector->data(), GL_STATIC_DRAW);
+//			m_MeshData.normalVectorHandle()->clear();
+//		}
+//
+//		// Activate mesh VBOs and IBO of the current LOD
+//		activateVboAndIbo();
+//	}
+//	else
+//	{
+//		activateVertexArray();
+//	}
+//
+//	if (GLC_State::isInSelectionMode())
+//	{
+//		if (renderProperties.renderingMode() == glc::PrimitiveSelection)
+//		{
+//			primitiveSelectionRenderLoop(vboIsUsed);
+//		}
+//		else if (renderProperties.renderingMode() == glc::BodySelection)
+//		{
+//			bodySelectionRenderLoop(vboIsUsed);
+//		}
+//		else
+//		{
+//			normalRenderLoop(renderProperties, vboIsUsed);
+//		}
+//	}
+//	else if (m_IsSelected)
+//	{
+//		if (renderProperties.renderingMode() == glc::PrimitiveSelected)
+//		{
+//			if (!renderProperties.setOfSelectedPrimitiveIdIsEmpty())
+//			{
+//				primitiveSelectedRenderLoop(renderProperties, vboIsUsed);
+//			}
+//			else
+//			{
+//				m_IsSelected= false;
+//				if ((m_CurrentLod == 0) && (renderProperties.savedRenderingMode() == glc::OverwritePrimitiveMaterial) && !renderProperties.hashOfOverwritePrimitiveMaterialsIsEmpty())
+//					primitiveRenderLoop(renderProperties, vboIsUsed);
+//				else
+//					normalRenderLoop(renderProperties, vboIsUsed);
+//				m_IsSelected= true;
+//			}
+//		}
+//		else
+//		{
+//			normalRenderLoop(renderProperties, vboIsUsed);
+//		}
+//	}
+//	else
+//	{
+//		// Choose the accurate render loop
+//		switch (renderProperties.renderingMode())
+//		{
+//		case glc::NormalRenderMode:
+//			normalRenderLoop(renderProperties, vboIsUsed);
+//			break;
+//		case glc::OverwriteMaterial:
+//			OverwriteMaterialRenderLoop(renderProperties, vboIsUsed);
+//			break;
+//		case glc::OverwriteTransparency:
+//			OverwriteTransparencyRenderLoop(renderProperties, vboIsUsed);
+//			break;
+//		case glc::OverwritePrimitiveMaterial:
+//			if ((m_CurrentLod == 0) && !renderProperties.hashOfOverwritePrimitiveMaterialsIsEmpty())
+//				primitiveRenderLoop(renderProperties, vboIsUsed);
+//			else
+//				normalRenderLoop(renderProperties, vboIsUsed);
+//			break;
+//		default:
+//			Q_ASSERT(false);
+//			break;
+//		}
+//	}
+//
+//
+//	// Restore client state
+//	if (vboIsUsed)
+//	{
+//		m_MeshData.useIBO(false);
+//		m_MeshData.useVBO(false, GLC_MeshData::GLC_Normal);
+//	}
+//
+//	if (m_ColorPearVertex && !m_IsSelected && !GLC_State::isInSelectionMode())
+//	{
+//		glDisableClientState(GL_COLOR_ARRAY);
+//		glDisable(GL_COLOR_MATERIAL);
+//	}
+//
+//	glDisableClientState(GL_VERTEX_ARRAY);
+//	glDisableClientState(GL_NORMAL_ARRAY);
+//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//
+//	// Draw mesh's wire if necessary
+//	if ((renderProperties.renderingFlag() == glc::WireRenderFlag) && !m_WireData.isEmpty() && !GLC_Geometry::typeIsWire())
+//	{
+//		if (!GLC_State::isInSelectionMode())
+//		{
+//			glDisable(GL_LIGHTING);
+//			// Set polyline colors
+//			GLfloat color[4]= {static_cast<float>(m_WireColor.redF()),
+//									static_cast<float>(m_WireColor.greenF()),
+//									static_cast<float>(m_WireColor.blueF()),
+//									static_cast<float>(m_WireColor.alphaF())};
+//
+//			glColor4fv(color);
+//			m_WireData.glDraw(renderProperties, GL_LINE_STRIP);
+//			glEnable(GL_LIGHTING);
+//		}
+//		else
+//		{
+//			m_WireData.glDraw(renderProperties, GL_LINE_STRIP);
+//		}
+//	}
+//
+//	// Update statistics
+//	//GLC_RenderStatistics::addBodies(1);
+//	//GLC_RenderStatistics::addTriangles(m_MeshData.trianglesCount(m_CurrentLod));
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1031,9 +1031,9 @@ void GLC_Mesh::fillVbosAndIbos()
 		{
 			QVector<GLuint>* pIndexVector= m_MeshData.indexVectorHandle(i);
 			m_MeshData.useIBO(true, i);
-			const GLsizei indexNbr= static_cast<GLsizei>(pIndexVector->size());
-			const GLsizeiptr indexSize = indexNbr * sizeof(GLuint);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, pIndexVector->data(), GL_STATIC_DRAW);
+// 			const GLsizei indexNbr= static_cast<GLsizei>(pIndexVector->size());
+// 			const GLsizeiptr indexSize = indexNbr * sizeof(GLuint);
+//			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, pIndexVector->data(), GL_STATIC_DRAW);
 		}
 	}
 	// Remove client side data
@@ -1158,7 +1158,7 @@ void GLC_Mesh::normalRenderLoop(const GLC_RenderProperties& renderProperties, bo
 				// Execute current material
 				pCurrentMaterial->glExecute();
 
-				if (m_IsSelected) GLC_SelectionMaterial::glExecute();
+				//if (m_IsSelected) GLC_SelectionMaterial::glExecute();
 			}
 
 	   		// Choose the primitives to render
@@ -1183,7 +1183,7 @@ void GLC_Mesh::OverwriteMaterialRenderLoop(const GLC_RenderProperties& renderPro
 	GLC_Material* pOverwriteMaterial= renderProperties.overwriteMaterial();
 	Q_ASSERT(NULL != pOverwriteMaterial);
 	pOverwriteMaterial->glExecute();
-	if (m_IsSelected) GLC_SelectionMaterial::glExecute();
+//	if (m_IsSelected) GLC_SelectionMaterial::glExecute();
 
 	LodPrimitiveGroups::iterator iGroup= m_PrimitiveGroups.value(m_CurrentLod)->begin();
 	while (iGroup != m_PrimitiveGroups.value(m_CurrentLod)->constEnd())
@@ -1227,7 +1227,7 @@ void GLC_Mesh::OverwriteTransparencyRenderLoop(const GLC_RenderProperties& rende
 			// Execute current material
 			pCurrentMaterial->glExecute(alpha);
 
-			if (m_IsSelected) GLC_SelectionMaterial::glExecute();
+//			if (m_IsSelected) GLC_SelectionMaterial::glExecute();
 
 	   		// Choose the primitives to render
 			if (m_IsSelected || materialIsrenderable)

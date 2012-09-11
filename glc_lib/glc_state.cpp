@@ -26,7 +26,7 @@
 #include "glc_ext.h"
 //#include "sceneGraph/glc_octree.h"
 
-#include <QGLFramebufferObject>
+//#include <QGLFramebufferObject>
 
 bool GLC_State::m_VboSupported= false;
 bool GLC_State::m_UseVbo= true;
@@ -178,7 +178,7 @@ void GLC_State::setPointSpriteSupport()
 
 void GLC_State::setFrameBufferSupport()
 {
-	m_IsFrameBufferSupported= QGLFramebufferObject::hasOpenGLFramebufferObjects();
+	//m_IsFrameBufferSupported= QGLFramebufferObject::hasOpenGLFramebufferObjects();
 }
 
 void GLC_State::setGlslUsage(const bool glslUsage)

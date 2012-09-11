@@ -346,7 +346,7 @@ void GLC_Material::setTexture(GLC_Texture* pTexture)
 	{
 		delete m_pTexture;
 		m_pTexture= pTexture;
-		glLoadTexture();
+//		glLoadTexture();
 	}
 	else
 	{
@@ -460,155 +460,155 @@ void GLC_Material::setOpacity(const qreal alpha)
 //////////////////////////////////////////////////////////////////////
 
 // Load the texture
-void GLC_Material::glLoadTexture(QGLContext* pContext)
-{
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->glLoadTexture(pContext);
-	}
-	else
-	{
-		qDebug() << "GLC_Material::glLoadTexture : Material without texture !";
-	}
-}
+//void GLC_Material::glLoadTexture(QGLContext* pContext)
+//{
+//	if (m_pTexture != NULL)
+//	{
+//		m_pTexture->glLoadTexture(pContext);
+//	}
+//	else
+//	{
+//		qDebug() << "GLC_Material::glLoadTexture : Material without texture !";
+//	}
+//}
 
 // Execute OpenGL Material
 void GLC_Material::glExecute()
 {
 
-	GLfloat pAmbientColor[4]= {ambientColor().redF(),
-								ambientColor().greenF(),
-								ambientColor().blueF(),
-								ambientColor().alphaF()};
+	//GLfloat pAmbientColor[4]= {ambientColor().redF(),
+	//							ambientColor().greenF(),
+	//							ambientColor().blueF(),
+	//							ambientColor().alphaF()};
 
-	GLfloat pDiffuseColor[4]= {diffuseColor().redF(),
-								diffuseColor().greenF(),
-								diffuseColor().blueF(),
-								diffuseColor().alphaF()};
+	//GLfloat pDiffuseColor[4]= {diffuseColor().redF(),
+	//							diffuseColor().greenF(),
+	//							diffuseColor().blueF(),
+	//							diffuseColor().alphaF()};
 
-	GLfloat pSpecularColor[4]= {specularColor().redF(),
-								specularColor().greenF(),
-								specularColor().blueF(),
-								specularColor().alphaF()};
+	//GLfloat pSpecularColor[4]= {specularColor().redF(),
+	//							specularColor().greenF(),
+	//							specularColor().blueF(),
+	//							specularColor().alphaF()};
 
-	GLfloat pLightEmission[4]= {emissiveColor().redF(),
-								emissiveColor().greenF(),
-								emissiveColor().blueF(),
-								emissiveColor().alphaF()};
+	//GLfloat pLightEmission[4]= {emissiveColor().redF(),
+	//							emissiveColor().greenF(),
+	//							emissiveColor().blueF(),
+	//							emissiveColor().alphaF()};
 
-	if (m_pTexture != NULL)
-	{
-		glEnable(GL_TEXTURE_2D);
-		m_pTexture->glcBindTexture();
-		if (GLC_State::glslUsed())
-		{
-			if (GLC_Shader::hasActiveShader())
-			{
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", true);
-			}
-		}
+	//if (m_pTexture != NULL)
+	//{
+	//	glEnable(GL_TEXTURE_2D);
+	//	m_pTexture->glcBindTexture();
+	//	if (GLC_State::glslUsed())
+	//	{
+	//		if (GLC_Shader::hasActiveShader())
+	//		{
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", true);
+	//		}
+	//	}
 
-	}
-	else
-	{
+	//}
+	//else
+	//{
 
-		if (GLC_State::glslUsed() && GLC_Shader::hasActiveShader())
-		{
-				glEnable(GL_TEXTURE_2D);
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", false);
-		}
-		else
-		{
-			glDisable(GL_TEXTURE_2D);
-		}
+	//	if (GLC_State::glslUsed() && GLC_Shader::hasActiveShader())
+	//	{
+	//			glEnable(GL_TEXTURE_2D);
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", false);
+	//	}
+	//	else
+	//	{
+	//		glDisable(GL_TEXTURE_2D);
+	//	}
 
-	}
+	//}
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, pAmbientColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, pDiffuseColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, pSpecularColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, pLightEmission);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &m_Shininess);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, pAmbientColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, pDiffuseColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, pSpecularColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, pLightEmission);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &m_Shininess);
 
-	glColor4fv(pDiffuseColor);
+	//glColor4fv(pDiffuseColor);
 
-	// OpenGL Error handler
-	GLenum errCode;
-	if ((errCode= glGetError()) != GL_NO_ERROR)
-	{
-		const GLubyte* errString;
-		errString = gluErrorString(errCode);
-		qDebug("GLC_Material::GlExecute OpenGL Error %s", errString);
-	}
+	//// OpenGL Error handler
+	//GLenum errCode;
+	//if ((errCode= glGetError()) != GL_NO_ERROR)
+	//{
+	//	const GLubyte* errString;
+	//	errString = gluErrorString(errCode);
+	//	qDebug("GLC_Material::GlExecute OpenGL Error %s", errString);
+	//}
 }
 
 // Execute OpenGL Material
 void GLC_Material::glExecute(float overwriteTransparency)
 {
-	GLfloat pAmbientColor[4]= {ambientColor().redF(),
-								ambientColor().greenF(),
-								ambientColor().blueF(),
-								overwriteTransparency};
+	//GLfloat pAmbientColor[4]= {ambientColor().redF(),
+	//							ambientColor().greenF(),
+	//							ambientColor().blueF(),
+	//							overwriteTransparency};
 
-	GLfloat pDiffuseColor[4]= {diffuseColor().redF(),
-								diffuseColor().greenF(),
-								diffuseColor().blueF(),
-								overwriteTransparency};
+	//GLfloat pDiffuseColor[4]= {diffuseColor().redF(),
+	//							diffuseColor().greenF(),
+	//							diffuseColor().blueF(),
+	//							overwriteTransparency};
 
-	GLfloat pSpecularColor[4]= {specularColor().redF(),
-								specularColor().greenF(),
-								specularColor().blueF(),
-								overwriteTransparency};
+	//GLfloat pSpecularColor[4]= {specularColor().redF(),
+	//							specularColor().greenF(),
+	//							specularColor().blueF(),
+	//							overwriteTransparency};
 
-	GLfloat pLightEmission[4]= {emissiveColor().redF(),
-								emissiveColor().greenF(),
-								emissiveColor().blueF(),
-								overwriteTransparency};
+	//GLfloat pLightEmission[4]= {emissiveColor().redF(),
+	//							emissiveColor().greenF(),
+	//							emissiveColor().blueF(),
+	//							overwriteTransparency};
 
-	if (m_pTexture != NULL)
-	{
-		glEnable(GL_TEXTURE_2D);
-		m_pTexture->glcBindTexture();
-		if (GLC_State::glslUsed())
-		{
-			if (GLC_Shader::hasActiveShader())
-			{
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", true);
-			}
-		}
-	}
-	else
-	{
-		glDisable(GL_TEXTURE_2D);
-		if (GLC_State::glslUsed())
-		{
-			if (GLC_Shader::hasActiveShader())
-			{
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
-				GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", false);
-			}
-		}
-	}
+	//if (m_pTexture != NULL)
+	//{
+	//	glEnable(GL_TEXTURE_2D);
+	//	m_pTexture->glcBindTexture();
+	//	if (GLC_State::glslUsed())
+	//	{
+	//		if (GLC_Shader::hasActiveShader())
+	//		{
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", true);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	glDisable(GL_TEXTURE_2D);
+	//	if (GLC_State::glslUsed())
+	//	{
+	//		if (GLC_Shader::hasActiveShader())
+	//		{
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("tex", GLint(0));
+	//			GLC_Shader::currentShaderHandle()->programShaderHandle()->setUniformValue("useTexture", false);
+	//		}
+	//	}
+	//}
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, pAmbientColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, pDiffuseColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, pSpecularColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, pLightEmission);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &m_Shininess);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, pAmbientColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, pDiffuseColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, pSpecularColor);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, pLightEmission);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &m_Shininess);
 
-	glColor4fv(pDiffuseColor);
+	//glColor4fv(pDiffuseColor);
 
-	// OpenGL Error handler
-	GLenum errCode;
-	if ((errCode= glGetError()) != GL_NO_ERROR)
-	{
-		const GLubyte* errString;
-		errString = gluErrorString(errCode);
-		qDebug("GLC_Material::glExecute(float) OpenGL Error %s", errString);
-	}
+	//// OpenGL Error handler
+	//GLenum errCode;
+	//if ((errCode= glGetError()) != GL_NO_ERROR)
+	//{
+	//	const GLubyte* errString;
+	//	errString = gluErrorString(errCode);
+	//	qDebug("GLC_Material::glExecute(float) OpenGL Error %s", errString);
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////
