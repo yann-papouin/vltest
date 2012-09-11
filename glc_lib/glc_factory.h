@@ -32,23 +32,23 @@
 #include <QSet>
 
 //class to built
-#include "geometry/glc_point.h"
-#include "geometry/glc_pointsprite.h"
-#include "geometry/glc_line.h"
-#include "geometry/glc_circle.h"
-#include "geometry/glc_box.h"
-#include "geometry/glc_cylinder.h"
-#include "geometry/glc_cone.h"
-#include "geometry/glc_sphere.h"
-#include "geometry/glc_rectangle.h"
+//#include "geometry/glc_point.h"
+//#include "geometry/glc_pointsprite.h"
+//#include "geometry/glc_line.h"
+//#include "geometry/glc_circle.h"
+//#include "geometry/glc_box.h"
+//#include "geometry/glc_cylinder.h"
+//#include "geometry/glc_cone.h"
+//#include "geometry/glc_sphere.h"
+//#include "geometry/glc_rectangle.h"
 #include "geometry/glc_3drep.h"
-#include "geometry/glc_pointcloud.h"
+//#include "geometry/glc_pointcloud.h"
 #include "shading/glc_material.h"
 #include "shading/glc_texture.h"
 #include "sceneGraph/glc_world.h"
 #include "sceneGraph/glc_3dviewinstance.h"
 #include "glc_boundingbox.h"
-#include "viewport/glc_movercontroller.h"
+//#include "viewport/glc_movercontroller.h"
 #include "viewport/glc_viewport.h"
 #include "io/glc_fileloader.h"
 
@@ -86,48 +86,48 @@ public:
 public:
 
 	//! Create a GLC_Point
-	GLC_3DRep createPoint(const GLC_Point3d &coord) const;
+	//GLC_3DRep createPoint(const GLC_Point3d &coord) const;
 
-	GLC_3DRep createPoint(double x, double y, double z) const;
+	//GLC_3DRep createPoint(double x, double y, double z) const;
 
-	//! Create a cloud of points
-	GLC_3DRep createPointCloud(const GLfloatVector& data, const QColor& color);
+	////! Create a cloud of points
+	//GLC_3DRep createPointCloud(const GLfloatVector& data, const QColor& color);
 
-	GLC_3DRep createPointCloud(const QList<GLC_Point3d>& pointList, const QColor& color);
+	//GLC_3DRep createPointCloud(const QList<GLC_Point3d>& pointList, const QColor& color);
 
-	GLC_3DRep createPointCloud(const QList<GLC_Point3df>& pointList, const QColor& color);
+	//GLC_3DRep createPointCloud(const QList<GLC_Point3df>& pointList, const QColor& color);
 
-	//! Create a GLC_PointSprite
-	GLC_3DRep createPointSprite(float, GLC_Material*) const;
+	////! Create a GLC_PointSprite
+	//GLC_3DRep createPointSprite(float, GLC_Material*) const;
 
-	//! Create a GLC_Line
-	GLC_3DRep createLine(const GLC_Point3d&, const GLC_Point3d&) const;
+	////! Create a GLC_Line
+	//GLC_3DRep createLine(const GLC_Point3d&, const GLC_Point3d&) const;
 
-	//!  Create a GLC_Circle
-	GLC_3DRep createCircle(double radius, double angle= 2 * glc::PI) const;
+	////!  Create a GLC_Circle
+	//GLC_3DRep createCircle(double radius, double angle= 2 * glc::PI) const;
 
-	//! Create a GLC_Box
-	GLC_3DRep createBox(double lx, double ly, double lz) const;
+	////! Create a GLC_Box
+	//GLC_3DRep createBox(double lx, double ly, double lz) const;
 
-	GLC_3DViewInstance createBox(const GLC_BoundingBox& boundingBox) const;
+	//GLC_3DViewInstance createBox(const GLC_BoundingBox& boundingBox) const;
 
-	//! Create a GLC_Cylinder
-	GLC_3DRep createCylinder(double radius, double length) const;
+	////! Create a GLC_Cylinder
+	//GLC_3DRep createCylinder(double radius, double length) const;
 
-	//! Create a GLC_Cone
-	GLC_3DRep createCone(double radius, double length) const;
+	////! Create a GLC_Cone
+	//GLC_3DRep createCone(double radius, double length) const;
 
-	//! Create a GLC_Sphere
-	GLC_3DRep createSphere(double radius) const;
+	////! Create a GLC_Sphere
+	//GLC_3DRep createSphere(double radius) const;
 
-	//!Create a GLC_Rectangle
-	GLC_3DRep createRectangle(double, double);
+	////!Create a GLC_Rectangle
+	//GLC_3DRep createRectangle(double, double);
 
-	//! Create a GLC_Rectangle from the given 3d point, normal and the given lenght
-	GLC_3DViewInstance createRectangle(const GLC_Point3d& point, const GLC_Vector3d& normal, double l1, double l2);
+	////! Create a GLC_Rectangle from the given 3d point, normal and the given lenght
+	//GLC_3DViewInstance createRectangle(const GLC_Point3d& point, const GLC_Vector3d& normal, double l1, double l2);
 
-	//! Create the representation of a cutting from the given 3d point, normal, lenght and material
-	GLC_3DViewInstance createCuttingPlane(const GLC_Point3d& point, const GLC_Vector3d& normal, double l1, double l2, GLC_Material* pMat);
+	////! Create the representation of a cutting from the given 3d point, normal, lenght and material
+	//GLC_3DViewInstance createCuttingPlane(const GLC_Point3d& point, const GLC_Vector3d& normal, double l1, double l2, GLC_Material* pMat);
 
 	//! Create a GLC_World from a QFile
 	GLC_World createWorldFromFile(QFile &file, QStringList* pAttachedFileName= NULL) const;
@@ -166,7 +166,7 @@ public:
 	GLC_Texture* createTexture(const QImage &, const QString& imageFileName= QString()) const;
 
 	//! Create the default mover controller
-	GLC_MoverController createDefaultMoverController(const QColor&, GLC_Viewport*);
+	//GLC_MoverController createDefaultMoverController(const QColor&, GLC_Viewport*);
 
 	//! Return the list of world reader plugin
 	static QList<GLC_WorldReaderPlugin*> worldReaderPlugins();

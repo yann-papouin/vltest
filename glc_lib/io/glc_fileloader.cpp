@@ -26,12 +26,12 @@
 
 #include "glc_fileloader.h"
 
-#include "glc_objtoworld.h"
-#include "glc_stltoworld.h"
-#include "glc_offtoworld.h"
-#include "glc_3dstoworld.h"
+//#include "glc_objtoworld.h"
+//#include "glc_stltoworld.h"
+//#include "glc_offtoworld.h"
+//#include "glc_3dstoworld.h"
 #include "glc_3dxmltoworld.h"
-#include "glc_colladatoworld.h"
+//#include "glc_colladatoworld.h"
 #include "glc_bsreptoworld.h"
 
 #include "../sceneGraph/glc_world.h"
@@ -88,35 +88,35 @@ GLC_World GLC_FileLoader::createWorldFromFile(QFile &file, QStringList* pAttache
 	GLC_World* pWorld= NULL;
 	if (QFileInfo(file).suffix().toLower() == "obj")
 	{
-		GLC_ObjToWorld objToWorld;
-		connect(&objToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
-		pWorld= objToWorld.CreateWorldFromObj(file);
-		if (NULL != pAttachedFileName)
-		{
-			(*pAttachedFileName)= objToWorld.listOfAttachedFileName();
-		}
+		//GLC_ObjToWorld objToWorld;
+		//connect(&objToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
+		//pWorld= objToWorld.CreateWorldFromObj(file);
+		//if (NULL != pAttachedFileName)
+		//{
+		//	(*pAttachedFileName)= objToWorld.listOfAttachedFileName();
+		//}
 	}
 	else if (QFileInfo(file).suffix().toLower() == "stl")
 	{
-		GLC_StlToWorld stlToWorld;
-		connect(&stlToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
-		pWorld= stlToWorld.CreateWorldFromStl(file);
+		//GLC_StlToWorld stlToWorld;
+		//connect(&stlToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
+		//pWorld= stlToWorld.CreateWorldFromStl(file);
 	}
 	else if (QFileInfo(file).suffix().toLower() == "off")
 	{
-		GLC_OffToWorld offToWorld;
-		connect(&offToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
-		pWorld= offToWorld.CreateWorldFromOff(file);
+		//GLC_OffToWorld offToWorld;
+		//connect(&offToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
+		//pWorld= offToWorld.CreateWorldFromOff(file);
 	}
 	else if (QFileInfo(file).suffix().toLower() == "3ds")
 	{
-		GLC_3dsToWorld studioToWorld;
-		connect(&studioToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
-		pWorld= studioToWorld.CreateWorldFrom3ds(file);
-		if (NULL != pAttachedFileName)
-		{
-			(*pAttachedFileName)= studioToWorld.listOfAttachedFileName();
-		}
+		//GLC_3dsToWorld studioToWorld;
+		//connect(&studioToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
+		//pWorld= studioToWorld.CreateWorldFrom3ds(file);
+		//if (NULL != pAttachedFileName)
+		//{
+		//	(*pAttachedFileName)= studioToWorld.listOfAttachedFileName();
+		//}
 	}
 	else if (QFileInfo(file).suffix().toLower() == "3dxml")
 	{
@@ -130,13 +130,13 @@ GLC_World GLC_FileLoader::createWorldFromFile(QFile &file, QStringList* pAttache
 	}
 	else if (QFileInfo(file).suffix().toLower() == "dae")
 	{
-		GLC_ColladaToWorld colladaToWorld;
-		connect(&colladaToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
-		pWorld= colladaToWorld.CreateWorldFromCollada(file);
-		if (NULL != pAttachedFileName)
-		{
-			(*pAttachedFileName)= colladaToWorld.listOfAttachedFileName();
-		}
+		//GLC_ColladaToWorld colladaToWorld;
+		//connect(&colladaToWorld, SIGNAL(currentQuantum(int)), this, SIGNAL(currentQuantum(int)));
+		//pWorld= colladaToWorld.CreateWorldFromCollada(file);
+		//if (NULL != pAttachedFileName)
+		//{
+		//	(*pAttachedFileName)= colladaToWorld.listOfAttachedFileName();
+		//}
 	}
 	else if (QFileInfo(file).suffix().toLower() == "bsrep")
 	{

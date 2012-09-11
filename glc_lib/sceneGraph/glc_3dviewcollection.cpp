@@ -25,7 +25,7 @@
 
 #include "glc_3dviewcollection.h"
 #include "../shading/glc_material.h"
-#include "../glc_openglexception.h"
+//#include "../glc_openglexception.h"
 #include "../shading/glc_selectionmaterial.h"
 #include "../glc_state.h"
 #include "../shading/glc_shader.h"
