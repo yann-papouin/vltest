@@ -33,7 +33,7 @@ public:
 #ifdef VL
 #include <vlGraphics/Rendering.hpp>
 //#include <vlGraphics/EdgeRenderer.hpp>
-#include <Renderer/vl/VLBaseView.hpp>
+#include "Renderer/vl/VLBaseView.hpp"
 //#include <Renderer/vl/AxisApplet.hpp>
 #include <vlMFC/MDIWindow.hpp>
 #define CMFCView vlMFC::MDIWindow

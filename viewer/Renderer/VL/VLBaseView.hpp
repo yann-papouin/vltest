@@ -12,8 +12,8 @@
 #include <vlGraphics/EdgeRenderer.hpp>
 #include <vlGraphics/Effect.hpp>
 
-#include <Renderer/vl/OrthographicTrackballManipulator.hpp>
-#include <Renderer/vl/PerspectiveTrackballManipulator.hpp>
+#include "Renderer/vl/OrthographicTrackballManipulator.hpp"
+#include "Renderer/vl/PerspectiveTrackballManipulator.hpp"
 
 using namespace vl;
 

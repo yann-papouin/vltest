@@ -365,6 +365,7 @@ void CGenViewerApp::OnFileOpen()
 	filter += _T("3ds Files (*.3ds)|*.3ds|");
 	filter += _T("ply Files (*.ply)|*.ply|");
 	filter += _T("vlx Files (*.vlt;*vlb)|*.vlt;*.vlb|");
+	filter += _T("3dxml Files (*.3dxml)|*.3dxml|");
 #endif
 
 #pragma region For Additional Formats
