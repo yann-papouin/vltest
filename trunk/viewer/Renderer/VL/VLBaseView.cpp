@@ -541,35 +541,40 @@ void VLBaseView::flush( bool bUpdate )
 	}
 }
 
+#include "glc_factory.h"
 void VLBaseView::loadFile(const std::string& strPathName )
 {
 	// resets the scene
 	sceneManager()->tree()->actors()->clear();
 
 	ref<ResourceDatabase> resource_db = vl::loadResource(strPathName.c_str());
-	if (!resource_db)
-		return;
-
-	std::vector< ref<Actor> > actors;
-	resource_db->get<Actor>(actors);
-	for(unsigned i=0; i<actors.size(); ++i)
+	if (resource_db)
 	{
-		ref<Actor> actor = actors[i].get();
-
-		// compute normals
-		vl::ref<vl::Geometry> geom = cast<vl::Geometry>(actor->lod(0));
-		if (geom)
+		std::vector< ref<Actor> > actors;
+		resource_db->get<Actor>(actors);
+		for(unsigned i=0; i<actors.size(); ++i)
 		{
-			geom->computeNormals();
-		}
+			ref<Actor> actor = actors[i].get();
 
-		// define a reasonable Shader
-		actor->effect()->shader()->setRenderState( new Light, 0 );
-		actor->effect()->shader()->enable(EN_DEPTH_TEST);
-		actor->effect()->shader()->enable(EN_LIGHTING);
-		actor->effect()->shader()->gocLightModel()->setTwoSide(true);
-		// add the actor to the scene
-		sceneManager()->tree()->addActor( actor.get() );
+			// compute normals
+			vl::ref<vl::Geometry> geom = cast<vl::Geometry>(actor->lod(0));
+			if (geom)
+			{
+				geom->computeNormals();
+			}
+
+			// define a reasonable Shader
+			actor->effect()->shader()->setRenderState( new Light, 0 );
+			actor->effect()->shader()->enable(EN_DEPTH_TEST);
+			actor->effect()->shader()->enable(EN_LIGHTING);
+			actor->effect()->shader()->gocLightModel()->setTwoSide(true);
+			// add the actor to the scene
+			sceneManager()->tree()->addActor( actor.get() );
+		}
+	}
+	else//for testing glc lib 3dxml importer
+	{
+		GLC_Factory 
 	}
 
 	setViewMode(ViewIso,true);
