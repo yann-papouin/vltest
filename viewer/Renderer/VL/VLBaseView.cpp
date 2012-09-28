@@ -541,7 +541,7 @@ void VLBaseView::flush( bool bUpdate )
 	}
 }
 
-#include "glc_factory.h"
+//#include "factory.h"
 void VLBaseView::loadFile(const std::string& strPathName )
 {
 	// resets the scene
@@ -574,7 +574,7 @@ void VLBaseView::loadFile(const std::string& strPathName )
 	}
 	else//for testing glc lib 3dxml importer
 	{
-		GLC_Factory 
+	//	Factory 
 	}
 
 	setViewMode(ViewIso,true);

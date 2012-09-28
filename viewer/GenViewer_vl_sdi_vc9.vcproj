@@ -50,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;XERCES;_CRT_SECURE_NO_WARNINGS;VL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -698,6 +698,110 @@
 				</File>
 				<File
 					RelativePath=".\InterOp\IOManager.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="3DXML"
+				>
+			</Filter>
+			<Filter
+				Name="Struct"
+				>
+				<File
+					RelativePath=".\Struct\Attributes.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Attributes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Instance.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Instance.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Occurence.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Occurence.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Reference.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Reference.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Represent.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Represent.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Represent3D.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Represent3D.h"
 					>
 				</File>
 			</Filter>

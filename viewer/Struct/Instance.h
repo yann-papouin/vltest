@@ -1,80 +1,56 @@
+//! \file Instance.h interface for the Instance class.
 
-/****************************************************************************
+#ifndef Instance_H_
+#define Instance_H_
 
- This file is part of the GLC-lib library.
- Copyright (C) 2005-2008 Laurent Ribon (laumaya@users.sourceforge.net)
- http://glc-lib.sourceforge.net
-
- GLC-lib is free software; you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 3 of the License, or
- (at your option) any later version.
-
- GLC-lib is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public License
- along with GLC-lib; if not, write to the Free Software
- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
-*****************************************************************************/
-
-//! \file structinstance.h interface for the StructInstance class.
-
-#ifndef STRUCTINSTANCE_H_
-#define STRUCTINSTANCE_H_
-
+#include <assert.h>
 #include <list>
 #include <string>
-#include "attributes.h"
 
-#include "vlCore/config.hpp"
-#include "vlCore/Vector4.hpp"
 #include "vlCore/Matrix4.hpp"
+#include "vlCore/Vector3.hpp"
+//#include "3dviewinstance.h"
 
-#include "../config.h"
-using namespace vl;
+#include "struct/attributes.h"
 
-class StructReference;
-class StructOccurence;
-class Rep;
+class Reference;
+class Occurence;
+class Represent;
 
 //////////////////////////////////////////////////////////////////////
-//! \class StructInstance
-/*! \brief StructInstance : A scene graph instance node */
+//! \class Instance
+/*! \brief Instance : A scene graph instance node */
 //////////////////////////////////////////////////////////////////////
-class GVCORE_EXPORT StructInstance
+class Instance
 {
 public:
 	//! Default constructor
-	StructInstance(StructReference* pRef= NULL);
+	Instance(Reference* pRef= NULL);
 
 	//! Create instance with a rep
-	StructInstance(Rep*);
+	Instance(Represent*);
 
 	//! Copy constructor
-	StructInstance(const StructInstance&);
+	Instance(const Instance&);
 
 	//! Copy constructor
-	StructInstance(StructInstance*);
+	Instance(Instance*);
 
 	//! Create empty instance
-	StructInstance(const std::string&);
+	Instance(const std::string&);
 
 	//! Set the reference of an empty instance
-	void setReference(StructReference*);
+	void setReference(Reference*);
 
 	// Destructor
-	virtual ~StructInstance();
+	virtual ~Instance();
 //////////////////////////////////////////////////////////////////////
 /*! \name Get Functions*/
 //@{
 //////////////////////////////////////////////////////////////////////
 public:
 	//! Return true if this instance have occurence
-	inline bool hasStructOccurence() const
+	inline bool hasOccurence() const
 	{ return !m_ListOfOccurences.empty();}
 
 	//! Return the number of occurence
@@ -82,19 +58,19 @@ public:
 	{return m_ListOfOccurences.size();}
 
 	//! Return first occurence handle
-	inline StructOccurence* firstOccurenceHandle() const
+	inline Occurence* firstOccurenceHandle() const
 	{ return m_ListOfOccurences.front();}
 
 	//! Return the relative matrix of this instance
-	inline dmat4 relativeMatrix() const
+	inline vl::dmat4 relativeMatrix() const
 	{ return m_RelativeMatrix;}
 
 	//! Return the reference of this instance
-	inline StructReference* structReference() const
-	{ return m_pStructReference;}
+	inline Reference* reference() const
+	{ return m_pReference;}
 
 	//! Return the list off occurence of this instance
-	inline std::vector<StructOccurence*> listOfStructOccurences() const
+	inline std::vector<Occurence*> listOfOccurences() const
 	{ return m_ListOfOccurences;}
 
 	//! Return the instance name
@@ -120,11 +96,10 @@ public:
 //////////////////////////////////////////////////////////////////////
 public:
 	//! An occurence of this instance have been created
-	inline void structOccurenceCreated(StructOccurence* pOccurence)
+	inline void OccurenceCreated(Occurence* pOccurence)
 	{
-//		assert(!m_ListOfOccurences.find(pOccurence) != m_ListOfOccurences.end());
-
-		std::vector<StructOccurence*>::const_iterator itor;
+//		assert(!m_ListOfOccurences.contains(pOccurence));
+		std::vector<Occurence*>::const_iterator itor;
 		for (itor=m_ListOfOccurences.begin();itor!=m_ListOfOccurences.end();itor++)
 		{
 			if (*itor == pOccurence)
@@ -132,13 +107,12 @@ public:
 				assert(false);
 			}			
 		}
-
 		m_ListOfOccurences.push_back(pOccurence);
 	}
 
-	inline void structOccurenceDeleted(StructOccurence *pOccurence)
+	inline void OccurenceDeleted(Occurence *pOccurence)
 	{
-		std::vector<StructOccurence*>::const_iterator itor;
+		std::vector<Occurence*>::const_iterator itor;
 		for (itor=m_ListOfOccurences.begin();itor!=m_ListOfOccurences.end();itor++)
 		{
 			if (*itor == pOccurence)
@@ -149,36 +123,36 @@ public:
 	}
 
 	//! Move the instance by specified matrix
-	inline StructInstance* move(const vl::dmat4& matrix)
+	inline Instance* move(const vl::dmat4& matrix)
 	{
 		m_RelativeMatrix= matrix * m_RelativeMatrix;
 		return this;
 	}
 
 	//! Translate Instance
-	inline StructInstance* translate(double Tx, double Ty, double Tz)
+	inline Instance* translate(double Tx, double Ty, double Tz)
 	{
 		m_RelativeMatrix= vl::dmat4::getTranslation(Tx, Ty, Tz) * m_RelativeMatrix;
 		return this;
 	}
 
 	//! Translate Instance
-	inline StructInstance* translate(const vl::dvec3& v)
+	inline Instance* translate(const vl::dvec3 & v)
 	{
 		return translate(v.x(), v.y(), v.z());
 	}
 
 	//! Replace the instance Matrix
-	inline StructInstance* setMatrix(const vl::dmat4 &SetMat)
+	inline Instance* setMatrix(const vl::dmat4 &SetMat)
 	{
 		m_RelativeMatrix= SetMat;
 		return this;
 	}
 
 	//! Reset the instance Matrix
-	inline StructInstance* resetMatrix()
+	inline Instance* resetMatrix()
 	{
-		m_RelativeMatrix = dmat4::getIdentity();
+		m_RelativeMatrix = vl::dmat4::getIdentity();
 		return this;
 	}
 
@@ -204,10 +178,10 @@ private:
 	int* m_pNumberOfInstance;
 
 	//! The Struct reference of this instance
-	StructReference* m_pStructReference;
+	Reference* m_pReference;
 
 	//! The list of instance's occurences
-	std::vector<StructOccurence*> m_ListOfOccurences;
+	std::vector<Occurence*> m_ListOfOccurences;
 
 	//! The relative matrix
 	vl::dmat4 m_RelativeMatrix;
@@ -219,4 +193,4 @@ private:
 	Attributes* m_pAttributes;
 };
 
-#endif /* STRUCTINSTANCE_H_ */
+#endif /* Instance_H_ */
