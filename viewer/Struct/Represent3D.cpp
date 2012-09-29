@@ -8,16 +8,16 @@ unsigned int Represent3D::m_ChunkId= 0xA702;
 // Default constructor
 Represent3D::Represent3D()
 : Represent()
-//, m_pGeomList(new QList<GLC_Geometry*>)
+//, m_pGeomList(new std::vector<Geometry*>)
 , m_pType(new int(Represent::VBOGEOM))
 {
 
 }
 
-// Construct a 3DRep with a geometry
+// Construct a Represent3D with a geometry
 Represent3D::Represent3D(const ActorCollection& actors)
 : Represent()
-//, m_pGeomList(new QList<GLC_Geometry*>)
+//, m_pGeomList(new std::vector<Geometry*>)
 , m_pType(new int(Represent::VBOGEOM))
 {
 //	m_pGeomList->append(pGeom);
@@ -38,14 +38,14 @@ Represent3D::Represent3D(const Represent3D& rep)
 // Assignement operator
 Represent3D& Represent3D::operator=(const Represent& rep)
 {
-	const Represent3D* p3DRep= dynamic_cast<const Represent3D*>(&rep);
-	assert(NULL != p3DRep);
+	const Represent3D* pRepresent3D= dynamic_cast<const Represent3D*>(&rep);
+	assert(NULL != pRepresent3D);
 	if (this != &rep)
 	{
 		clear();
 		Represent::operator=(rep);
-//		m_pGeomList= p3DRep->m_pGeomList;
-		m_pType= p3DRep->m_pType;
+//		m_pGeomList= pRepresent3D->m_pGeomList;
+		m_pType= pRepresent3D->m_pType;
 	}
 
 	return *this;
@@ -57,7 +57,7 @@ Represent* Represent3D::clone() const
 	return new Represent3D(*this);
 }
 
-// Make a deep copy of the 3DRep
+// Make a deep copy of the Represent3D
 Represent* Represent3D::deepCopy() const
 {
 	Represent3D* pCloneRep= new Represent3D;
@@ -74,7 +74,7 @@ Represent* Represent3D::deepCopy() const
 	const int size= mActorCollection.size();
 	for (int i= 0; i < size; ++i)
 	{
-		pCloneRep->addActor(mActorCollection[i]);
+		pCloneRep->insertActor(mActorCollection[i]);
 	}
 
 	return pCloneRep;
@@ -119,7 +119,7 @@ bool Represent3D::boundsDirty() const
 	return result;
 }
 
-// Return the 3DRep bounding Box
+// Return the Represent3D bounding Box
 AABB Represent3D::boundingBox() const
 {
 	AABB aabb;
@@ -184,8 +184,8 @@ unsigned int Represent3D::materialCount() const
 // Remove empty geometries
 void Represent3D::clean()
 {
-// 	QList<GLC_Geometry*>::iterator iGeomList= m_pGeomList->begin();
-// 	while(iGeomList != m_pGeomList->constEnd())
+// 	std::vector<Geometry*>::iterator iGeomList= m_pGeomList->begin();
+// 	while(iGeomList != m_pGeomList->end())
 // 	{
 // 		if ((*iGeomList)->VertexCount() == 0)
 // 		{
@@ -208,17 +208,17 @@ bool Represent3D::load()
 
 	if(!(*m_pIsLoaded))
 	{
-// 		Q_ASSERT(m_pGeomList->isEmpty());
+// 		assert(m_pGeomList->isEmpty());
 // 		if (fileName().isEmpty())
 // 		{
 // 			std::stringList stringList("Represent3D::load");
 // 			stringList.append("Representation : " + Represent::name());
 // 			stringList.append("Empty File Name");
-// 			GLC_ErrorLog::addError(stringList);
+// 			ErrorLog::addError(stringList);
 // 		}
 // 		else
 // 		{
-// 			Represent3D newRep= GLC_Factory::instance()->create3DRepFromFile(fileName());
+// 			Represent3D newRep= Factory::instance()->createRepresent3DFromFile(fileName());
 // 			if (!newRep.isEmpty())
 // 			{
 // 				const int size= newRep.m_pGeomList->size();

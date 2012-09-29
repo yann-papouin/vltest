@@ -110,7 +110,7 @@ void GLFont::Draw2DText(char *string)
 	SelectObject(hDC,hOldFont);
 	::DeleteDC(hDC);
 }
-map<UINT,FontDesc>  GLFont::m_sglFontList;
+map<unsigned int,FontDesc>  GLFont::m_sglFontList;
 
 void GLFont::Draw3DText(const char *string)
 {
@@ -148,7 +148,7 @@ void GLFont::Draw3DText(const char *string)
 		//不同的文字在文字描述表中只出现一次，如“我是中国中国”，重复的中和国只出现一次，这样大大提高了速度
 		if (m_sglFontList.find(dwChar) == m_sglFontList.end())
 		{
-			GLuint newID  = glGenLists(1);
+			unsigned int newID  = glGenLists(1);
 			wglUseFontOutlines(hDC,dwChar,1,newID,0.0,m_fExtrusion,WGL_FONT_LINES,pgmf);
 			FontDesc  font;
 			font.flyfloat = pgmf[0];

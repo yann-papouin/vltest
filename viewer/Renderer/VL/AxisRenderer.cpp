@@ -23,7 +23,7 @@ void drawCNString(const char* str) {
 	int len, i;
 	wchar_t* wstring;
 	HDC hDC = wglGetCurrentDC();
-	GLuint list = glGenLists(1);
+	unsigned int list = glGenLists(1);
 
 	// 计算字符的个数
 	// 如果是双字节字符的（比如中文字符），两个字节才算一个字符

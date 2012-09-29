@@ -61,7 +61,7 @@ BEGIN_MESSAGE_MAP(CDockingPaneMiniWnd, CXTPDockingPaneMiniWnd)
 	ON_WM_NCRBUTTONDOWN()
 END_MESSAGE_MAP()
 
-void CDockingPaneMiniWnd::OnNcRButtonDown(UINT nHitTest, CPoint point)
+void CDockingPaneMiniWnd::OnNcRButtonDown(unsigned int nHitTest, CPoint point)
 {
 	if (nHitTest == HTCAPTION)
 	{
@@ -80,7 +80,7 @@ void CDockingPaneMiniWnd::OnNcRButtonDown(UINT nHitTest, CPoint point)
 
 		}
 
-		UINT nID = CXTPCommandBars::TrackPopupMenu(pPopupBar, TPM_RETURNCMD, point.x, point.y, AfxGetMainWnd());
+		unsigned int nID = CXTPCommandBars::TrackPopupMenu(pPopupBar, TPM_RETURNCMD, point.x, point.y, AfxGetMainWnd());
 
 		if (nID > 0)
 		{

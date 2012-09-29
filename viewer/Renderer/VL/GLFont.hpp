@@ -53,7 +53,7 @@ public:
 
 	int m_iDisplayList; //显示列表ID
 
-	static map<UINT,FontDesc>  m_sglFontList;  
+	static map<unsigned int,FontDesc>  m_sglFontList;  
 
 	int m_red; //红(255色)
 	int m_green; //绿  

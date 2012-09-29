@@ -47,7 +47,7 @@ public:
 protected:
 	//{{AFX_MSG(CPaneView)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnSize(unsigned int nType, int cx, int cy);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
@@ -114,7 +114,7 @@ public:
 	// Remarks:
 	//     Usually this function is called by ReportRecordItem's OnMouseMove function
 	//-----------------------------------------------------------------------
-	virtual void OnMouseEnter(UINT nFlags, CPoint point);
+	virtual void OnMouseEnter(unsigned int nFlags, CPoint point);
 
 	//-----------------------------------------------------------------------
 	// Summary:
@@ -125,7 +125,7 @@ public:
 	// Remarks:
 	//     Usually this function is called by ReportRecordItem's OnMouseMove function
 	//-----------------------------------------------------------------------
-	virtual void OnMouseLeave(UINT nFlags, CPoint point);
+	virtual void OnMouseLeave(unsigned int nFlags, CPoint point);
 
 	//-----------------------------------------------------------------------
 	// Summary:
@@ -136,7 +136,7 @@ public:
 	// Remarks:
 	//     Usually this function is called by ReportRecordItem's OnMouseMove function
 	//-----------------------------------------------------------------------
-	virtual void OnMouseMove(UINT nFlags, CPoint point);
+	virtual void OnMouseMove(unsigned int nFlags, CPoint point);
 
 protected:
 	int m_nSavedState; // Button state when the mouse cursor leaves the button area.

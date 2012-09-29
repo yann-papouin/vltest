@@ -68,7 +68,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CXTPFrameWnd)
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
-static UINT indicators[] =
+static unsigned int indicators[] =
 {
 	ID_SEPARATOR,           // status line indicator
 	ID_INDICATOR_CAPS,
@@ -97,7 +97,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
-		  sizeof(indicators)/sizeof(UINT)))
+		  sizeof(indicators)/sizeof(unsigned int)))
 	{
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
@@ -241,7 +241,7 @@ void CMainFrame::RefreshPanes()
 {
 }
 
-void CMainFrame::OnShowView(UINT nID)
+void CMainFrame::OnShowView(unsigned int nID)
 {
 	m_paneManager.ShowPane(nID);
 }

@@ -1,32 +1,50 @@
+/****************************************************************************
 
-//! \file Occurence.h interface for the Occurence class.
+ This file is part of the GLC-lib library.
+ Copyright (C) 2005-2008 Laurent Ribon (laumaya@users.sourceforge.net)
+ http://glc-lib.sourceforge.net
 
-#ifndef Occurence_H_
-#define Occurence_H_
+ GLC-lib is free software; you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
 
-#include "vlCore/Matrix4.hpp"
-#include "vlCore/AABB.hpp"
+ GLC-lib is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with GLC-lib; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+*****************************************************************************/
+
+//! \file structoccurence.h interface for the StructOccurence class.
+
+#ifndef STRUCTOCCURENCE_H_
+#define STRUCTOCCURENCE_H_
+#include "../config.h"
 
 
+
+#include "structinstance.h"
 #include <set>
-#include <vector>
 
-// #include "struct/Instance.h"
-#include "renderer/vl/VLBaseView.hpp"
+#include "vlCore/AABB.hpp"
+#include "vlCore/Matrix4.hpp"
+using namespace vl;
 
-
+class WorldHandle;
+class Rep3D;
 //class Material;
 //class RenderProperties;
-class Represent3D;
-class Instance;
-class Reference;
-class WorldHandle;
 
 //////////////////////////////////////////////////////////////////////
-//! \class Occurence
-/*! \brief Occurence : A scene graph occurence node */
+//! \class StructOccurence
+/*! \brief StructOccurence : A scene graph occurence node */
 //////////////////////////////////////////////////////////////////////
-class Occurence
+class GVCORE_EXPORT StructOccurence
 {
 //////////////////////////////////////////////////////////////////////
 /*! @name Constructor / Destructor */
@@ -35,19 +53,19 @@ class Occurence
 
 public:
 	//! Default constructor
-	Occurence();
+	StructOccurence();
 
 	//! Create Occurence of the specified instance
-	Occurence(Instance*, WorldHandle* pWorldHandle= NULL, unsigned int shaderId=0);
+	StructOccurence(StructInstance*, WorldHandle* pWorldHandle= NULL, GLuint shaderId=0);
 
-	//! Construct Occurence withe the specified Represent3D
-	Occurence(Represent3D*);
+	//! Construct Occurence withe the specified Rep3D
+	StructOccurence(Rep3D*);
 
 	//! Copy constructor
-	Occurence(WorldHandle*, const Occurence&, bool shareInstance);
+	StructOccurence(WorldHandle*, const StructOccurence&, bool shareInstance);
 
 	//! Destructor
-	virtual ~Occurence();
+	virtual ~StructOccurence();
 //@}
 //////////////////////////////////////////////////////////////////////
 /*! \name Get Functions*/
@@ -59,7 +77,8 @@ public:
 	{return m_Uid;}
 
 	//! Return the instance name of this occurence
-	const std::string name() const;
+	inline const std::string name() const
+	{return m_pStructInstance->name();}
 
 	//! Return the absolute matrix of this occurence
 	inline vl::dmat4 absoluteMatrix() const
@@ -80,10 +99,15 @@ public:
 	bool has3DViewInstance() const;
 
 	//! Return the instance of this occurence
-	Instance* instance() const;
+	inline StructInstance* structInstance() const
+	{ return m_pStructInstance;}
 
 	//! Return the reference of this occurence
-	Reference* reference() const;
+	inline StructReference* structReference() const
+	{
+		assert(NULL != m_pStructInstance);
+		return m_pStructInstance->structReference();
+	}
 
 	//! Return the number of childs
 	inline int childCount() const
@@ -94,22 +118,23 @@ public:
 	{return childCount() > 0;}
 
 	//! Return true if the given occurence can be added to this occurence children
-	bool canBeAddedToChildren(Occurence* pOccurence) const;
+	bool canBeAddedToChildren(StructOccurence* pOccurence) const;
 
 	//! Return The parent of this occurence
-	inline Occurence* parent() const
+	inline StructOccurence* parent() const
 	{return m_pParent;}
 
 	//! Return a child of this occurence
 	/*! The index must exist*/
-	Occurence* child(const int index) const;
+	inline StructOccurence* child(const int index) const
+	{return m_Childs.at(index);}
 
 	//! Return the list of children of this occurence
-	inline std::vector<Occurence*> children() const
+	inline std::vector<StructOccurence*> children() const
 	{return m_Childs;}
 
 	//! Return the list of all accurence under this occurence
-	std::vector<Occurence*> subOccurenceList() const;
+	std::vector<StructOccurence*> subOccurenceList() const;
 
 	//! Return the number of faces of the representation of this occurence
 	unsigned int numberOfFaces() const;
@@ -118,13 +143,13 @@ public:
 	unsigned int numberOfVertex() const;
 
 	//! Return the number of materials of the representation of this occurence
-	unsigned int numberOfMaterials() const;
+	//unsigned int numberOfMaterials() const;
 
 	//! Return the materials List of the representation of this occurence
 //	std::set<Material*> materialSet() const;
 
 	//! Return a clone this occurence
-	Occurence* clone(WorldHandle*, bool shareInstance) const;
+	StructOccurence* clone(WorldHandle*, bool shareInstance) const;
 
 	//! Return true if this occurence is visible
 	bool isVisible() const;
@@ -137,21 +162,21 @@ public:
 	{return m_OccurenceNumber;}
 
 	//! Return an handle of the renderProperties of this occurence
-//	RenderProperties* renderPropertiesHandle() const
-//	{return m_pRenderProperties;}
+	//RenderProperties* renderPropertiesHandle() const
+	//{return m_pRenderProperties;}
 
 	//! Return the number of node of this branch
 	unsigned int nodeCount() const;
 
 	//! Return the world handle of this occurence
-	inline WorldHandle* getWorldHandle() const
+	inline WorldHandle* worldHandle() const
 	{return m_pWorldHandle;}
 
 	//! Return the Set of children references of this occurence
-	std::set<Reference*> childrenReferences() const;
+	std::set<StructReference*> childrenReferences() const;
 
 	//! Return the set of parents references of the given occurence
-	static std::set<Reference*> parentsReferences(const Occurence* pOccurence);
+	static std::set<StructReference*> parentsReferences(const StructOccurence* pOccurence);
 
 	//! Return true if the automatic creation of 3DViewInstance is used
 	inline bool useAutomatic3DViewInstanceCreation() const
@@ -166,32 +191,32 @@ public:
 public:
 
 	//! Set Occurence instance Name
-	void setName(const std::string name);
+	inline void setName(const std::string name) {m_pStructInstance->setName(name);}
 
 	//! Update the absolute matrix
-	Occurence* updateAbsoluteMatrix();
+	StructOccurence* updateAbsoluteMatrix();
 
 	//! Update children obsolute Matrix
-	Occurence* updateChildrenAbsoluteMatrix();
+	StructOccurence* updateChildrenAbsoluteMatrix();
 
 	//! Add Child
 	/*! The new child must be orphan*/
-	void addChild(Occurence*);
+	void addChild(StructOccurence*);
 
 	//! Add Child instance and returns the newly created occurence
-	Occurence* addChild(Instance*);
+	StructOccurence* addChild(StructInstance*);
 
 	//! make the occurence orphan
 	void makeOrphan();
 
 	//! Remove the specified child
 	/*! The removed child will not be deleted*/
-	bool removeChild(Occurence* pChild);
+	bool removeChild(StructOccurence* pChild);
 
 	//! Reverse Normals of this Occurence and childs
 	void reverseNormals();
 
-	//! Create the 3DViewInstance of this occurence if there is a valid Represent3D
+	//! Create the 3DViewInstance of this occurence if there is a valid Rep3D
 	bool create3DViewInstance();
 
 	//! Remove the 3DViewInstance of this occurence
@@ -217,13 +242,13 @@ public:
 	void setVisibility(bool visibility);
 
 	//! set the renderProperties of this occurence
-	//void setRenderProperties(const RenderProperties& renderProperties);
+//	void setRenderProperties(const RenderProperties& renderProperties);
 
 	//! Remove empty children
 	void removeEmptyChildren();
 
 	//! Set the given reference to this occurence
-	void setReference(Reference* pRef);
+	void setReference(StructReference* pRef);
 
 	//! Set the automatic creation of 3DViewInstance usage
 	inline void setAutomatic3DViewInstanceCreationUsage(bool usage)
@@ -253,13 +278,13 @@ private:
 	int* m_pNumberOfOccurence;
 
 	//! The struct instance of this occurence
-	Instance* m_pInstance;
+	StructInstance* m_pStructInstance;
 
 	//! The parent of this occurence
-	Occurence* m_pParent;
+	StructOccurence* m_pParent;
 
 	//! The Child of this occurence
-	std::vector<Occurence*> m_Childs;
+	std::vector<StructOccurence*> m_Childs;
 
 	//! The absolute matrix of the occurence
 	vl::dmat4 m_AbsoluteMatrix;
@@ -271,11 +296,11 @@ private:
 	bool m_IsVisible;
 
 	//! The occurence rendering properties
-//	RenderProperties* m_pRenderProperties;
+	//RenderProperties* m_pRenderProperties;
 
-	//! Automatique creation of 3DViewInstance
+	//! Automatique création of 3DViewInstance
 	bool m_AutomaticCreationOf3DViewInstance;
 
 };
 
-#endif /* Occurence_H_ */
+#endif /* STRUCTOCCURENCE_H_ */

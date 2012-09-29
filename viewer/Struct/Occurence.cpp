@@ -5,6 +5,7 @@
 #include "struct/Reference.h"
 #include "struct/Instance.h"
 #include "struct/represent3d.h"
+#include "struct/WorldHandle.h"
 //#include "VLBaseView.h"
 //#include "../errorlog.h"
 
@@ -18,7 +19,7 @@ unsigned int GenUid(void)
 // Default constructor
 Occurence::Occurence()
 : m_Uid(GenUid())
-, m_pVLBaseView(NULL)
+, m_pWorldHandle(NULL)
 , m_pNumberOfOccurence(new int(1))
 , m_pInstance(new Instance())
 , m_pParent(NULL)
@@ -34,9 +35,9 @@ Occurence::Occurence()
 }
 
 // Default constructor
-Occurence::Occurence(Instance* pInstance, VLBaseView* pVLBaseView, GLuint shaderId)
+Occurence::Occurence(Instance* pInstance, WorldHandle* pWorldHandle, unsigned int shaderId)
 : m_Uid(GenUid())
-, m_pVLBaseView(pVLBaseView)
+, m_pWorldHandle(pWorldHandle)
 , m_pNumberOfOccurence(NULL)
 , m_pInstance(pInstance)
 , m_pParent(NULL)
@@ -57,7 +58,7 @@ Occurence::Occurence(Instance* pInstance, VLBaseView* pVLBaseView, GLuint shader
 		const int size= childs.size();
 		for (int i= 0; i < size; ++i)
 		{
-			Occurence* pChild= childs.at(i)->clone(m_pVLBaseView, true);
+			Occurence* pChild= childs.at(i)->clone(m_pWorldHandle, true);
 			addChild(pChild);
 		}
 	}
@@ -69,9 +70,9 @@ Occurence::Occurence(Instance* pInstance, VLBaseView* pVLBaseView, GLuint shader
 	setName(m_pInstance->name());
 
 	// Inform the world Handle
-	if (NULL != m_pVLBaseView)
+	if (NULL != pWorldHandle)
 	{
-//		m_pVLBaseView->addOccurence(this, shaderId);
+//		m_pWorldHandle->addOccurence(this, shaderId);
 	}
 
 	// Update Absolute matrix
@@ -83,7 +84,7 @@ Occurence::Occurence(Instance* pInstance, VLBaseView* pVLBaseView, GLuint shader
 // Construct Occurence with the specified Represent3D
 Occurence::Occurence(Represent3D* pRep)
 : m_Uid(GenUid())
-, m_pVLBaseView(NULL)
+, m_pWorldHandle(NULL)
 , m_pNumberOfOccurence(new int(1))
 , m_pInstance(NULL)
 , m_pParent(NULL)
@@ -102,9 +103,9 @@ Occurence::Occurence(Represent3D* pRep)
 }
 
 // Copy constructor
-Occurence::Occurence(VLBaseView* pVLBaseView, const Occurence& occurence, bool shareInstance)
+Occurence::Occurence(WorldHandle* pWorldHandle, const Occurence& occurence, bool shareInstance)
 : m_Uid(GenUid())
-, m_pVLBaseView(pVLBaseView)
+, m_pWorldHandle(pWorldHandle)
 , m_pNumberOfOccurence(NULL)
 , m_pInstance(NULL)
 , m_pParent(NULL)
@@ -129,15 +130,15 @@ Occurence::Occurence(VLBaseView* pVLBaseView, const Occurence& occurence, bool s
 
 
 	// Test if Occurence has representation and has a shader
-	GLuint shaderId= 0;
+	unsigned int shaderId= 0;
 	bool instanceIsSelected= false;
-	//if ((NULL != m_pVLBaseView) && (NULL != Occurence.m_pVLBaseView) && Occurence.m_pVLBaseView->collection()->contains(Occurence.id()))
+	//if ((NULL != m_pWorldHandle) && (NULL != Occurence.m_pWorldHandle) && Occurence.m_pWorldHandle->collection()->contains(Occurence.id()))
 	//{
-	//	3DViewInstance* p3DViewInstance= Occurence.m_pVLBaseView->collection()->instanceHandle(Occurence.id());
+	//	3DViewInstance* p3DViewInstance= Occurence.m_pWorldHandle->collection()->instanceHandle(Occurence.id());
 
-	//	if(Occurence.m_pVLBaseView->collection()->isInAShadingGroup(Occurence.id()))
+	//	if(Occurence.m_pWorldHandle->collection()->isInAShadingGroup(Occurence.id()))
 	//	{
-	//		shaderId= Occurence.m_pVLBaseView->collection()->shadingGroup(Occurence.id());
+	//		shaderId= Occurence.m_pWorldHandle->collection()->shadingGroup(Occurence.id());
 	//	}
 
 	//	instanceIsSelected= p3DViewInstance->isSelected();
@@ -153,12 +154,12 @@ Occurence::Occurence(VLBaseView* pVLBaseView, const Occurence& occurence, bool s
 	//}
 
 	// Inform the world Handle
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
-//		m_pVLBaseView->addOccurence(this, instanceIsSelected, shaderId);
+//		m_pWorldHandle->addOccurence(this, instanceIsSelected, shaderId);
 //		if (NULL != m_pRenderProperties)
 //		{
-//// 			m_pVLBaseView->collection()->instanceHandle(id())->setRenderProperties(*m_pRenderProperties);
+//// 			m_pWorldHandle->collection()->instanceHandle(id())->setRenderProperties(*m_pRenderProperties);
 //			delete m_pRenderProperties;
 //			m_pRenderProperties= NULL;
 //		}
@@ -172,7 +173,7 @@ Occurence::Occurence(VLBaseView* pVLBaseView, const Occurence& occurence, bool s
 	const int size= occurence.childCount();
 	for (int i= 0; i < size; ++i)
 	{
-		Occurence* pChild= occurence.child(i)->clone(m_pVLBaseView, true);
+		Occurence* pChild= occurence.child(i)->clone(m_pWorldHandle, true);
 		addChild(pChild);
 	}
 	updateChildrenAbsoluteMatrix();
@@ -186,9 +187,9 @@ Occurence::~Occurence()
 	//qDebug() << "Delete " << id();
 	assert(m_pNumberOfOccurence != NULL);
 	// Remove from the VLBaseView
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
-//		m_pVLBaseView->removeOccurence(this);
+//		m_pWorldHandle->removeOccurence(this);
 	}
 
 	// Remove Childs
@@ -239,9 +240,9 @@ bool Occurence::hasRepresentation() const
 
 bool Occurence::has3DViewInstance() const
 {
-	if ( NULL != m_pVLBaseView)
+	if ( NULL != m_pWorldHandle)
 	{
-//		return m_pVLBaseView->collection()->contains(m_Uid);
+//		return m_pWorldHandle->collection()->contains(m_Uid);
 	}
 	else return false;
 }
@@ -363,9 +364,9 @@ unsigned int Occurence::numberOfMaterials() const
 //}
 
 // Clone the occurence
-Occurence* Occurence::clone(VLBaseView* pVLBaseView, bool shareInstance) const
+Occurence* Occurence::clone(WorldHandle* pWorldHandle, bool shareInstance) const
 {
-	return new Occurence(pVLBaseView, *this, shareInstance);
+	return new Occurence(pWorldHandle, *this, shareInstance);
 }
 
 // Return true if the occurence is visible
@@ -373,9 +374,9 @@ bool Occurence::isVisible() const
 {
 	bool isHidden= true;
 
-// 	if ((NULL != m_pVLBaseView) && m_pVLBaseView->collection()->contains(m_Uid))
+// 	if ((NULL != m_pWorldHandle) && m_pWorldHandle->collection()->contains(m_Uid))
 // 	{
-// 		isHidden= !m_pVLBaseView->collection()->instanceHandle(m_Uid)->isVisible();
+// 		isHidden= !m_pWorldHandle->collection()->instanceHandle(m_Uid)->isVisible();
 // 	}
 // 	else if (childCount() > 0)
 // 	{
@@ -399,12 +400,12 @@ AABB Occurence::boundingBox() const
 {
 	AABB boundingBox;
 
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
 		//if (has3DViewInstance())
 		//{
-		//	assert(m_pVLBaseView->collection()->contains(id()));
-		//	boundingBox= m_pVLBaseView->collection()->instanceHandle(id())->boundingBox();
+		//	assert(m_pWorldHandle->collection()->contains(id()));
+		//	boundingBox= m_pWorldHandle->collection()->instanceHandle(id())->boundingBox();
 		//}
 		//else
 		//{
@@ -460,7 +461,7 @@ std::set<Reference*> Occurence::parentsReferences(const Occurence* pOccurence)
 		if ((NULL != pParent->instance()) && (NULL != pParent->reference()))
 		{
 			parentSet.insert(pParent->reference());
-		//??	parentSet.unite(Occurence::parentsReferences(pParent));
+			parentSet.insert(Occurence::parentsReferences(pParent).begin(),Occurence::parentsReferences(pParent).end());
 		}
 	}
 
@@ -484,9 +485,9 @@ Occurence* Occurence::updateAbsoluteMatrix()
 	}
 	// If the occurence have a representation, update it.
 
-	//if ((NULL != m_pVLBaseView) && m_pVLBaseView->collection()->contains(m_Uid))
+	//if ((NULL != m_pWorldHandle) && m_pWorldHandle->collection()->contains(m_Uid))
 	//{
-	//	m_pVLBaseView->collection()->instanceHandle(m_Uid)->setMatrix(m_AbsoluteMatrix);
+	//	m_pWorldHandle->collection()->instanceHandle(m_Uid)->setMatrix(m_AbsoluteMatrix);
 	//}
 	return this;
 }
@@ -507,16 +508,16 @@ Occurence* Occurence::updateChildrenAbsoluteMatrix()
 void Occurence::addChild(Occurence* pChild)
 {
 	assert(pChild->isOrphan());
-	assert((NULL == pChild->m_pVLBaseView) || (m_pVLBaseView == pChild->m_pVLBaseView));
+	assert((NULL == pChild->m_pWorldHandle) || (m_pWorldHandle == pChild->m_pWorldHandle));
 
 	//qDebug() << "Add Child " << pChild->name() << "id=" << pChild->id() << " to " << name() << " id=" << id();
 	// Add the child to the list of child
 	// Get occurence reference
 	m_Childs.push_back(pChild);
 	pChild->m_pParent= this;
-	if (NULL == pChild->m_pVLBaseView)
+	if (NULL == pChild->m_pWorldHandle)
 	{
-		pChild->setVLBaseView(m_pVLBaseView);
+		pChild->setWorldHandle(m_pWorldHandle);
 	}
 	pChild->updateChildrenAbsoluteMatrix();
 }
@@ -525,7 +526,7 @@ void Occurence::addChild(Occurence* pChild)
 Occurence* Occurence::addChild(Instance* pInstance)
 {
 	Occurence* pOccurence;
-	pOccurence= new Occurence(pInstance, m_pVLBaseView);
+	pOccurence= new Occurence(pInstance, m_pWorldHandle);
 
 	addChild(pOccurence);
 
@@ -567,20 +568,20 @@ bool Occurence::removeChild(Occurence* pChild)
 // Detach the occurence from the World
 void Occurence::detach()
 {
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
 		// retrieve renderProperties if needed
-		//if (m_pVLBaseView->collection()->contains(m_Uid))
+		//if (m_pWorldHandle->collection()->contains(m_Uid))
 		//{
-		//	3DViewInstance* pInstance= m_pVLBaseView->collection()->instanceHandle(m_Uid);
+		//	3DViewInstance* pInstance= m_pWorldHandle->collection()->instanceHandle(m_Uid);
 		//	if (!pInstance->renderPropertiesHandle()->isDefault())
 		//	{
 		//		assert(NULL == m_pRenderProperties);
 		//		m_pRenderProperties= new RenderProperties(*(pInstance->renderPropertiesHandle()));
 		//	}
 		//}
-	//	m_pVLBaseView->removeOccurence(this);
-		m_pVLBaseView= NULL;
+	//	m_pWorldHandle->removeOccurence(this);
+		m_pWorldHandle= NULL;
 		if (!m_Childs.empty())
 		{
 			const int size= m_Childs.size();
@@ -597,7 +598,7 @@ void Occurence::reverseNormals()
 {
 	if (has3DViewInstance())
 	{
-//		m_pVLBaseView->collection()->instanceHandle(id())->reverseGeometriesNormals();
+//		m_pWorldHandle->collection()->instanceHandle(id())->reverseGeometriesNormals();
 	}
 }
 
@@ -605,7 +606,7 @@ void Occurence::reverseNormals()
 bool Occurence::create3DViewInstance()
 {
 	bool creationSuccess= false;
-	if ((NULL != m_pVLBaseView) && hasRepresentation())
+	if ((NULL != m_pWorldHandle) && hasRepresentation())
 	{
 		Represent3D* pRepresent3D= dynamic_cast<Represent3D*>(reference()->representationHandle());
 		if (NULL != pRepresent3D)
@@ -614,8 +615,8 @@ bool Occurence::create3DViewInstance()
 			//instance.setName(name());
 			//// Force instance representation id
 			//instance.setId(id());
-			//creationSuccess= m_pVLBaseView->collection()->add(instance);
-			//m_pVLBaseView->collection()->setVisibility(m_Uid, m_IsVisible);
+			//creationSuccess= m_pWorldHandle->collection()->add(instance);
+			//m_pWorldHandle->collection()->setVisibility(m_Uid, m_IsVisible);
 		}
 	}
 	return creationSuccess;
@@ -623,36 +624,36 @@ bool Occurence::create3DViewInstance()
 
 bool Occurence::remove3DViewInstance()
 {
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
-	//	return m_pVLBaseView->collection()->remove(m_Uid);
+	//	return m_pWorldHandle->collection()->remove(m_Uid);
 	}
 	else return false;
 }
 
 // Set the occurence world Handle
-void Occurence::setVLBaseView(VLBaseView* pVLBaseView)
+void Occurence::setWorldHandle(WorldHandle* pWorldHandle)
 {
 	// Check if world handles are equal
-	if (m_pVLBaseView == pVLBaseView) return;
+	if (m_pWorldHandle == pWorldHandle) return;
 
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
-//		m_pVLBaseView->removeOccurence(this);
+		m_pWorldHandle->removeOccurence(this);
 	}
 
-	m_pVLBaseView= pVLBaseView;
+	m_pWorldHandle= pWorldHandle;
 
-	if (NULL != m_pVLBaseView)
+	if (NULL != m_pWorldHandle)
 	{
-// 		m_pVLBaseView->addOccurence(this);
-// 		m_pVLBaseView->collection()->setVisibility(m_Uid, m_IsVisible);
+ 		m_pWorldHandle->addOccurence(this);
+// 		m_pWorldHandle->collection()->setVisibility(m_Uid, m_IsVisible);
 // 
-// 		const int size= m_Childs.size();
-// 		for (int i= 0; i < size; ++i)
-// 		{
-// 			m_Childs[i]->setVLBaseView(m_pVLBaseView);
-// 		}
+		const int size= m_Childs.size();
+		for (int i= 0; i < size; ++i)
+		{
+			m_Childs[i]->setWorldHandle(m_pWorldHandle);
+		}
 	}
 }
 
@@ -693,7 +694,7 @@ bool Occurence::unloadRepresentation()
 		{
 			if (this->has3DViewInstance())
 			{
-//				unloadResult= m_pVLBaseView->collection()->remove(m_Uid);
+//				unloadResult= m_pWorldHandle->collection()->remove(m_Uid);
 				std::set<Occurence*> occurenceSet= pRef->setOfOccurence();
 				std::set<Occurence*>::const_iterator iOcc= occurenceSet.begin();
 				bool unloadReferenceRep= true;
@@ -728,7 +729,7 @@ void Occurence::setVisibility(bool visibility)
 	m_IsVisible= visibility;
 	if (has3DViewInstance())
 	{
-	//	m_pVLBaseView->collection()->setVisibility(m_Uid, m_IsVisible);
+	//	m_pWorldHandle->collection()->setVisibility(m_Uid, m_IsVisible);
 	}
 	const int childCount= m_Childs.size();
 	for (int i= 0; i < childCount; ++i)
@@ -742,7 +743,7 @@ void Occurence::setVisibility(bool visibility)
 //	delete m_pRenderProperties;
 //	if (has3DViewInstance())
 //	{
-////		m_pVLBaseView->collection()->instanceHandle(m_Uid)->setRenderProperties(renderProperties);
+////		m_pWorldHandle->collection()->instanceHandle(m_Uid)->setRenderProperties(renderProperties);
 //	}
 //	else if (hasChild())
 //	{
@@ -791,7 +792,7 @@ void Occurence::setReference(Reference* pRef)
 			const int size= childs.size();
 			for (int i= 0; i < size; ++i)
 			{
-				Occurence* pChild= childs.at(i)->clone(m_pVLBaseView, true);
+				Occurence* pChild= childs.at(i)->clone(m_pWorldHandle, true);
 				addChild(pChild);
 			}
 

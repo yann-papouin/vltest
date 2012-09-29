@@ -150,15 +150,15 @@ public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnPaint();
 	afx_msg void OnDestroy();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnSize(unsigned int nType, int cx, int cy);
+	afx_msg void OnLButtonDown(unsigned int nFlags, CPoint point);
+	afx_msg void OnLButtonUp(unsigned int nFlags, CPoint point);
+	afx_msg void OnMButtonDown(unsigned int nFlags, CPoint point);
+	afx_msg void OnMButtonUp(unsigned int nFlags, CPoint point);
+	afx_msg void OnRButtonDown(unsigned int nFlags, CPoint point);
+	afx_msg void OnRButtonUp(unsigned int nFlags, CPoint point);
+	afx_msg void OnMouseMove(unsigned int nFlags, CPoint point);
+	afx_msg BOOL OnMouseWheel(unsigned int nFlags, short zDelta, CPoint pt);
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 #ifdef HOOPS
 	unsigned long MapFlags(unsigned long state);

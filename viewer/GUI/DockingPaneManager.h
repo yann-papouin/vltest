@@ -20,7 +20,7 @@ public:
 	CDockingPaneMiniWnd(CXTPDockingPaneLayout* pLayout);
 	void OnCaptionButtonClick(CXTPDockingPaneCaptionButton* pButton);
 
-	void OnNcRButtonDown(UINT nHitTest, CPoint point);
+	void OnNcRButtonDown(unsigned int nHitTest, CPoint point);
 
 	DECLARE_MESSAGE_MAP()
 };

@@ -34,7 +34,7 @@ public:
 //	DECLARE_SERIAL(CMessageRecordItemIconText)
 //public:
 //	// Constructs record item with the initial read/unread value.
-//	CMessageRecordItemIconText(CString szText = _T("ss"),UINT nIconID = 0);
+//	CMessageRecordItemIconText(CString szText = _T("ss"),unsigned int nIconID = 0);
 //};
 
 
@@ -45,7 +45,7 @@ class CMessageRecordItemIconCheckText : public CXTPReportRecordItemText
 	DECLARE_SERIAL(CMessageRecordItemIconCheckText)
 public:
 	// Constructs record item with the initial read/unread value.
-	CMessageRecordItemIconCheckText(CString szText = _T("ss"),UINT nIconID = 0, BOOL bHasCheckBox = TRUE, BOOL bRead = FALSE);
+	CMessageRecordItemIconCheckText(CString szText = _T("ss"),unsigned int nIconID = 0, BOOL bHasCheckBox = TRUE, BOOL bRead = FALSE);
 
 	virtual void DoPropExchange(CXTPPropExchange* pPX);
 public:
@@ -65,7 +65,7 @@ public:
 	CMessageRecord();
 	
 	// Construct record object from detailed values on each field
-	CMessageRecord( 	 CString strName, UINT nIconID = 0, BOOL bHasCheckBox = TRUE,BOOL bCheck = TRUE,BOOL bCuttingPlane = FALSE, BOOL bManipulate = FALSE, BOOL bTransparent = FALSE );
+	CMessageRecord( 	 CString strName, unsigned int nIconID = 0, BOOL bHasCheckBox = TRUE,BOOL bCheck = TRUE,BOOL bCuttingPlane = FALSE, BOOL bManipulate = FALSE, BOOL bTransparent = FALSE );
 
 	// Clean up internal objects
 	virtual ~CMessageRecord();

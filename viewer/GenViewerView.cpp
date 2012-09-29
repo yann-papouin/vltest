@@ -415,7 +415,7 @@ unsigned long CGenViewerView::MapFlags(unsigned long state)
 }
 #endif
 
-void CGenViewerView::OnLButtonDown(UINT nFlags, CPoint point)
+void CGenViewerView::OnLButtonDown(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -439,7 +439,7 @@ void CGenViewerView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMFCView::OnLButtonDown(nFlags,point);
 }
 
-void CGenViewerView::OnLButtonUp(UINT nFlags, CPoint point)
+void CGenViewerView::OnLButtonUp(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -462,7 +462,7 @@ void CGenViewerView::OnLButtonUp(UINT nFlags, CPoint point)
 	CMFCView::OnLButtonUp(nFlags,point);
 }
 
-void CGenViewerView::OnMButtonDown(UINT nFlags, CPoint point)
+void CGenViewerView::OnMButtonDown(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -486,7 +486,7 @@ void CGenViewerView::OnMButtonDown(UINT nFlags, CPoint point)
 	CMFCView::OnMButtonDown(nFlags,point);
 }
 
-void CGenViewerView::OnMButtonUp(UINT nFlags, CPoint point)
+void CGenViewerView::OnMButtonUp(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -509,7 +509,7 @@ void CGenViewerView::OnMButtonUp(UINT nFlags, CPoint point)
 	CMFCView::OnMButtonUp(nFlags,point);
 }
 
-void CGenViewerView::OnRButtonDown(UINT nFlags, CPoint point)
+void CGenViewerView::OnRButtonDown(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -544,7 +544,7 @@ void CGenViewerView::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 
-void CGenViewerView::OnRButtonUp(UINT nFlags, CPoint point)
+void CGenViewerView::OnRButtonUp(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView)
@@ -567,7 +567,7 @@ void CGenViewerView::OnRButtonUp(UINT nFlags, CPoint point)
 	CMFCView::OnRButtonUp(nFlags,point);
 }
 
-void CGenViewerView::OnMouseMove(UINT nFlags, CPoint point)
+void CGenViewerView::OnMouseMove(unsigned int nFlags, CPoint point)
 {
 #ifdef HOOPS
 	if (m_pHSolidView && m_pHSolidView->GetViewActive())
@@ -589,7 +589,7 @@ void CGenViewerView::OnMouseMove(UINT nFlags, CPoint point)
 #endif
 }
 
-BOOL CGenViewerView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+BOOL CGenViewerView::OnMouseWheel(unsigned int nFlags, short zDelta, CPoint pt)
 {
 #ifdef HOOPS
 	RECT windowRect;
@@ -1071,7 +1071,7 @@ void CGenViewerView::DrawScene()
 	}
 }
 
-void CGenViewerView::OnSize(UINT nType, int cx, int cy)
+void CGenViewerView::OnSize(unsigned int nType, int cx, int cy)
 {
 	// Save old framebuffer size
 	if (mVLBaseView != NULL)

@@ -61,7 +61,7 @@ CWnd* CPaneView::OnCreateView()
 	return &m_wndView;
 }
 
-void CPaneView::OnSize(UINT nType, int cx, int cy)
+void CPaneView::OnSize(unsigned int nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
@@ -144,14 +144,14 @@ void CXTPReportRecordItemCheck::OnLButtonUp(XTP_REPORTRECORDITEM_CLICKARGS* pCli
 	}
 }
 
-void CXTPReportRecordItemCheck::OnMouseEnter(UINT nFlags, CPoint point)
+void CXTPReportRecordItemCheck::OnMouseEnter(unsigned int nFlags, CPoint point)
 {
 	UNREFERENCED_PARAMETER(point);
 	if (m_nSavedState == PBS_PRESSED && (nFlags & MK_LBUTTON))
 		m_nState = m_nSavedState;
 }
 
-void CXTPReportRecordItemCheck::OnMouseLeave(UINT nFlags, CPoint point)
+void CXTPReportRecordItemCheck::OnMouseLeave(unsigned int nFlags, CPoint point)
 {
 	UNREFERENCED_PARAMETER(nFlags);
 	UNREFERENCED_PARAMETER(point);
@@ -159,7 +159,7 @@ void CXTPReportRecordItemCheck::OnMouseLeave(UINT nFlags, CPoint point)
 	m_nState = GetEnable() ? PBS_NORMAL : PBS_DISABLED;
 }
 
-void CXTPReportRecordItemCheck::OnMouseMove(UINT nFlags, CPoint point)
+void CXTPReportRecordItemCheck::OnMouseMove(unsigned int nFlags, CPoint point)
 {
 	if (m_rcControl.PtInRect(point) && m_nSavedState == PBS_PRESSED && (nFlags & MK_LBUTTON))
 		m_nState = m_nSavedState;
