@@ -63,7 +63,7 @@ protected:  // control bar embedded members
 protected:
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnShowView(UINT nID);
+	afx_msg void OnShowView(unsigned int nID);
 	afx_msg void OnPaneAnno();
 	afx_msg void OnUpdatePaneAnno(CCmdUI* pCmdUI);
 	afx_msg void OnClose();

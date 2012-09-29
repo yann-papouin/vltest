@@ -702,10 +702,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="3DXML"
-				>
-			</Filter>
-			<Filter
 				Name="Struct"
 				>
 				<File
@@ -802,6 +798,54 @@
 				</File>
 				<File
 					RelativePath=".\Struct\Represent3D.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\Selectionset.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\Selectionset.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\World.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\World.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Struct\WorldHandle.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Struct\WorldHandle.h"
 					>
 				</File>
 			</Filter>

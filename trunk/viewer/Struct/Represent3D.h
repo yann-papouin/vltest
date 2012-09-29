@@ -24,7 +24,7 @@
 #ifndef Represent3D_H_
 #define Represent3D_H_
 
-//#include "glc_geometry.h"
+//#include "geometry.h"
 #include "struct/Represent.h"
 #include "vlGraphics/Actor.hpp"
 #include "vlCore/Collection.hpp"
@@ -47,7 +47,7 @@ public:
 	//! Default Constructor
 	Represent3D();
 
-	//! Construct a 3DRep with a geometry
+	//! Construct a Represent3D with a geometry
 	Represent3D(const ActorCollection&);
 
 	//! Copy Constructor
@@ -59,7 +59,7 @@ public:
 	//! Clone the representation
 	virtual Represent* clone() const;
 
-	//! Make a deep copy of the 3DRep
+	//! Make a deep copy of the Represent3D
 	virtual Represent* deepCopy() const;
 
 	//! Destructor
@@ -84,14 +84,14 @@ public:
 	//! Return the number of body
 	inline int numberOfBody() const
 	{
-	//	Q_ASSERT(NULL != m_pGeomList);
+	//	assert(NULL != m_pGeomList);
 		return mActorCollection.size();
 	}
 
 	//! Return true if the representation is empty
 	inline virtual bool isEmpty() const
 	{
-	//	Q_ASSERT(NULL != m_pGeomList);
+	//	assert(NULL != m_pGeomList);
 	//	return m_pGeomList->isEmpty();
 		return mActorCollection.empty();
 	}
@@ -99,24 +99,24 @@ public:
 	//! Return true if the rep bounding box is valid
 	bool boundsDirty() const;
 
-	//! Return the 3DRep bounding Box
+	//! Return the Represent3D bounding Box
 	AABB boundingBox() const;
 
-	//! Return true if the 3DRep contains the geometry
+	//! Return true if the Represent3D contains the geometry
 	inline bool contains(ref<Actor> actor)
 	{return mActorCollection.find(actor.get()) > 0;}
 
-	//! Return the number of faces of this 3DRep
+	//! Return the number of faces of this Represent3D
 	unsigned int faceCount() const;
 
-	//! Return number of vertex of this 3DRep
+	//! Return number of vertex of this Represent3D
 	unsigned int vertexCount() const;
 
-	//! Return number of materials of this 3DRep
+	//! Return number of materials of this Represent3D
 	unsigned int materialCount() const;
 
-	//! Return materials Set of this 3DRep
-// 	QSet<GLC_Material*> materialSet() const;
+	//! Return materials Set of this Represent3D
+// 	std::set<Material*> materialSet() const;
 
 //@}
 
@@ -125,8 +125,8 @@ public:
 //@{
 //////////////////////////////////////////////////////////////////////
 public:
-	//! Add Geometry to the 3DRep
-	inline void addActor(ref<Actor> actor)
+	//! Add Geometry to the Represent3D
+	inline void insertActor(ref<Actor> actor)
 	{
 		mActorCollection.push_back(actor.get());
 		*m_pIsLoaded= true;
@@ -148,9 +148,9 @@ public:
 	virtual void replace(Represent*);
 
 	//! Replace the specified material by a new one
-//	void replaceMaterial(GLC_uint, GLC_Material*);
+//	void replaceMaterial(unsigned int, Material*);
 
-	//! Merge this 3Drep with another 3DRep
+	//! Merge this Represent3D with another Represent3D
 
 //@}
 
@@ -166,7 +166,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 private:
 	//! Geometries of the 3D representation
-//	QList<GLC_Geometry*>* m_pGeomList;
+//	std::vector<Geometry*>* m_pGeomList;
 	ActorCollection mActorCollection;
 
 	//! The Type of representation

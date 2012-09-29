@@ -41,7 +41,7 @@ int CMessageRecordItemCheck::Compare(CXTPReportColumn* /*pColumn*/, CXTPReportRe
 //* CMessageRecordItemIconText
 //*/
 //
-//CMessageRecordItemIconText::CMessageRecordItemIconText(CString szText, UINT nIconID)
+//CMessageRecordItemIconText::CMessageRecordItemIconText(CString szText, unsigned int nIconID)
 //{
 //	SetIconIndex(nIconID);
 //	SetValue(szText);
@@ -52,7 +52,7 @@ int CMessageRecordItemCheck::Compare(CXTPReportColumn* /*pColumn*/, CXTPReportRe
 //* CMessageRecordItemIconCheckText
 //*/
 
-CMessageRecordItemIconCheckText::CMessageRecordItemIconCheckText(CString szText,UINT nIconID, BOOL bHasCheckBox, BOOL bCheck)
+CMessageRecordItemIconCheckText::CMessageRecordItemIconCheckText(CString szText,unsigned int nIconID, BOOL bHasCheckBox, BOOL bCheck)
 : m_bRead(bCheck)
 {
 	SetValue(szText);
@@ -87,7 +87,7 @@ CMessageRecord::CMessageRecord()
 }
 
 CMessageRecord::CMessageRecord(
-			   CString strName, UINT nIconID, BOOL bHasCheckBox,BOOL bCheck,BOOL bCuttingPlane, BOOL bManipulate, BOOL bTransparent
+			   CString strName, unsigned int nIconID, BOOL bHasCheckBox,BOOL bCheck,BOOL bCuttingPlane, BOOL bManipulate, BOOL bTransparent
 			   )
 {
 

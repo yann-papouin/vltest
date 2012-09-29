@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Model_3dxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.3ds.com/xsd/3DXML">
+  <Header>
+    <SchemaVersion>4.3</SchemaVersion>
+    <Title>PRODUCT</Title>
+    <Author>ODT</Author>
+    <Generator>Dassault Systemes V6</Generator>
+    <Created>2012-09-17</Created>
+  </Header>
+  <ProductStructure root="1">
+    <Reference3D id="1" xsi:type="Reference3DType" name="HYDFIT">
+      <PLM_ExternalID>HYDFIT</PLM_ExternalID>
+      <V_description>HYDFIT_Ref</V_description>
+    </Reference3D>
+    <Reference3D id="3" xsi:type="Reference3DType" name="fitting">
+      <PLM_ExternalID>fitting</PLM_ExternalID>
+      <V_description>fitting_Ref</V_description>
+    </Reference3D>
+    <Reference3D id="7" xsi:type="Reference3DType" name="washer">
+      <PLM_ExternalID>washer</PLM_ExternalID>
+      <V_description>washer_Ref</V_description>
+    </Reference3D>
+    <Reference3D id="12" xsi:type="Reference3DType" name="hexbolt">
+      <PLM_ExternalID>hexbolt</PLM_ExternalID>
+      <V_description>hexbolt_Ref</V_description>
+    </Reference3D>
+    <Instance3D id="2" xsi:type="Instance3DType" name="fitting.prt">
+      <PLM_ExternalID>fitting.prt</PLM_ExternalID>
+      <IsAggregatedBy>1</IsAggregatedBy>
+      <IsInstanceOf>3</IsInstanceOf>
+      <RelativeMatrix>1 0 0 0 1 0 0 0 1 0 0 0</RelativeMatrix>
+    </Instance3D>
+    <Instance3D id="6" xsi:type="Instance3DType" name="washer.prt">
+      <PLM_ExternalID>washer.prt</PLM_ExternalID>
+      <IsAggregatedBy>1</IsAggregatedBy>
+      <IsInstanceOf>7</IsInstanceOf>
+      <RelativeMatrix>-1 0 0 0 -1 0 0 0 1 0 9 0</RelativeMatrix>
+    </Instance3D>
+    <Instance3D id="10" xsi:type="Instance3DType" name="washer.prt">
+      <PLM_ExternalID>washer.prt</PLM_ExternalID>
+      <IsAggregatedBy>1</IsAggregatedBy>
+      <IsInstanceOf>7</IsInstanceOf>
+      <RelativeMatrix>1 0 0 0 1 0 0 0 1 0 -9 0</RelativeMatrix>
+    </Instance3D>
+    <Instance3D id="11" xsi:type="Instance3DType" name="hexbolt.prt">
+      <PLM_ExternalID>hexbolt.prt</PLM_ExternalID>
+      <IsAggregatedBy>1</IsAggregatedBy>
+      <IsInstanceOf>12</IsInstanceOf>
+      <RelativeMatrix>1 0 0 0 1 0 0 0 1 0 11.4 0</RelativeMatrix>
+    </Instance3D>
+    <ReferenceRep version="1.0" id="5" associatedFile="urn:3DXML:fitting_2_UVR_1_b4dd00d4_2144_5056a3f4_1a32.3DRep" xsi:type="ReferenceRepType" format="UVR" name="fitting_2_UVR">
+      <PLM_ExternalID>fitting_2_UVR</PLM_ExternalID>
+      <V_description>Representation</V_description>
+      <V_discipline>Design</V_discipline>
+    </ReferenceRep>
+    <ReferenceRep version="1.0" id="9" associatedFile="urn:3DXML:washer_4_UVR_1_b4dd00d4_2144_5056a3f4_1a3e.3DRep" xsi:type="ReferenceRepType" format="UVR" name="washer_4_UVR">
+      <PLM_ExternalID>washer_4_UVR</PLM_ExternalID>
+      <V_description>Representation</V_description>
+      <V_discipline>Design</V_discipline>
+    </ReferenceRep>
+    <ReferenceRep version="1.0" id="14" associatedFile="urn:3DXML:hexbolt_7_UVR_1_b4dd00d4_2144_5056a3f4_1a4a.3DRep" xsi:type="ReferenceRepType" format="UVR" name="hexbolt_7_UVR">
+      <PLM_ExternalID>hexbolt_7_UVR</PLM_ExternalID>
+      <V_description>Representation</V_description>
+      <V_discipline>Design</V_discipline>
+    </ReferenceRep>
+    <InstanceRep id="4" xsi:type="InstanceRepType" name="fitting_2_UVRInst">
+      <PLM_ExternalID>fitting_2_UVRInst</PLM_ExternalID>
+      <V_description>Representation Instance</V_description>
+      <IsAggregatedBy>3</IsAggregatedBy>
+      <IsInstanceOf>5</IsInstanceOf>
+    </InstanceRep>
+    <InstanceRep id="8" xsi:type="InstanceRepType" name="washer_4_UVRInst">
+      <PLM_ExternalID>washer_4_UVRInst</PLM_ExternalID>
+      <V_description>Representation Instance</V_description>
+      <IsAggregatedBy>7</IsAggregatedBy>
+      <IsInstanceOf>9</IsInstanceOf>
+    </InstanceRep>
+    <InstanceRep id="13" xsi:type="InstanceRepType" name="hexbolt_7_UVRInst">
+      <PLM_ExternalID>hexbolt_7_UVRInst</PLM_ExternalID>
+      <V_description>Representation Instance</V_description>
+      <IsAggregatedBy>12</IsAggregatedBy>
+      <IsInstanceOf>14</IsInstanceOf>
+    </InstanceRep>
+  </ProductStructure>
+</Model_3dxml>
