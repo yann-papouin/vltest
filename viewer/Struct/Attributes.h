@@ -127,7 +127,6 @@ private:
 
 	//! the list of attribute name
 	std::vector<std::string> m_AttributesList;
-
 };
 
 #endif /* ATTRIBUTES_H_ */
