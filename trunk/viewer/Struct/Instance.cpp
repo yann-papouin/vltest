@@ -158,5 +158,4 @@ Instance::~Instance()
 	}
 	//else 
 	//	cout<< "Instance::~Instance() of empty instance";
-
 }
