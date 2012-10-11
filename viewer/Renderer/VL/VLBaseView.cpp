@@ -294,8 +294,8 @@ void VLBaseView::fitWorld()
 			pOrthoTM->SetZoomFactor(zoomFactor);
 		}
 
-		const float nearPlane = 0.5f;
-		const float farPlane  = 10000.0f;
+		const float nearPlane = 0.05f;
+		const float farPlane  = 2.5f*w;
 
 		// install the orthographic projection
 		if (rend->camera()->projectionMatrixType() == PMT_OrthographicProjection )
@@ -305,6 +305,9 @@ void VLBaseView::fitWorld()
 				vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
 				* vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) 
 				,PMT_OrthographicProjection) ;
+
+			//rend->camera()->setNearPlane(nearPlane);
+			//rend->camera()->setFarPlane(farPlane);
 		}
 		else
 		{
@@ -344,13 +347,11 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 		vl::vec3 eye;  
 		vl::vec3 at;
 		vl::vec3 up;  
-		vl::vec3 right;
-		rend->camera()->getViewMatrixAsLookAt(eye, at,up,right);
-
-		float length = (eye-at).length();
+	//	vl::vec3 right;
+	//	rend->camera()->getViewMatrixAsLookAt(eye, at,up,right);
 
 		at = bs.center();
-		length = 10.0f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation
+		float length = 2.5f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation
 
 		switch(mViewMode)
 		{
@@ -406,7 +407,8 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 				vec3 frontAxis(1,0,0);
 				vec3 topAxis(0,0,1);
 				vec3 rightAxis = -cross(frontAxis,topAxis);
-				float newLen = length * 0.5774f;
+//				float newLen = length * 0.5774f;
+				float newLen = length * 1.0f;
 
 				eye.x() = at.x()+newLen*frontAxis.x()+newLen*rightAxis.x()+newLen*topAxis.x();
 				eye.y() = at.y()+newLen*frontAxis.y()+newLen*rightAxis.y()+newLen*topAxis.y();
@@ -585,7 +587,9 @@ void VLBaseView::makeBox()
 {
 //	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
 
-	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
+//	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),1000,5000)  ;
+
+	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
 
 	// compute normals
 	geom->computeNormals();

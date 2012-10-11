@@ -2,6 +2,7 @@
 #include <vlCore/GlobalSettings.hpp>
 #include <vlGraphics/RenderQueue.hpp>
 #include <vlGraphics/OpenGLContext.hpp>
+#include <vlGraphics/Camera.hpp>
 
 #include <vlGraphics/Text.hpp>
 #include <vlGraphics/FontManager.hpp>
@@ -101,11 +102,46 @@ const RenderQueue* AxisRenderer::render(const RenderQueue* render_queue, Camera*
 
   //glPushAttrib(GL_ALL_ATTRIB_BITS);
 
+
+// 10/11/2012 mwu : test draw the camera volume box
+
+#if 1
+  vec3 eye,at,up,right;
+  camera->getViewMatrixAsLookAt(eye,at,up,right);
+
+  glViewport(0,0,camera->viewport()->width(),camera->viewport()->height());
+  glMatrixMode (GL_PROJECTION);		
+  // glPushMatrix();
+  glLoadIdentity ();	
+  glOrtho(-1.0, 1.0, -1.0, 1.0,-1.0,1.0);
+
+  glMatrixMode(GL_MODELVIEW);
+  // glPushMatrix();
+
+  glDisable(GL_LIGHTING);
+  glDisable(GL_DEPTH_TEST);
+  glLoadIdentity();
+
+  glLineWidth(10.0f); 
+  float a1 =100.0f;
+
+  glBegin(GL_LINES);
+	  glColor4f(1.f,.0f,.0f,1.0f);
+	  glVertex3f(eye.x(),eye.y(),eye.z());
+	  glVertex3f((eye+at).x(),(eye+at).y(),(eye+at).z());
+	//  glVertex3f(right.x(),right.y(),right.z());
+//	  glVertex2f((eye+at).x(),(eye+at).y(),(eye+at).z());
+  glEnd();
+#endif
+
+
+
   double dAspectRatio = camera->aspectRatio();
 
   dAspectRatio  = 1.0;
   int h = 100;
   int w = (int)(h*dAspectRatio);
+
 
   glViewport(0,0,w,h);
   glMatrixMode (GL_PROJECTION);		
