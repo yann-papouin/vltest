@@ -26,8 +26,8 @@ VLBaseView::VLBaseView()
 	mFPS        = 0;
 	mReadPixels = new ReadPixels;
 	mMainAppletName = "MainAppletNoName";
-	m_bPerspective = false;
-//	m_bPerspective = true;
+//	m_bPerspective = false;
+	m_bPerspective = true;
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
