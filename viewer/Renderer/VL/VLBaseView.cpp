@@ -12,6 +12,9 @@
 #include <vlGraphics/FlatManipulator.hpp>
 #include <vlGraphics/GeometryPrimitives.hpp>
 
+#include <vlGraphics/Text.hpp>
+#include <vlGraphics/FontManager.hpp>
+
 #include "Renderer/VL/VLBaseView.hpp"
 #include "Renderer/VL/AxisRenderer.hpp"
 
@@ -28,6 +31,7 @@ VLBaseView::VLBaseView()
 	mMainAppletName = "MainAppletNoName";
 	m_bPerspective = false;
 //	m_bPerspective = true;
+	mFrameRateActor = NULL;
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
@@ -90,7 +94,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	rend->renderers().push_back( mAxisRenderer.get() );
 
 	/* set render mode */
-	setRenderMode(RenderGouraud);
+	setRenderMode(RenderGouraudWithEdges);
 
 	// installs a SceneManagerActorTree as the default scene manager
 	mSceneManagerActorTree = new SceneManagerActorTree;
@@ -157,6 +161,9 @@ void VLBaseView::updateEvent()
 
 	// execute rendering
 	rendering()->render();
+
+	// update the scene content
+//	updateScene(); //moved by mwu
 
 	// show rendering
 	if ( openglContext()->hasDoubleBuffer() )
@@ -591,11 +598,11 @@ void VLBaseView::loadFile(const std::string& strPathName )
 
 void VLBaseView::makeBox()
 {
-//	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
 
 //	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
-		vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
+//		vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
 
 	// compute normals
 	geom->computeNormals();
@@ -642,5 +649,56 @@ void VLBaseView::fileDroppedEvent( const std::vector<String>& files )
 		}
 	}
 	setViewMode(ViewIso,true);
+}
+
+void VLBaseView::updateScene()
+{
+#if _DEBUG
+	if (mFrameRateActor != NULL)
+	{
+		sceneManager()->tree()->eraseActor( mFrameRateActor );	
+		mFrameRateActor = NULL;
+	}
+	char buffer[MAX_PATH];
+	memset(buffer,0,sizeof(char)*MAX_PATH);
+	GetWindowsDirectoryA(buffer,MAX_PATH);
+	vl::String system_font_directory = vl::String(buffer) + "/fonts";
+
+	/* chinese & japanese fonts */
+	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont(system_font_directory+"/simhei.ttf", 12);
+
+	vl::ref<vl::Light> light = new vl::Light;
+
+	vl::ref<vl::Effect> name_effect = new vl::Effect;
+	  name_effect->shader()->setRenderState( light.get(), 0 );
+	  name_effect->shader()->enable(vl::EN_LIGHTING);
+	  name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+	  name_effect->shader()->enable(vl::EN_CULL_FACE);
+	  name_effect->shader()->disable(vl::EN_LIGHTING);
+	  name_effect->shader()->enable(vl::EN_BLEND);
+  ///* to avoid clipping artefacts due to partial character overlapping we either disable depth
+  //   testing, set depth-write mask to false or enable an appropriate alpha testing. */
+  // name_effect->shader()->disable(vl::EN_DEPTH_TEST);
+   name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+
+
+	vl::ref< vl::Text > text = new vl::Text;
+	mFrameRateActor = sceneManager()->tree()->addActor( text.get(),name_effect.get() );
+
+	char framerate[128];
+	sprintf(framerate,"%8.3f frames/sec",mFPS);
+
+	text->setFont(font.get());
+	text->setKerningEnabled(false);
+	text->setText(vl::String(framerate));
+	text->setMode(vl::Text2D);
+	text->setTextAlignment( vl::TextAlignJustify );
+	text->setAlignment( vl::AlignLeft | vl::AlignTop );
+	text->setViewportAlignment( vl::AlignLeft | vl::AlignTop );
+	text->setColor( vl::black );
+	//text->setShadowVector( vl::fvec2(5,5) );
+	//text->setOutlineEnabled(true);
+	//text->setOutlineColor(vl::black);
+#endif
 }
 //-----------------------------------------------------------------------------
