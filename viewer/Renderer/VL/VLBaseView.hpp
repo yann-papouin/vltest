@@ -10,7 +10,7 @@
 #include <vlGraphics/Rendering.hpp>
 #include <vlGraphics/ReadPixels.hpp>
 #include <vlGraphics/EdgeRenderer.hpp>
-#include <vlGraphics/Effect.hpp>
+#include <vlGraphics/Text.hpp>
 
 #include "Renderer/vl/OrthographicTrackballManipulator.hpp"
 #include "Renderer/vl/PerspectiveTrackballManipulator.hpp"
@@ -148,7 +148,6 @@ public:
 	void setRenderMode(RenderMode eRenderMode);
 	void loadFile( const std::string& strPathName );
 	void makeBox();
-	vl::ref<vl::Effect> mEffect;
 
 protected:
 	void bindManipulators(Camera* camera);
@@ -161,7 +160,8 @@ private:
 	ref<ReadPixels> mReadPixels;
 
 
-	Actor* mFrameRateActor;
+	vl::ref<vl::Effect> mEffect;
+	ref<Text> mTextFrameRate;
 
 
 	String mMainAppletName;

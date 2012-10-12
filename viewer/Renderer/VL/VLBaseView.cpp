@@ -31,7 +31,6 @@ VLBaseView::VLBaseView()
 	mMainAppletName = "MainAppletNoName";
 	m_bPerspective = false;
 //	m_bPerspective = true;
-	mFrameRateActor = NULL;
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
@@ -113,6 +112,35 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	}
 	mTrackball->setEnabled(true);
 
+#pragma region for displaying framerate
+	mTextFrameRate = new vl::Text;
+	char buffer[MAX_PATH];
+	memset(buffer,0,sizeof(char)*MAX_PATH);
+	GetWindowsDirectoryA(buffer,MAX_PATH);
+	vl::String system_font_directory = vl::String(buffer) + "/fonts";
+
+	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont(system_font_directory+"/simhei.ttf", 12);
+	mTextFrameRate->setFont(font.get());
+	mTextFrameRate->setKerningEnabled(false);
+	mTextFrameRate->setText("");
+	mTextFrameRate->setMode(vl::Text2D);
+	mTextFrameRate->setTextAlignment( vl::TextAlignJustify );
+	mTextFrameRate->setAlignment( vl::AlignLeft | vl::AlignTop );
+	mTextFrameRate->setViewportAlignment( vl::AlignLeft | vl::AlignTop );
+	mTextFrameRate->setColor( vl::black );
+
+	vl::ref<vl::Effect> name_effect = new vl::Effect;
+	name_effect->shader()->setRenderState( light.get(), 0 );
+	name_effect->shader()->enable(vl::EN_LIGHTING);
+	name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+	name_effect->shader()->enable(vl::EN_CULL_FACE);
+	name_effect->shader()->disable(vl::EN_LIGHTING);
+	name_effect->shader()->enable(vl::EN_BLEND);
+    name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+
+	sceneManager()->tree()->addActor( mTextFrameRate.get(),name_effect.get() );
+#pragma endregion for displaying framerate
+
 	bindManipulators( rend->camera() );
 }
 //-----------------------------------------------------------------------------
@@ -126,18 +154,6 @@ void VLBaseView::bindManipulators(Camera* camera)
 //-----------------------------------------------------------------------------
 void VLBaseView::initEvent()
 {
-	Rendering* rend = cast<Rendering>(rendering());
-	if (rend)
-	{
-// 		if (m_bPerspective)
-// 		{
-// 			rend->camera()->setProjectionPerspective();
-// 		}
-// 		else
-// 		{
-// 			rend->camera()->setProjectionOrtho();
-// 		}
-	}
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::updateEvent()
@@ -161,9 +177,6 @@ void VLBaseView::updateEvent()
 
 	// execute rendering
 	rendering()->render();
-
-	// update the scene content
-//	updateScene(); //moved by mwu
 
 	// show rendering
 	if ( openglContext()->hasDoubleBuffer() )
@@ -653,52 +666,22 @@ void VLBaseView::fileDroppedEvent( const std::vector<String>& files )
 
 void VLBaseView::updateScene()
 {
-#if _DEBUG
-	if (mFrameRateActor != NULL)
-	{
-		sceneManager()->tree()->eraseActor( mFrameRateActor );	
-		mFrameRateActor = NULL;
-	}
-	char buffer[MAX_PATH];
-	memset(buffer,0,sizeof(char)*MAX_PATH);
-	GetWindowsDirectoryA(buffer,MAX_PATH);
-	vl::String system_font_directory = vl::String(buffer) + "/fonts";
+	//if(1)
+	//{
+	//	if (mFrameRateActor != NULL)
+	//	{
+	//		sceneManager()->tree()->eraseActor( mFrameRateActor );	
+	//		mFrameRateActor = NULL;
+	//	}
 
-	/* chinese & japanese fonts */
-	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont(system_font_directory+"/simhei.ttf", 12);
-
-	vl::ref<vl::Light> light = new vl::Light;
-
-	vl::ref<vl::Effect> name_effect = new vl::Effect;
-	  name_effect->shader()->setRenderState( light.get(), 0 );
-	  name_effect->shader()->enable(vl::EN_LIGHTING);
-	  name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-	  name_effect->shader()->enable(vl::EN_CULL_FACE);
-	  name_effect->shader()->disable(vl::EN_LIGHTING);
-	  name_effect->shader()->enable(vl::EN_BLEND);
-  ///* to avoid clipping artefacts due to partial character overlapping we either disable depth
-  //   testing, set depth-write mask to false or enable an appropriate alpha testing. */
-  // name_effect->shader()->disable(vl::EN_DEPTH_TEST);
-   name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-
-
-	vl::ref< vl::Text > text = new vl::Text;
-	mFrameRateActor = sceneManager()->tree()->addActor( text.get(),name_effect.get() );
+	//	//text->setShadowVector( vl::fvec2(5,5) );
+	//	//text->setOutlineEnabled(true);
+	//	//text->setOutlineColor(vl::black);
+	//}
 
 	char framerate[128];
 	sprintf(framerate,"%8.3f frames/sec",mFPS);
+	mTextFrameRate->setText(vl::String(framerate));
 
-	text->setFont(font.get());
-	text->setKerningEnabled(false);
-	text->setText(vl::String(framerate));
-	text->setMode(vl::Text2D);
-	text->setTextAlignment( vl::TextAlignJustify );
-	text->setAlignment( vl::AlignLeft | vl::AlignTop );
-	text->setViewportAlignment( vl::AlignLeft | vl::AlignTop );
-	text->setColor( vl::black );
-	//text->setShadowVector( vl::fvec2(5,5) );
-	//text->setOutlineEnabled(true);
-	//text->setOutlineColor(vl::black);
-#endif
 }
 //-----------------------------------------------------------------------------
