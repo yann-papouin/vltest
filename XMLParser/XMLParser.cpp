@@ -42,7 +42,7 @@
 void MyDeleteFile(CString& sPath) 
 { 
 	WIN32_FIND_DATA fd;
-	HANDLE hFind = ::FindFirstFile(sPath + _T("*.*"),&fd);
+	HANDLE hFind = ::FindFirstFile(sPath + _T("\\*.*"),&fd);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{           
 		while (::FindNextFile(hFind,&fd))
@@ -60,7 +60,7 @@ void MyDeleteFile(CString& sPath)
 				}
 			}
 			else
-				DeleteFile(sPath + fd.cFileName);
+				DeleteFile(sPath + _T("\\") + fd.cFileName);
 		}
 		::FindClose(hFind);
 	}
