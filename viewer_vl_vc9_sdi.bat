@@ -1,4 +1,4 @@
-SET CSP=C:\Program Files (x86)\Codejock Software\MFC\Xtreme ToolkitPro v15.1.3.0908
+SET CSP=C:\Program Files (x86)\Codejock Software\MFC\Xtreme ToolkitPro v15.2.1
 SET VL_SRC=d:\spa_instdir\VizLib_svn\src
 SET VL_DATA_PATH=d:\spa_instdir\VizLib_svn\data
 SET VL=d:\spa_instdir\VizLib_vc9_x86\src
