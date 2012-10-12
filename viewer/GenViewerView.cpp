@@ -618,6 +618,7 @@ BOOL CGenViewerView::OnMouseWheel(unsigned int nFlags, short zDelta, CPoint pt)
 		RedrawWindow();
 	}
 
+	CMFCView::OnMouseMove(nFlags,pt);// 10/11/2012 mwu :  
 	CMFCView::OnMouseWheel(nFlags,zDelta,pt);
 
 	return TRUE;
