@@ -30,6 +30,8 @@ static char THIS_FILE[] = __FILE__;
 #ifdef VL
 #include <vlCore/VisualizationLibrary.hpp>
 #include "InterOp/IOManager.hpp"
+#include <vlCore/LoadWriterManager.hpp>
+#include "io3DXML.hpp"
 #endif
 
 #define UtC(x,y)     (wcstombs(y, x, wcslen(x)), y)
@@ -128,6 +130,7 @@ BOOL CGenViewerApp::InitInstance()
 
 	/* init Visualization Library */
 	vl::VisualizationLibrary::init();
+	registerLoadWriter(new LoadWriter3DXML);
 #endif
 
 #if defined(INTEROP) || defined(ACIS)

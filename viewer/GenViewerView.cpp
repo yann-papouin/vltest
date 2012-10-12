@@ -308,7 +308,7 @@ void CGenViewerView::OnInitialUpdate()
 		Win32Context::initWin32GLContext(NULL, "VLView", format, /*these last for are ignored*/0, 0, r.Width(), r.Height());
 
 		// 8/23/2012 mwu : test  
-		mVLBaseView->makeBox();
+		//mVLBaseView->makeBox();
 	}
 
 	mVLBaseView->setViewMode(ViewIso,true);
