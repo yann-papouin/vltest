@@ -125,14 +125,14 @@ void VLBaseView::initEvent()
 	Rendering* rend = cast<Rendering>(rendering());
 	if (rend)
 	{
-		if (m_bPerspective)
-		{
-			rend->camera()->setProjectionPerspective();
-		}
-		else
-		{
-			rend->camera()->setProjectionOrtho();
-		}
+// 		if (m_bPerspective)
+// 		{
+// 			rend->camera()->setProjectionPerspective();
+// 		}
+// 		else
+// 		{
+// 			rend->camera()->setProjectionOrtho();
+// 		}
 	}
 }
 //-----------------------------------------------------------------------------
@@ -217,6 +217,15 @@ void VLBaseView::resizeEvent(int w, int h)
 		VL_CHECK( h == rend->renderer()->framebuffer()->height() );
 		rend->camera()->viewport()->setWidth( w );
 		rend->camera()->viewport()->setHeight( h );
+
+		if (m_bPerspective)
+		{
+			rend->camera()->setProjectionPerspective();
+		}
+		else
+		{
+			rend->camera()->setProjectionOrtho();
+		}
 	}
 }
 //-----------------------------------------------------------------------------
@@ -300,11 +309,14 @@ void VLBaseView::fitWorld()
 		// install the orthographic projection
 		if (rend->camera()->projectionMatrixType() == PMT_OrthographicProjection )
 		{
-			rend->camera()->setProjectionMatrix(
-				// compute directly an orthographic projection & center the scene on the screen
-				vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
-				* vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) 
-				,PMT_OrthographicProjection) ;
+			//rend->camera()->setProjectionMatrix(
+			//	// compute directly an orthographic projection & center the scene on the screen
+			//	vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
+			//	/** vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) */
+			//	,PMT_OrthographicProjection) ;
+
+			rend->camera()->setProjectionOrtho(-w/2.0,w/2.0,-h/2.0,h/2.0, nearPlane, farPlane);
+
 
 			//rend->camera()->setNearPlane(nearPlane);
 			//rend->camera()->setFarPlane(farPlane);
@@ -317,7 +329,7 @@ void VLBaseView::fitWorld()
 // 				rend->camera()->projectionMatrix() *
 // 				vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0),PMT_PerspectiveProjection);
 			vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
-				* vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) 
+				/** vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0)*/ 
 				,PMT_PerspectiveProjection) ;
 
 		}
@@ -587,9 +599,9 @@ void VLBaseView::makeBox()
 {
 //	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
 
-//	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),1000,5000)  ;
+//	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
-	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
+	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,203000)  ;
 
 	// compute normals
 	geom->computeNormals();
