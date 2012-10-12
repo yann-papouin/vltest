@@ -79,7 +79,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 
 	// style options
 	mEdgeRenderer->setLineWidth(1.0f);
-	mEdgeRenderer->setSmoothLines(true);
+	mEdgeRenderer->setSmoothLines(false);
 	mEdgeRenderer->setDefaultLineColor(black);
 
 	rend->renderers().push_back( mEdgeRenderer.get() );
@@ -595,7 +595,7 @@ void VLBaseView::makeBox()
 
 //	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
-	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
+		vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
 
 	// compute normals
 	geom->computeNormals();
