@@ -83,7 +83,7 @@
 				OutputFile="$(OutDir)/GenViewer.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(VL)\vlCore\lib\Debug&quot;;&quot;$(VL)\vlGraphics\lib\Debug&quot;;&quot;$(VL)\vlWin32\lib\Debug&quot;;&quot;$(VL)\vlMFC\lib\Debug&quot;;&quot;$(VL)\examples\Applets\lib\Debug&quot;;&quot;%(AdditionalLibraryDirectories)&quot;;&quot;$(CSP)/lib/vc90&quot;;&quot;$(XERCES)\lib&quot;;&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;;&quot;$(QTDIR)\lib&quot;;..\bin\Debug_sdi_vc9"
+				AdditionalLibraryDirectories="&quot;$(VL)\vlCore\lib\Debug&quot;;&quot;$(VL)\vlGraphics\lib\Debug&quot;;&quot;$(VL)\vlWin32\lib\Debug&quot;;&quot;$(VL)\vlMFC\lib\Debug&quot;;&quot;$(VL)\examples\Applets\lib\Debug&quot;;&quot;%(AdditionalLibraryDirectories)&quot;;&quot;$(CSP)/lib/vc90&quot;;&quot;$(XERCES)\lib&quot;;&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;;..\bin\Debug_sdi_vc9"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
@@ -117,8 +117,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)_sdi_vc9"
-			IntermediateDirectory="$(ConfigurationName)_sdi_vc9"
+			OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)_sdi_vc9"
+			IntermediateDirectory="$(SolutionDir)Build\$(ProjectName)\$(ConfigurationName)_sdi_vc9"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
@@ -150,7 +150,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;./"
+				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser;."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;VL"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -178,7 +178,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfc90u.lib psapi.lib opengl32.lib glu32.lib VLApplets.lib VLMFC.lib VLGraphics.lib VLCore.lib VLWin32.lib"
+				AdditionalDependencies="mfc90u.lib psapi.lib opengl32.lib glu32.lib VLApplets.lib VLMFC.lib VLGraphics.lib VLCore.lib VLWin32.lib XMLParser.lib"
 				OutputFile="$(OutDir)/GenViewer.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -526,18 +526,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\io3DXML.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\MainFrm.cpp"
 				>
 			</File>
@@ -705,159 +693,31 @@
 				Name="InterOp"
 				>
 				<File
+					RelativePath=".\io3DXML.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\InterOp\IOManager.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\InterOp\IOManager.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Struct"
-				>
-				<File
-					RelativePath=".\Struct\Attributes.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Attributes.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Instance.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Instance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Occurence.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Occurence.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Reference.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Reference.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Represent.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Represent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Represent3D.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Represent3D.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\Selectionset.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\Selectionset.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\World.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\World.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Struct\WorldHandle.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Struct\WorldHandle.h"
 					>
 				</File>
 			</Filter>

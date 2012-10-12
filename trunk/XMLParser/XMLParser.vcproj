@@ -97,8 +97,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)_sdi_vc9"
+			IntermediateDirectory="$(SolutionDir)Build\$(ProjectName)\$(ConfigurationName)_sdi_vc9"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
@@ -302,6 +302,14 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
