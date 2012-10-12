@@ -131,7 +131,7 @@ public:
 	 * \note Since updateScene() is called by updateEvent() this function is called only if somebody
 	 * requests a OpenGLContext::update() or if OpenGLContext::continuousUpdate() is set to \p true. 
 	 */
-	virtual void updateScene() {}
+	virtual void updateScene();
 
 	/** Sets the MainApplet name, used for the window title and for naming screenshots. */
 	void setMainAppletName(const String& app_name) { mMainAppletName = app_name; } 
@@ -159,6 +159,9 @@ private:
 	ref<TrackballManipulator> mTrackball;
 	ref<SceneManagerActorTree> mSceneManagerActorTree;
 	ref<ReadPixels> mReadPixels;
+
+
+	Actor* mFrameRateActor;
 
 
 	String mMainAppletName;
