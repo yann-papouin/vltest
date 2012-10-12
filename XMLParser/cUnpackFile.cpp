@@ -70,7 +70,7 @@ void cUnpackFile::CreateDirFromZip(const char * dirName, const char * zipFileNam
 			nReadBytes = unzReadCurrentFile(unZipDir, buf , size);
 			unzCloseCurrentFile(unZipDir);
 		}
-		FILE * pFile;
+		FILE * pFile = NULL;
 		char filePos[MAX_PATH];
 		strcpy_s(filePos,dirName);
 		if (slashFlag)
@@ -86,8 +86,11 @@ void cUnpackFile::CreateDirFromZip(const char * dirName, const char * zipFileNam
 		else
 			printf("无法打开输出文件 %s \n",filePos);
 
-		fclose(pFile);
-		delete buf;
+		if (pFile)
+		{
+			fclose(pFile);
+			delete buf;
+		}
 
 		nResult = unzGoToNextFile(unZipDir);
 	}
