@@ -50,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;XERCES;_CRT_SECURE_NO_WARNINGS;VL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -79,7 +79,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfc90ud.lib psapi.lib opengl32.lib glu32.lib VLApplets-d.lib VLMFC-d.lib VLGraphics-d.lib VLCore-d.lib VLWin32-d.lib GLC_lib2.lib QtCored4.lib XMLParser.lib"
+				AdditionalDependencies="mfc90ud.lib psapi.lib opengl32.lib glu32.lib VLApplets-d.lib VLMFC-d.lib VLGraphics-d.lib VLCore-d.lib VLWin32-d.lib XMLParser.lib"
 				OutputFile="$(OutDir)/GenViewer.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"

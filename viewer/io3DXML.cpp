@@ -13,9 +13,9 @@
 #include "XMLParser.h"
 #include "TFRep.h"
 #include "assert.h"
-#include "glc_factory.h"
-#include "geometry\glc_geometry.h"
-#include "geometry\glc_geometry.h"
+//#include "glc_factory.h"
+//#include "geometry\glc_geometry.h"
+//#include "geometry\glc_geometry.h"
 
 using namespace vl;
 //-----------------------------------------------------------------------------
