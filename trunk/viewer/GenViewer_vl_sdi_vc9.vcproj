@@ -150,7 +150,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser;."
+				AdditionalIncludeDirectories="&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(SolutionDir)&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser;."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;VL"
 				StringPooling="true"
 				RuntimeLibrary="2"

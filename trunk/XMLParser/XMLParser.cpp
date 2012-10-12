@@ -94,6 +94,7 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 	{
 		::CreateDirectory(szFolder,NULL);
 	}
+
 #pragma endregion Create temp folder
 
 	const size_t strsize=(szFolder.GetLength()+1)*2; // 宽字符的长度;
@@ -101,15 +102,15 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 	size_t sz=0;
 	wcstombs_s(&sz,qstr,strsize,szFolder,_TRUNCATE);
 
-	const size_t filestrsize=(fileStr.size()+1)*2; // 宽字符的长度;
-	char * filestr= new char[filestrsize]; //分配空间;
-	sz=0;
-	wcstombs_s(&sz,filestr,filestrsize,CString(fileStr.c_str()),_TRUNCATE);
+	//const size_t filestrsize=(fileStr.size()+1)*2; // 宽字符的长度;
+	//char * filestr= new char[filestrsize]; //分配空间;
+	//sz=0;
+	//wcstombs_s(&sz,filestr,filestrsize,CString(fileStr.c_str()),_TRUNCATE);
 
 	cUnpackFile unpackTool;
-	unpackTool.CreateDirFromZip(qstr, filestr);
+	unpackTool.CreateDirFromZip(qstr,fileStr.c_str());
 	delete []qstr;
-	delete []filestr;
+	//delete []filestr;
 
 	CFileFind finder;
 	LPCTSTR pstr = szFolder;
@@ -227,10 +228,96 @@ void CXMLParser::GetIdRepInformation(TiXmlElement *root)
 		AddIdTriangle(triangleStr);
 	}
 #pragma endregion VertexBuffer
+//#pragma region SurfaceAttributes
+//
+//	if(strcmp(root->FirstChildElement()->Value(),"SurfaceAttributes")==0)
+//	{
+//		if(strcmp(root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->Value(),"VertexBuffer")==0)
+//		{
+//			char *pointStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->GetText();
+//			AddPoint(pointStr);
+//			char *normalStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->NextSiblingElement()->GetText();
+//			AddNormals(normalStr);
+//		}
+//		TiXmlElement* triangleElement=root->FirstChildElement()->NextSiblingElement()->FirstChildElement();
+//
+//		//此部分用于判断有些特殊的triangles没有id但是也不用","分开每个三角形
+//		string s(triangleElement->FirstAttribute()->Value());
+//		bool flag=true;
+//		if(s.find(",")==s.npos)
+//		{
+//			flag=false;
+//		}
+//
+//		if(strcmp(triangleElement->FirstAttribute()->Name(),"id")==0)
+//		{
+//			while(triangleElement!=NULL)
+//			{
+//				char *triangleStr=(char *)triangleElement->FirstAttribute()->Next()->Value();
+//				AddIdTriangle(triangleStr);
+//				triangleElement=triangleElement->NextSiblingElement();
+//			}
+//		}
+//		else
+//		{
+//			while(triangleElement!=NULL)
+//			{
+//				char *triangleStr=(char *)triangleElement->FirstAttribute()->Value();
+//				if(flag==true)
+//				{
+//					AddTriangle(triangleStr);
+//				}
+//				else
+//				{
+//					AddIdTriangle(triangleStr);
+//				}
+//				triangleElement=triangleElement->NextSiblingElement();
+//			}
+//		}
+//	}
+//#pragma endregion SurfaceAttributes
 #pragma region SurfaceAttributes
 
 	if(strcmp(root->FirstChildElement()->Value(),"SurfaceAttributes")==0)
 	{
+		if(strcmp(root->FirstChildElement()->NextSiblingElement()->Value(),"PolygonalLOD")==0)
+		{
+			TiXmlElement *r=root->FirstChildElement()->NextSiblingElement();
+			while (strcmp(r->Value(),"PolygonalLOD")==0)
+			{
+				char *triangleStr=(char *)r->FirstChildElement()->FirstChildElement()->FirstAttribute()->Value();
+				AddIdTriangle(triangleStr);
+				r=r->NextSiblingElement();
+			}
+			while (r!=NULL)
+			{
+				if(strcmp(r->Value(),"Faces")==0)
+				{
+					char *triangleStr=(char *)r->FirstChildElement()->FirstAttribute()->Value();
+				}
+				if(strcmp(r->Value(),"Edges")==0)
+				{
+					TiXmlElement *polyElement=r->FirstChildElement()->NextSiblingElement();
+					while (polyElement!=NULL)
+					{
+						char *polyStr=(char *)polyElement->FirstAttribute()->Value();
+						AddPoly(polyStr);
+						polyElement=polyElement->NextSiblingElement();
+					}
+				}
+				if(strcmp(r->Value(),"VertexBuffer")==0)
+				{
+					char *pointStr=(char *)r->FirstChildElement()->GetText();
+
+					AddPoint(pointStr);
+					char *normalStr=(char *)r->FirstChildElement()->NextSiblingElement()->GetText();
+					AddNormals(normalStr);
+				}
+				r=r->NextSiblingElement();
+			}
+		}
+		else
+		{
 		if(strcmp(root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->Value(),"VertexBuffer")==0)
 		{
 			char *pointStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->GetText();
@@ -273,6 +360,7 @@ void CXMLParser::GetIdRepInformation(TiXmlElement *root)
 				triangleElement=triangleElement->NextSiblingElement();
 			}
 		}
+	}
 	}
 #pragma endregion SurfaceAttributes
 #pragma region Edges

@@ -126,7 +126,7 @@ BOOL CGenViewerApp::InitInstance()
 #endif
 
 #ifdef VL
-//	vl::showWin32Console();
+	vl::showWin32Console();
 
 	/* init Visualization Library */
 	vl::VisualizationLibrary::init();
