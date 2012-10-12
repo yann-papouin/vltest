@@ -26,8 +26,8 @@ VLBaseView::VLBaseView()
 	mFPS        = 0;
 	mReadPixels = new ReadPixels;
 	mMainAppletName = "MainAppletNoName";
-//	m_bPerspective = false;
-	m_bPerspective = true;
+	m_bPerspective = false;
+//	m_bPerspective = true;
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
@@ -601,7 +601,7 @@ void VLBaseView::makeBox()
 
 //	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
-	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,203000)  ;
+	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
 
 	// compute normals
 	geom->computeNormals();
