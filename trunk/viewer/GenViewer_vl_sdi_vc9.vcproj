@@ -50,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Viewer&quot;;&quot;$(SolutionDir)glcCore&quot;;&quot;$(VL)&quot;;&quot;$(VL_SRC)&quot;;&quot;$(VL_SRC)\3rdparty\Khronos&quot;;&quot;$(CSP)\source&quot;;&quot;$(XERCES)\include&quot;;..\XMLParser;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;XERCES;_CRT_SECURE_NO_WARNINGS;VL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -79,11 +79,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfc90ud.lib psapi.lib opengl32.lib glu32.lib VLApplets-d.lib VLMFC-d.lib VLGraphics-d.lib VLCore-d.lib VLWin32-d.lib GLC_lib2.lib QtCored4.lib"
+				AdditionalDependencies="mfc90ud.lib psapi.lib opengl32.lib glu32.lib VLApplets-d.lib VLMFC-d.lib VLGraphics-d.lib VLCore-d.lib VLWin32-d.lib GLC_lib2.lib QtCored4.lib XMLParser.lib"
 				OutputFile="$(OutDir)/GenViewer.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(VL)\vlCore\lib\Debug&quot;;&quot;$(VL)\vlGraphics\lib\Debug&quot;;&quot;$(VL)\vlWin32\lib\Debug&quot;;&quot;$(VL)\vlMFC\lib\Debug&quot;;&quot;$(VL)\examples\Applets\lib\Debug&quot;;&quot;%(AdditionalLibraryDirectories)&quot;;&quot;$(CSP)/lib/vc90&quot;;&quot;$(XERCES)\lib&quot;;&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;;&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(VL)\vlCore\lib\Debug&quot;;&quot;$(VL)\vlGraphics\lib\Debug&quot;;&quot;$(VL)\vlWin32\lib\Debug&quot;;&quot;$(VL)\vlMFC\lib\Debug&quot;;&quot;$(VL)\examples\Applets\lib\Debug&quot;;&quot;%(AdditionalLibraryDirectories)&quot;;&quot;$(CSP)/lib/vc90&quot;;&quot;$(XERCES)\lib&quot;;&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;;&quot;$(QTDIR)\lib&quot;;..\bin\Debug_sdi_vc9"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
@@ -526,6 +526,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\io3DXML.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\MainFrm.cpp"
 				>
 			</File>
@@ -867,6 +879,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\io3DXML.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MainFrm.h"
 				>
 			</File>
@@ -941,14 +957,6 @@
 			</File>
 			<File
 				RelativePath=".\res\ViewBar.bmp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="My Amplifier Results"
-			>
-			<File
-				RelativePath=".\My Amplifier Results\r000hs\r000hs.ampl"
 				>
 			</File>
 		</Filter>

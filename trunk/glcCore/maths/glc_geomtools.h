@@ -30,7 +30,7 @@
 #include "glc_vector3d.h"
 #include "glc_line3d.h"
 #include "glc_plane.h"
-#include "D:\spa_instdir\VizLib_svn\src\3rdparty\Khronos\GL/mesa_gl.h"
+#include "3rdparty\Khronos\GL/mesa_gl.h"
 
 //#include "../geometry/glc_mesh.h"
 

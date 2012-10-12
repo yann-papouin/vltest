@@ -926,10 +926,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="d:\spa_instdir\GLC_lib\src\GLC_lib_resource.rc"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global
