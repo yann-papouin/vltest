@@ -90,7 +90,7 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 	rend->renderers().push_back( mAxisRenderer.get() );
 
 	/* set render mode */
-	setRenderMode(RenderGouraudWithEdges);
+	setRenderMode(RenderGouraud);
 
 	// installs a SceneManagerActorTree as the default scene manager
 	mSceneManagerActorTree = new SceneManagerActorTree;
@@ -316,10 +316,6 @@ void VLBaseView::fitWorld()
 			//	,PMT_OrthographicProjection) ;
 
 			rend->camera()->setProjectionOrtho(-w/2.0,w/2.0,-h/2.0,h/2.0, nearPlane, farPlane);
-
-
-			//rend->camera()->setNearPlane(nearPlane);
-			//rend->camera()->setFarPlane(farPlane);
 		}
 		else
 		{
@@ -359,8 +355,6 @@ void VLBaseView::setViewMode( ViewMode eViewMode,bool bFitWorld /*= true*/ )
 		vl::vec3 eye;  
 		vl::vec3 at;
 		vl::vec3 up;  
-	//	vl::vec3 right;
-	//	rend->camera()->getViewMatrixAsLookAt(eye, at,up,right);
 
 		at = bs.center();
 		float length = 2.5f*bs.radius();//when it is small, some problems with hidden line and silhouette calculation

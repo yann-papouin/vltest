@@ -76,19 +76,28 @@ void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 //	double scale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
 	float scale = n>0?1.1f:0.9f;
 	vl::mat4 projMatrix = camera()->projectionMatrix();
-	projMatrix *= vl::mat4::getScaling(scale,scale,scale);
 
 	if (m_bShift)
 	{
+		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
 		camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
 	}
 	else
 	{
+
+
 		//need to consider the best factor for offset
 		double dOffsetX = -(_x - camera()->viewport()->width()/2.0 )/800.0*n;
 		double dOffsetY = (_y - camera()->viewport()->height()/2.0 ) /800.0*n;
 
+		//const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
+		//	(1 / std::abs(mZoomFactor));
+
+		//dOffsetX = - ( _x - camera()->viewport()->width()/2.0) / zoomFactor ;
+		//dOffsetY =  ( _y - camera()->viewport()->height()/2.0) / zoomFactor;
+
 		projMatrix *= vl::mat4::getTranslation(dOffsetX, dOffsetY, 0);
+		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
 
 		camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
 	}
@@ -135,7 +144,6 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 			mIntersectionPoint->computeWorldMatrix();
 			
 			mPivot = intersector.intersections()[0]->intersectionPoint();
-
 
 			//// TODO: Move to the center of the screen
 			//const double zoomFactor = m_dZoomFactor > 0 ? m_dZoomFactor :
@@ -210,6 +218,10 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
  			// compute directly an orthographic projection & pan the scene on the screen
  			mProjMatrixBeforePan*
  			vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
+	}
+	else
+	{
+		TrackballManipulator::mouseMoveEvent(x,y);
 	}
 
 	// update the view

@@ -128,6 +128,7 @@ ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 	res_db->resources().push_back( effect.get() );
 	return res_db;
 }
+
 ref<ResourceDatabase> File3DXMLLoader::load3DXML(VirtualFile* file)
 {
 	ref<ResourceDatabase> res_db;
