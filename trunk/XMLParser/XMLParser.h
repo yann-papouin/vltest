@@ -38,10 +38,12 @@ private:
 
 protected:
 	void TraverseGetInformation(TiXmlElement *root);	//遍历结点树获得信息
-	void GetIdRepInformation(TiXmlElement *root);
 	void AddPoint(const string &str);	//将找到的点添加入向量
 	void AddNormals(const string &str);
 	void AddTriangle(const string &str);
 	void AddIdTriangle(const string &str);
 	void AddPoly(const string &str);
+	void AddStrips(const string &str);
+	void AddFans(const string &str);
+	bool IsTriangleStrWithSplit(char *str);
 };

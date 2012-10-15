@@ -162,7 +162,7 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 						{
 							m_pTempGeometry->SetRepType(3);
 							m_pTempChildGeometry=new TFRep();
-							GetIdRepInformation(rootElement);
+							TraverseGetInformation(rootElement);
 							m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
 							rootElement=rootElement->NextSiblingElement();
 						}
@@ -193,188 +193,98 @@ CXMLParser::~CXMLParser()
 
 void CXMLParser::TraverseGetInformation(TiXmlElement* root)
 {
-	char *pointStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->GetText();
-	AddPoint(pointStr);
-	char *normalStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->NextSiblingElement()->GetText();
-	AddNormals(normalStr);
-	TiXmlElement* triangleElement=root->FirstChildElement()->NextSiblingElement()->FirstChildElement();
-	char *m=(char *)triangleElement->Value();
-	while(triangleElement!=NULL)
+	TiXmlElement *childroot=root->FirstChildElement();
+	while(childroot!=NULL)
 	{
-		char *triangleStr=(char *)triangleElement->FirstAttribute()->Value();
-		AddTriangle(triangleStr);
-		triangleElement=triangleElement->NextSiblingElement();
-	}
-	TiXmlElement* polyElement=root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement();
-	while(polyElement!=NULL)
-	{
-		char *polyStr=(char *)polyElement->FirstAttribute()->Value();
-		AddPoly(polyStr);
-		polyElement=polyElement->NextSiblingElement();
-	}
-}
-
-void CXMLParser::GetIdRepInformation(TiXmlElement *root)
-{
-#pragma region VertexBuffer
-
-	if(strcmp(root->FirstChildElement()->Value(),"VertexBuffer")==0)
-	{
-		char *pointStr=(char *)root->FirstChildElement()->FirstChildElement()->GetText();
-		AddPoint(pointStr);
-		char *normalStr=(char *)root->FirstChildElement()->FirstChildElement()->NextSiblingElement()->GetText();
-		AddNormals(normalStr);
-		char *triangleStr=(char *)root->FirstChildElement()->NextSiblingElement()->FirstChildElement()->NextSiblingElement()->FirstAttribute()->Next()->Value();
-		AddIdTriangle(triangleStr);
-	}
-#pragma endregion VertexBuffer
-//#pragma region SurfaceAttributes
-//
-//	if(strcmp(root->FirstChildElement()->Value(),"SurfaceAttributes")==0)
-//	{
-//		if(strcmp(root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->Value(),"VertexBuffer")==0)
-//		{
-//			char *pointStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->GetText();
-//			AddPoint(pointStr);
-//			char *normalStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->NextSiblingElement()->GetText();
-//			AddNormals(normalStr);
-//		}
-//		TiXmlElement* triangleElement=root->FirstChildElement()->NextSiblingElement()->FirstChildElement();
-//
-//		//此部分用于判断有些特殊的triangles没有id但是也不用","分开每个三角形
-//		string s(triangleElement->FirstAttribute()->Value());
-//		bool flag=true;
-//		if(s.find(",")==s.npos)
-//		{
-//			flag=false;
-//		}
-//
-//		if(strcmp(triangleElement->FirstAttribute()->Name(),"id")==0)
-//		{
-//			while(triangleElement!=NULL)
-//			{
-//				char *triangleStr=(char *)triangleElement->FirstAttribute()->Next()->Value();
-//				AddIdTriangle(triangleStr);
-//				triangleElement=triangleElement->NextSiblingElement();
-//			}
-//		}
-//		else
-//		{
-//			while(triangleElement!=NULL)
-//			{
-//				char *triangleStr=(char *)triangleElement->FirstAttribute()->Value();
-//				if(flag==true)
-//				{
-//					AddTriangle(triangleStr);
-//				}
-//				else
-//				{
-//					AddIdTriangle(triangleStr);
-//				}
-//				triangleElement=triangleElement->NextSiblingElement();
-//			}
-//		}
-//	}
-//#pragma endregion SurfaceAttributes
-#pragma region SurfaceAttributes
-
-	if(strcmp(root->FirstChildElement()->Value(),"SurfaceAttributes")==0)
-	{
-		if(strcmp(root->FirstChildElement()->NextSiblingElement()->Value(),"PolygonalLOD")==0)
+		if(strcmp(childroot->Value(),"VertexBuffer")==0)
 		{
-			TiXmlElement *r=root->FirstChildElement()->NextSiblingElement();
-			while (strcmp(r->Value(),"PolygonalLOD")==0)
-			{
-				char *triangleStr=(char *)r->FirstChildElement()->FirstChildElement()->FirstAttribute()->Value();
-				AddIdTriangle(triangleStr);
-				r=r->NextSiblingElement();
-			}
-			while (r!=NULL)
-			{
-				if(strcmp(r->Value(),"Faces")==0)
-				{
-					char *triangleStr=(char *)r->FirstChildElement()->FirstAttribute()->Value();
-				}
-				if(strcmp(r->Value(),"Edges")==0)
-				{
-					TiXmlElement *polyElement=r->FirstChildElement()->NextSiblingElement();
-					while (polyElement!=NULL)
-					{
-						char *polyStr=(char *)polyElement->FirstAttribute()->Value();
-						AddPoly(polyStr);
-						polyElement=polyElement->NextSiblingElement();
-					}
-				}
-				if(strcmp(r->Value(),"VertexBuffer")==0)
-				{
-					char *pointStr=(char *)r->FirstChildElement()->GetText();
-
-					AddPoint(pointStr);
-					char *normalStr=(char *)r->FirstChildElement()->NextSiblingElement()->GetText();
-					AddNormals(normalStr);
-				}
-				r=r->NextSiblingElement();
-			}
-		}
-		else
-		{
-		if(strcmp(root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->Value(),"VertexBuffer")==0)
-		{
-			char *pointStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->GetText();
+			char *pointStr=(char *)childroot->FirstChildElement()->GetText();
 			AddPoint(pointStr);
-			char *normalStr=(char *)root->FirstChildElement()->NextSiblingElement()->NextSiblingElement()->FirstChildElement()->NextSiblingElement()->GetText();
+			char *normalStr=(char *)childroot->FirstChildElement()->NextSiblingElement()->GetText();
 			AddNormals(normalStr);
 		}
-		TiXmlElement* triangleElement=root->FirstChildElement()->NextSiblingElement()->FirstChildElement();
-
-		//此部分用于判断有些特殊的triangles没有id但是也不用","分开每个三角形
-		string s(triangleElement->FirstAttribute()->Value());
-		bool flag=true;
-		if(s.find(",")==s.npos)
+		else if(strcmp(childroot->Value(),"Faces")==0)
 		{
-			flag=false;
-		}
-
-		if(strcmp(triangleElement->FirstAttribute()->Name(),"id")==0)
-		{
-			while(triangleElement!=NULL)
+			TiXmlElement *triangleElem=childroot->FirstChildElement();
+			while (triangleElem!=NULL)
 			{
-				char *triangleStr=(char *)triangleElement->FirstAttribute()->Next()->Value();
-				AddIdTriangle(triangleStr);
-				triangleElement=triangleElement->NextSiblingElement();
+				if(strcmp(triangleElem->Value(),"Face")==0)
+				{
+					TiXmlAttribute *triangleAttribute=triangleElem->FirstAttribute();
+					while(triangleAttribute!=NULL)
+					{
+						if(strcmp(triangleAttribute->Name(),"triangles")==0)
+						{
+							char *triangleStr=(char *)triangleAttribute->Value();
+							if(IsTriangleStrWithSplit(triangleStr)==true)
+							{
+								AddTriangle(triangleStr);
+							}
+							else
+							{
+								AddIdTriangle(triangleStr);
+							}
+						}
+						if(strcmp(triangleAttribute->Name(),"strips")==0)
+						{
+							char *stripStr=(char *)triangleAttribute->Value();
+							AddStrips(stripStr);
+						}
+						if(strcmp(triangleAttribute->Name(),"fans")==0)
+						{
+							char *fanStr=(char *)triangleAttribute->Value();
+							AddFans(fanStr);
+						}
+						triangleAttribute=triangleAttribute->Next();
+					}
+				}
+				triangleElem=triangleElem->NextSiblingElement();
 			}
 		}
-		else
+		else if(strcmp(childroot->Value(),"Edges")==0)
 		{
-			while(triangleElement!=NULL)
+			TiXmlElement *polyElem=childroot->FirstChildElement();
+			while(polyElem!=NULL)
 			{
-				char *triangleStr=(char *)triangleElement->FirstAttribute()->Value();
-				if(flag==true)
+				if(strcmp(polyElem->Value(),"Polyline")==0)
 				{
-					AddTriangle(triangleStr);
+					char *polyStr=(char *)polyElem->FirstAttribute()->Value();
+					AddPoly(polyStr);
 				}
-				else
-				{
-					AddIdTriangle(triangleStr);
-				}
-				triangleElement=triangleElement->NextSiblingElement();
+				polyElem=polyElem->NextSiblingElement();
 			}
 		}
-	}
-	}
-#pragma endregion SurfaceAttributes
-#pragma region Edges
-	if(strcmp(root->FirstChildElement()->Value(),"Edges")==0)
-	{
-		TiXmlElement* polyElement=root->FirstChildElement()->FirstChildElement()->NextSiblingElement();
-		while(polyElement!=NULL)
+		/*else if (strcmp(childroot->Value(),"PolygonalLOD")==0)
 		{
-			char *polyStr=(char *)polyElement->FirstAttribute()->Value();
-			AddPoly(polyStr);
-			polyElement=polyElement->NextSiblingElement();
-		}
+			continue;
+			TiXmlElement *triangleElem=childroot->FirstChildElement()->FirstChildElement();
+			while (triangleElem!=NULL)
+			{
+				if(strcmp(triangleElem->Value(),"Face")==0)
+				{
+					TiXmlAttribute *triangleAttribute=triangleElem->FirstAttribute();
+					while(triangleAttribute!=NULL)
+					{
+						if(strcmp(triangleAttribute->Name(),"triangles")==0)
+						{
+							char *triangleStr=(char *)triangleAttribute->Value();
+							if(IsTriangleStrWithSplit(triangleStr)==true)
+							{
+								AddTriangle(triangleStr);
+							}
+							else
+							{
+								AddIdTriangle(triangleStr);
+							}
+						}
+						triangleAttribute=triangleAttribute->Next();
+					}
+				}
+				triangleElem=triangleElem->NextSiblingElement();
+			}
+		}*/
+		childroot=childroot->NextSiblingElement();
 	}
-#pragma endregion Edges
 }
 
 void CXMLParser::AddPoint(const string &str)
@@ -383,7 +293,7 @@ void CXMLParser::AddPoint(const string &str)
 	string pattern=",";
 	split(str,pattern, &temp);
 	string pat=" ";
-	for(int i=0;i<temp.size();i++)
+	for(unsigned int i=0;i<temp.size();i++)
 	{
 		vector<string> result;
 		split(temp[i],pat, &result);
@@ -418,7 +328,7 @@ void CXMLParser::AddNormals(const string &str)
 	string pattern=",";
 	split(str,pattern, &temp);
 	string pat=" ";
-	for(int i=0;i<temp.size();i++)
+	for(unsigned int i=0;i<temp.size();i++)
 	{
 		vector<string> result;
 		split(temp[i],pat, &result);
@@ -453,7 +363,7 @@ void CXMLParser::AddTriangle(const string& str)
 	string pattern=",";
 	split(str,pattern,&temp);
 	string pat=" ";
-	for(int i=0;i<temp.size();i++)
+	for(unsigned int i=0;i<temp.size();i++)
 	{
 		vector<string> result;
 		split(temp[i],pat,&result);
@@ -471,7 +381,14 @@ void CXMLParser::AddTriangle(const string& str)
 			p3=atoi(result[2].c_str());
 		}
 		TFTriangle *p=new TFTriangle(p1,p2,p3);
-		m_pTempGeometry->AddTriangle(p);
+		if(m_pTempGeometry->GetRepType()==1)
+		{
+			m_pTempGeometry->AddTriangle(p);
+		}
+		else
+		{
+			m_pTempChildGeometry->AddTriangle(p);
+		}
 	}
 }
 
@@ -481,13 +398,20 @@ void CXMLParser::AddIdTriangle(const string &str)
 	string pattern=" ";
 	split(str,pattern,&temp);
 	int x,y,z;
-	for(int i=0;i<temp.size();i++)
+	for(unsigned int i=0;i<temp.size();i++)
 	{
 		if(i%3==2)
 		{
 			z=atoi(temp[i].c_str());
 			TFTriangle *p=new TFTriangle(x,y,z);
-			m_pTempChildGeometry->AddTriangle(p);
+			if(m_pTempGeometry->GetRepType()==1)
+			{
+				m_pTempGeometry->AddTriangle(p);
+			}
+			else
+			{
+				m_pTempChildGeometry->AddTriangle(p);
+			}
 		}
 		else if(i%3==0)
 		{
@@ -507,7 +431,7 @@ void CXMLParser::AddPoly(const string& str)
 	split(str,pattern,&temp);
 	string pat=" ";
 	vector<TFPoint*> v_pt;
-	for(int i=0;i<temp.size();i++)
+	for(unsigned int i=0;i<temp.size();i++)
 	{
 		vector<string> result;
 		split(temp[i],pat,&result);
@@ -536,5 +460,75 @@ void CXMLParser::AddPoly(const string& str)
 	{
 		m_pTempChildGeometry->AddPolyline(p);
 	}
+}
+
+void CXMLParser::AddStrips(const string &str)
+{
+	vector<string> temp;
+	string pattern=",";
+	split(str,pattern,&temp);
+	string pat=" ";
+	for(unsigned int i=0;i<temp.size();i++)
+	{
+		vector<string> result;
+		split(temp[i],pat,&result);
+		vector<int> v;
+		for(unsigned int j=0;j<result.size();j++)
+		{
+			int n=atoi(result[j].c_str());
+			v.push_back(n);
+		}
+		TFStrips *p=new TFStrips(v);
+		if(m_pTempGeometry->GetRepType()==1)
+		{
+			m_pTempGeometry->AddStrips(p);
+		}
+		else
+		{
+			m_pTempChildGeometry->AddStrips(p);
+		}
+	}
+}
+
+void CXMLParser::AddFans(const string &str)
+{
+	vector<string> temp;
+	string pattern=",";
+	split(str,pattern,&temp);
+	string pat=" ";
+	for(unsigned int i=0;i<temp.size();i++)
+	{
+		vector<string> result;
+		split(temp[i],pat,&result);
+		vector<int> v;
+		for(unsigned int j=0;j<result.size();j++)
+		{
+			int n=atoi(result[j].c_str());
+			v.push_back(n);
+		}
+		TFFan *p=new TFFan(v);
+		if(m_pTempGeometry->GetRepType()==1)
+		{
+			m_pTempGeometry->AddFans(p);
+		}
+		else
+		{
+			m_pTempChildGeometry->AddFans(p);
+		}
+	}
+}
+
+bool CXMLParser::IsTriangleStrWithSplit(char *str)
+{
+	bool flag=false;
+	for(int i=0;str[i]!='\0';i++)
+	{
+		if(str[i]==',')
+		{
+			flag=true;
+			break;
+		}
+	}
+	return flag;
 }
 
