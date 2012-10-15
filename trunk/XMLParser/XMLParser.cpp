@@ -256,7 +256,6 @@ void CXMLParser::TraverseGetInformation(TiXmlElement* root)
 		}
 		/*else if (strcmp(childroot->Value(),"PolygonalLOD")==0)
 		{
-			continue;
 			TiXmlElement *triangleElem=childroot->FirstChildElement()->FirstChildElement();
 			while (triangleElem!=NULL)
 			{
@@ -276,6 +275,16 @@ void CXMLParser::TraverseGetInformation(TiXmlElement* root)
 							{
 								AddIdTriangle(triangleStr);
 							}
+						}
+						if(strcmp(triangleAttribute->Name(),"strips")==0)
+						{
+							char *stripStr=(char *)triangleAttribute->Value();
+							AddStrips(stripStr);
+						}
+						if(strcmp(triangleAttribute->Name(),"fans")==0)
+						{
+							char *fanStr=(char *)triangleAttribute->Value();
+							AddFans(fanStr);
 						}
 						triangleAttribute=triangleAttribute->Next();
 					}
