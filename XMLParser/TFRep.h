@@ -4,6 +4,8 @@
 #include "Normals.h"
 #include "Triangle.h"
 #include "Poly.h"
+#include "TFStrips.h"
+#include "TFFan.h"
 using namespace std;
 
 class XMLDLL_EXPORT TFRep
@@ -21,6 +23,10 @@ public:
 	void AddTriangle(TFTriangle *p);
 
 	void AddPolyline(TFPoly *p);
+
+	void AddStrips(TFStrips *p);
+
+	void AddFans(TFFan *p);
 
 	void SetRepType(int f);
 
@@ -51,6 +57,16 @@ public:
 		return m_polyList;
 	}
 
+	vector<TFStrips*> GetStripsList() const
+	{
+		return m_stripsList;
+	}
+
+	vector<TFFan*> GetFansList() const
+	{
+		return m_fansList;
+	}
+
 private:
 	vector<TFRep*>				m_childRepList;
 
@@ -62,6 +78,9 @@ private:
 
 	vector<TFPoly*>				m_polyList;
 
-	//标记Rep是何种类型的，1代表是无id的，2代表有id的，3代表是父Rep
+	vector<TFStrips*>			m_stripsList;
+
+	vector<TFFan*>				m_fansList;
+	//标记Rep是何种类型的，1代表是子Rep，3代表是父Rep
 	int							m_iRepType;	
 };

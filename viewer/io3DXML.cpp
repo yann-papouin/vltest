@@ -39,7 +39,7 @@ ref<ResourceDatabase> vl::load3DXML(VirtualFile* file)
 	return res_db;
 }
 //-----------------------------------------------------------------------------
-void FillTheVertAndNormal(TFRep*& curGeom,
+void FillTriangleVertAndNormal(TFRep*& curGeom,
 						  std::vector<fvec3>& verts,
 						  std::vector<fvec3>& norms)
 {
@@ -76,10 +76,97 @@ void FillTheVertAndNormal(TFRep*& curGeom,
 	}
 }
 
+void FillStripsGeometry(TFRep*& curGeom,
+							 std::vector<ref<Geometry>> &stripsGeom)
+{
+	std::vector<fvec3> verts;
+	std::vector<fvec3> norms;
+	fvec3 v, n;
+	n = fvec3(0, 0, 1);
+	vector<int> stripsIdxs;
+	vector<int>::iterator iter;
+	TFPoint* curPnt = NULL;
+	;
+	vector<TFPoint*> pointList = curGeom->GetPointList();
+	vector<TFStrips*> stripsList = curGeom->GetStripsList();
+	vector<TFStrips*>::iterator triIter;
+	for (triIter = stripsList.begin();
+		triIter != stripsList.end(); ++triIter)
+	{
+		TFStrips* curStripts = *triIter;
+		verts.clear();
+		norms.clear();
+		stripsIdxs = curStripts->GetStripIdxs();
+		for (iter = stripsIdxs.begin();
+			iter != stripsIdxs.end(); ++iter)
+		{
+			curPnt = pointList[*iter];
+			assert(curPnt != NULL);
+			v = fvec3(curPnt->GetX(), curPnt->GetY(), curPnt->GetZ());
+			verts.push_back(v);
+			norms.push_back(n);
+		}
+		ref<ArrayFloat3>  vertices   = new ArrayFloat3;
+		ref<ArrayFloat3>  normals = new ArrayFloat3;
+		vertices->resize(verts.size());
+		normals->resize(verts.size());
+		memcpy(normals ->ptr(), &norms[0], sizeof(norms[0])*norms.size());
+		memcpy(vertices->ptr(), &verts[0], sizeof(verts[0])*verts.size());
+		ref<DrawArrays> de = new DrawArrays(PT_TRIANGLE_STRIP,0,verts.size());
+		ref<Geometry> geom = new Geometry;
+		geom->drawCalls()->push_back(de.get());
+		geom->setVertexArray(vertices.get());
+		geom->setNormalArray(normals.get());
+		stripsGeom.push_back(geom);
+	}
+}
+
+void FillFanGeometry(TFRep*& curGeom,
+						std::vector<ref<Geometry>> &fanGeom)
+{
+	std::vector<fvec3> verts;
+	std::vector<fvec3> norms;
+	fvec3 v, n;
+	n = fvec3(0, 0, 1);
+	vector<int> fansIdxs;
+	vector<int>::iterator iter;
+	TFPoint* curPnt = NULL;
+	vector<TFPoint*> pointList = curGeom->GetPointList();
+	vector<TFFan*> fanList = curGeom->GetFansList();
+	vector<TFFan*>::iterator fanIter;
+	for (fanIter = fanList.begin();
+		fanIter != fanList.end(); ++fanIter)
+	{
+		TFFan* curFans = *fanIter;
+		verts.clear();
+		norms.clear();
+		fansIdxs = curFans->GetFans();
+		for (iter = fansIdxs.begin();
+			iter != fansIdxs.end(); ++iter)
+		{
+			curPnt = pointList[*iter];
+			assert(curPnt != NULL);
+			v = fvec3(curPnt->GetX(), curPnt->GetY(), curPnt->GetZ());
+			verts.push_back(v);
+			norms.push_back(n);
+		}
+		ref<ArrayFloat3>  vertices   = new ArrayFloat3;
+		ref<ArrayFloat3>  normals = new ArrayFloat3;
+		vertices->resize(verts.size());
+		normals->resize(verts.size());
+		memcpy(normals ->ptr(), &norms[0], sizeof(norms[0])*norms.size());
+		memcpy(vertices->ptr(), &verts[0], sizeof(verts[0])*verts.size());
+		ref<DrawArrays> de = new DrawArrays(PT_TRIANGLE_FAN,0,verts.size());
+		ref<Geometry> geom = new Geometry;
+		geom->drawCalls()->push_back(de.get());
+		geom->setVertexArray(vertices.get());
+		geom->setNormalArray(normals.get());
+		fanGeom.push_back(geom);
+	}
+}
+
 ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 {
-	//GLC_3DRep newRep= GLC_Factory::instance()->createWorldStructureFrom3dxml("E:\\Sample Files\\3DXML_Test_File\\US Coast Guard RB-HS Fast Response Boat.3dxml");
-
 	std::vector<fvec3> verts;
 	std::vector<fvec3> norms;
 
@@ -91,18 +178,28 @@ ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 	vector<TFRep*> childRepList;
 	vector<TFRep*>::iterator childRepIter;
 
+	std::vector<ref<Geometry>> stripGeomList;
+	std::vector<ref<Geometry>> fanGeomList;
+	std::vector<ref<Geometry>>::iterator stripIter;
+
+	int i = 0;
 	for (geomIter = geomList.begin();
 		geomIter != geomList.end(); ++geomIter)
 	{
+		i++;
 		TFRep* curGeom = *geomIter;
 		childRepList = curGeom->GetChildRepList();
 		for (childRepIter = childRepList.begin();
 			childRepIter != childRepList.end(); ++childRepIter)
 		{
 			TFRep* curChildGeom = *childRepIter;
-			FillTheVertAndNormal(curChildGeom, verts, norms);
+			FillTriangleVertAndNormal(curChildGeom, verts, norms);
+			FillStripsGeometry(curChildGeom, stripGeomList);
+			FillFanGeometry(curChildGeom, fanGeomList);
 		}
-		FillTheVertAndNormal(curGeom, verts, norms);
+		FillTriangleVertAndNormal(curGeom, verts, norms);
+		FillStripsGeometry(curGeom, stripGeomList);
+		FillFanGeometry(curGeom, fanGeomList);
 	}
 
 	ref<ResourceDatabase> res_db = new ResourceDatabase;
@@ -126,6 +223,25 @@ ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 	res_db->resources().push_back( geom );
 	res_db->resources().push_back( new Actor(geom.get(), effect.get(), NULL ) );
 	res_db->resources().push_back( effect.get() );
+
+	for (stripIter = stripGeomList.begin();
+		stripIter != stripGeomList.end(); ++stripIter)
+	{
+		ref<Geometry> curGeom = *stripIter;
+		res_db->resources().push_back( curGeom );
+		res_db->resources().push_back( new Actor(curGeom.get(), effect.get(), NULL ) );
+		res_db->resources().push_back( effect.get() );
+	}
+
+	for (stripIter = fanGeomList.begin();
+		stripIter != fanGeomList.end(); ++stripIter)
+	{
+		ref<Geometry> curGeom = *stripIter;
+		res_db->resources().push_back( curGeom );
+		res_db->resources().push_back( new Actor(curGeom.get(), effect.get(), NULL ) );
+		res_db->resources().push_back( effect.get() );
+	}
+
 	return res_db;
 }
 

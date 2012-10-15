@@ -49,6 +49,24 @@ TFRep::~TFRep(void)
 	}
 	m_TriangleList.clear();
 
+	vector<TFFan*>::iterator fanIter;
+	for (fanIter = m_fansList.begin();
+		fanIter != m_fansList.end(); ++fanIter)
+	{
+		delete *fanIter;
+		*fanIter = NULL;
+	}
+	m_fansList.clear();
+
+	vector<TFStrips*>::iterator stripsIter;
+	for (stripsIter = m_stripsList.begin();
+		stripsIter != m_stripsList.end(); ++stripsIter)
+	{
+		delete *stripsIter;
+		*stripsIter = NULL;
+	}
+	m_stripsList.clear();
+
 	vector<TFPoly*>::iterator polyIter;
 	for (polyIter = m_polyList.begin();
 		polyIter != m_polyList.end(); ++polyIter)
@@ -82,6 +100,16 @@ void TFRep::AddTriangle(TFTriangle *p)
 void TFRep::AddPolyline(TFPoly *p)
 {
 	this->m_polyList.push_back(p);
+}
+
+void TFRep::AddFans(TFFan *p)
+{
+	this->m_fansList.push_back(p);
+}
+
+void TFRep::AddStrips(TFStrips *p)
+{
+	this->m_stripsList.push_back(p);
 }
 
 void TFRep::SetRepType(int f)

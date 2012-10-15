@@ -300,7 +300,31 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TFFan.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\TFRep.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\TFStrips.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -498,7 +522,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TFFan.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TFRep.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TFStrips.h"
 				>
 			</File>
 			<File
