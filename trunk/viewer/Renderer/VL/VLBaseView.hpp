@@ -151,6 +151,7 @@ public:
 
 protected:
 	void bindManipulators(Camera* camera);
+	void addDebugActor();
 
 private:
 	ref<RenderingAbstract> mRendering;
@@ -159,10 +160,8 @@ private:
 	ref<SceneManagerActorTree> mSceneManagerActorTree;
 	ref<ReadPixels> mReadPixels;
 
-
-	vl::ref<vl::Effect> mEffect;
-	ref<Text> mTextFrameRate;
-
+	ref<Effect> mEffect;
+	ref<Text> mTextDebug;
 
 	String mMainAppletName;
 	double mStartTime;
@@ -172,8 +171,8 @@ private:
 	ref<Renderer> mSolidRenderer;
 	ref<EdgeRenderer> mEdgeRenderer;
 	RenderMode mRenderMode;
+	ViewMode mViewMode;
 
 	bool m_bPerspective;
-	ViewMode mViewMode;
 };
 #endif

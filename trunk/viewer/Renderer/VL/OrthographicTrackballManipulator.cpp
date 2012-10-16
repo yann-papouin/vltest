@@ -84,8 +84,6 @@ void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 	}
 	else
 	{
-
-
 		//need to consider the best factor for offset
 		double dOffsetX = -(_x - camera()->viewport()->width()/2.0 )/800.0*n;
 		double dOffsetY = (_y - camera()->viewport()->height()/2.0 ) /800.0*n;
