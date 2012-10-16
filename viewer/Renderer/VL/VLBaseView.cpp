@@ -111,37 +111,12 @@ void VLBaseView::initialize(vl::Framebuffer* frameBuffer)
 		mTrackball = new OrthographicTrackballManipulator(this);
 	}
 	mTrackball->setEnabled(true);
-
-#pragma region for displaying framerate
-	mTextFrameRate = new vl::Text;
-	char buffer[MAX_PATH];
-	memset(buffer,0,sizeof(char)*MAX_PATH);
-	GetWindowsDirectoryA(buffer,MAX_PATH);
-	vl::String system_font_directory = vl::String(buffer) + "/fonts";
-
-	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont(system_font_directory+"/simhei.ttf", 12);
-	mTextFrameRate->setFont(font.get());
-	mTextFrameRate->setKerningEnabled(false);
-	mTextFrameRate->setText("");
-	mTextFrameRate->setMode(vl::Text2D);
-	mTextFrameRate->setTextAlignment( vl::TextAlignJustify );
-	mTextFrameRate->setAlignment( vl::AlignLeft | vl::AlignTop );
-	mTextFrameRate->setViewportAlignment( vl::AlignLeft | vl::AlignTop );
-	mTextFrameRate->setColor( vl::black );
-
-	vl::ref<vl::Effect> name_effect = new vl::Effect;
-	name_effect->shader()->setRenderState( light.get(), 0 );
-	name_effect->shader()->enable(vl::EN_LIGHTING);
-	name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-	name_effect->shader()->enable(vl::EN_CULL_FACE);
-	name_effect->shader()->disable(vl::EN_LIGHTING);
-	name_effect->shader()->enable(vl::EN_BLEND);
-    name_effect->shader()->enable(vl::EN_DEPTH_TEST);
-
-	sceneManager()->tree()->addActor( mTextFrameRate.get(),name_effect.get() );
-#pragma endregion for displaying framerate
-
 	bindManipulators( rend->camera() );
+
+	addDebugActor();
+
+
+#pragma endregion for displaying framerate
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::bindManipulators(Camera* camera)
@@ -169,7 +144,7 @@ void VLBaseView::updateEvent()
 	mFrameCount++;
 
 	// update the scene content
-	updateScene();
+//	updateScene();
 
 	// set frame time for all the rendering
 	real now_time = Time::currentTime();
@@ -177,6 +152,9 @@ void VLBaseView::updateEvent()
 
 	// execute rendering
 	rendering()->render();
+
+	// update the scene content
+	updateScene();
 
 	// show rendering
 	if ( openglContext()->hasDoubleBuffer() )
@@ -289,12 +267,6 @@ void VLBaseView::fitWorld()
 		vl::vec3 new_at = bs.center();
 		mTrackball->setPivot(new_at);
 
-
-		// 8/24/2012 mwu :  
-		//vl::vec3 eye,at,up,right;
-		//rend->camera()->getViewMatrixAsLookAt(eye,at,up,right);
-		//mTrackball->adjustView(sceneManager(),at,up);
-
 		//Set projection matrix
 		float w = (float) rend->camera()->viewport()->width();
 		float h =  (float) rend->camera()->viewport()->height();
@@ -329,13 +301,7 @@ void VLBaseView::fitWorld()
 		// install the orthographic projection
 		if (rend->camera()->projectionMatrixType() == PMT_OrthographicProjection )
 		{
-			//rend->camera()->setProjectionMatrix(
-			//	// compute directly an orthographic projection & center the scene on the screen
-			//	vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
-			//	/** vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0) */
-			//	,PMT_OrthographicProjection) ;
-
-			rend->camera()->setProjectionOrtho(-w/2.0,w/2.0,-h/2.0,h/2.0, nearPlane, farPlane);
+			rend->camera()->setProjectionOrtho(-w/2.0f,w/2.0f,-h/2.0f,h/2.0f, nearPlane, farPlane);
 		}
 		else
 		{
@@ -347,7 +313,6 @@ void VLBaseView::fitWorld()
 			vl::mat4::getOrtho(0, w, 0, h, nearPlane, farPlane) 
 				/** vl::mat4::getTranslation(w / 2.0f, h / 2.0f, 0)*/ 
 				,PMT_PerspectiveProjection) ;
-
 		}
 	}
 }
@@ -561,6 +526,7 @@ void VLBaseView::flush( bool bUpdate )
 	for (int i=0;i<actors.size();i++)
 	{
 		sceneManager()->tree()->eraseActor(actors[i].get());	
+		mTextDebug = NULL;
 	}
 
 	if (bUpdate)
@@ -574,6 +540,8 @@ void VLBaseView::loadFile(const std::string& strPathName )
 {
 	// resets the scene
 	sceneManager()->tree()->actors()->clear();
+
+	addDebugActor();
 
 	ref<ResourceDatabase> resource_db = vl::loadResource(strPathName.c_str());
 	if (resource_db)
@@ -611,11 +579,11 @@ void VLBaseView::loadFile(const std::string& strPathName )
 
 void VLBaseView::makeBox()
 {
-	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
+//	vl::ref<vl::Geometry> geom = vl::makeBox( vl::vec3(0,0,0),  vl::vec3(10,10,10), true);
 
 //	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10,20)  ;
 
-//		vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
+	vl::ref<vl::Geometry> geom = vl::makeCone(vec3(0,0,0),10000,20000)  ;
 
 	// compute normals
 	geom->computeNormals();
@@ -627,6 +595,9 @@ void VLBaseView::fileDroppedEvent( const std::vector<String>& files )
 {
 	// resets the scene
 	sceneManager()->tree()->actors()->clear();
+
+	addDebugActor();
+
 	// resets the EdgeRenderer cache
 	mEdgeRenderer->clearCache();
 
@@ -666,22 +637,58 @@ void VLBaseView::fileDroppedEvent( const std::vector<String>& files )
 
 void VLBaseView::updateScene()
 {
-	//if(1)
-	//{
-	//	if (mFrameRateActor != NULL)
-	//	{
-	//		sceneManager()->tree()->eraseActor( mFrameRateActor );	
-	//		mFrameRateActor = NULL;
-	//	}
+	ref<Rendering> rend =  rendering()->as<Rendering>();
+	//update framerate
+	char debug[1024];
+	sprintf(debug,
+		"framerate:%8.3f\n"\
+		"left:%8.3f\n"\
+		"right:%8.3f\n"\
+		"bottom:%8.3f\n"\
+		"top:%8.3f\n"\
+		"nearplane:%8.3f\n"\
+		"farplane:%8.3f\n",
 
-	//	//text->setShadowVector( vl::fvec2(5,5) );
-	//	//text->setOutlineEnabled(true);
-	//	//text->setOutlineColor(vl::black);
-	//}
-
-	char framerate[128];
-	sprintf(framerate,"%8.3f frames/sec",mFPS);
-	mTextFrameRate->setText(vl::String(framerate));
-
+		mFPS,
+		rend->camera()->left(),
+		rend->camera()->right(),
+		rend->camera()->bottom(),
+		rend->camera()->top(),
+		rend->camera()->nearPlane(),
+		rend->camera()->farPlane()
+		);
+	mTextDebug->setText(vl::String(debug));
 }
 //-----------------------------------------------------------------------------
+void VLBaseView::addDebugActor()
+{
+	#pragma region for displaying debug info
+	mTextDebug = new vl::Text;
+	char buffer[MAX_PATH];
+	memset(buffer,0,sizeof(char)*MAX_PATH);
+	GetWindowsDirectoryA(buffer,MAX_PATH);
+	vl::String system_font_directory = vl::String(buffer) + "/fonts";
+
+	vl::ref<vl::Font> font = vl::defFontManager()->acquireFont(system_font_directory+"/simhei.ttf", 12);
+	mTextDebug->setFont(font.get());
+	mTextDebug->setKerningEnabled(false);
+	mTextDebug->setText("");
+	mTextDebug->setMode(vl::Text2D);
+	mTextDebug->setTextAlignment( vl::TextAlignJustify );
+	mTextDebug->setAlignment( vl::AlignLeft | vl::AlignTop );
+	mTextDebug->setViewportAlignment( vl::AlignLeft | vl::AlignTop );
+	mTextDebug->setColor( vl::black );
+
+	vl::ref<vl::Light> light = new vl::Light;
+
+	vl::ref<vl::Effect> name_effect = new vl::Effect;
+	name_effect->shader()->setRenderState( light.get(), 0 );
+	name_effect->shader()->enable(vl::EN_LIGHTING);
+	name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+	name_effect->shader()->enable(vl::EN_CULL_FACE);
+	name_effect->shader()->disable(vl::EN_LIGHTING);
+	name_effect->shader()->enable(vl::EN_BLEND);
+	name_effect->shader()->enable(vl::EN_DEPTH_TEST);
+
+	sceneManager()->tree()->addActor( mTextDebug.get(),name_effect.get() );
+}
