@@ -27,34 +27,8 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 	float nearPlane = camera()->nearPlane();
 	float farPlane = camera()->farPlane();
 
-	float scale = 1.0f;
- 	//scale = 1.0*mOldSizeX/w;
- 	//if (mOldSizeX/mOldSizeY > camera()->aspectRatio())
- 	//{
- 	//	scale = 1.0f*mOldSizeY/h;
- 	//}
-	
-	float new_w =w/mZoomFactor*scale;
-	float new_h = h/mZoomFactor*scale;
-
-	vl::mat4 projMatrix = camera()->projectionMatrix();
-	vl::vec3 translation = projMatrix.getT();
-
-	vl::mat4 invMatrix;
-//	vl::mat4 orthoMatrix = 	vl::mat4::getOrtho(0,mOldSizeX/mZoomFactor,0,mOldSizeY/mZoomFactor,nearPlane,farPlane);
-	vl::mat4 orthoMatrix = 	vl::mat4::getOrtho(0,new_w,0,new_h,nearPlane,farPlane);
-	invMatrix = orthoMatrix.getInverse();
-
-	vl::mat4 transf = invMatrix*projMatrix;
-	translation = transf.getT();
-
-	// install the orthographic projection
-//	camera()->setProjectionMatrix(
-//		// compute directly an orthographic projection & center the scene on the screen
-//		vl::mat4::getOrtho(0, new_w, 0, new_h, nearPlane, farPlane) *
-////		vl::mat4::getTranslation(new_w/2, new_h/2, 0)
-//		vl::mat4::getTranslation(translation.x(), translation.y(), 0)
-//		,PMT_OrthographicProjection);
+	float new_w =w/mZoomFactor;
+	float new_h = h/mZoomFactor;
 
 	camera()->setProjectionOrtho(-new_w/2.0,new_w/2.0,-new_h/2.0,new_h/2.0, nearPlane, farPlane);
 }
@@ -89,14 +63,18 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 
 			intersection_point_geom->computeNormals();
 			mCrossActor = m_pVLBaseView->sceneManager()->tree()->addActor( intersection_point_geom.get(), fx.get(), new Transform );
-			mIntersectionPointTransf = mCrossActor->transform();
+			Transform* intersectionPointTransf = mCrossActor->transform();
 			// highlight the intersection point by moving the green sphere there
-			mIntersectionPointTransf->setLocalMatrix( mat4() );
-			mIntersectionPoint = intersector.intersections()[0]->intersectionPoint();
-			mIntersectionPointTransf->translate( mIntersectionPoint );
-			mIntersectionPointTransf->computeWorldMatrix();
+			if (intersectionPointTransf != NULL)
+			{
+				intersectionPointTransf->setLocalMatrix( mat4() );
+				mIntersectionPoint = intersector.intersections()[0]->intersectionPoint();
+				intersectionPointTransf->translate( mIntersectionPoint );
+				intersectionPointTransf->computeWorldMatrix();
+			}
 		}
 
+		// update the view
 		openglContext()->update();
 	}
 }
@@ -150,6 +128,7 @@ void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, in
 	{
 		if (x== mMouseStart.x() && y == mMouseStart.y() )//single click
 		{
+			//Set pivot
 			mPivot = mIntersectionPoint;
 
 			//Move to the center of the screen	
@@ -169,6 +148,8 @@ void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, in
 		}
 
 		m_pVLBaseView->sceneManager()->tree()->eraseActor( mCrossActor);
+
+		// update the view
 		openglContext()->update();
 	}
 }
@@ -181,17 +162,17 @@ void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 	vl::mat4 projMatrix = camera()->projectionMatrix();
 	camera()->setProjectionMatrix(projMatrix.scale(scaleRelativeFactor,scaleRelativeFactor,scaleRelativeFactor),PMT_OrthographicProjection);
 
-	if (!m_bShift) //if shift key is not pushed, need to translate the camera
+	if (!m_bShift) //if shift key is not pushed, also need to translate the scene
 	{
 		int centerX = camera()->viewport()->width()/2.0;
 		int centerY = camera()->viewport()->height()/2.0;
 
-		// 10/17/2012 modified by mwu : need to consider the best factor for offset
-		double dOffsetX = -(m_pVLBaseView->mWheelX- centerX ) /8000.0*n;
-		double dOffsetY = (m_pVLBaseView->mWheelY - centerY ) /8000.0*n;
+		// 10/17/2012 modified by mwu : need to consider the best factor for translation
+		double tx = -(m_pVLBaseView->mWheelX- centerX ) /8000.0*n;
+		double ty = (m_pVLBaseView->mWheelY - centerY ) /8000.0*n;
 
 		projMatrix = camera()->projectionMatrix();
-		camera()->setProjectionMatrix(projMatrix.translate(dOffsetX,dOffsetY,0),PMT_OrthographicProjection);
+		camera()->setProjectionMatrix(projMatrix.translate(tx,ty,0),PMT_OrthographicProjection);
 	}
 }
 
