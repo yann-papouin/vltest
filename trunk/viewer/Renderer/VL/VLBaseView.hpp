@@ -149,6 +149,9 @@ public:
 	void loadFile( const std::string& strPathName );
 	void makeBox();
 
+	int mWheelX;//record it for mouse wheel
+	int mWheelY;//record it for mouse wheel
+
 protected:
 	void bindManipulators(Camera* camera);
 	void addDebugActor();
@@ -167,6 +170,8 @@ private:
 	double mStartTime;
 	double mFPS;
 	int mFrameCount;
+
+
 
 	ref<Renderer> mSolidRenderer;
 	ref<EdgeRenderer> mEdgeRenderer;
