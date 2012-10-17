@@ -59,28 +59,6 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 	camera()->setProjectionOrtho(-new_w/2.0,new_w/2.0,-new_h/2.0,new_h/2.0, nearPlane, farPlane);
 }
 
-void OrthographicTrackballManipulator::mouseWheelEvent( int n )
-{
-	float scaleRelativeFactor = n>0?1.1f:0.9f;
-	mZoomFactor*=scaleRelativeFactor;
-
-	vl::mat4 projMatrix = camera()->projectionMatrix();
-	camera()->setProjectionMatrix(projMatrix.scale(scaleRelativeFactor,scaleRelativeFactor,scaleRelativeFactor),PMT_OrthographicProjection);
-
-	if (!m_bShift) //if shift key is not pushed, need to translate the camera
-	{
-		int centerX = camera()->viewport()->width()/2.0;
-		int centerY = camera()->viewport()->height()/2.0;
-
-		// 10/17/2012 modified by mwu : need to consider the best factor for offset
-		double dOffsetX = -(m_pVLBaseView->mWheelX- centerX ) /8000.0*n;
-		double dOffsetY = (m_pVLBaseView->mWheelY - centerY ) /8000.0*n;
-
-		projMatrix = camera()->projectionMatrix();
-		camera()->setProjectionMatrix(projMatrix.translate(dOffsetX,dOffsetY,0),PMT_OrthographicProjection);
-	}
-}
-
 void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, int y )
 {
 	TrackballManipulator::mouseDownEvent(btn,x,y);
@@ -111,50 +89,14 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 
 			intersection_point_geom->computeNormals();
 			mCrossActor = m_pVLBaseView->sceneManager()->tree()->addActor( intersection_point_geom.get(), fx.get(), new Transform );
-			mIntersectionPoint = mCrossActor->transform();
-
+			mIntersectionPointTransf = mCrossActor->transform();
 			// highlight the intersection point by moving the green sphere there
-			mIntersectionPoint->setLocalMatrix( mat4() );
-			mIntersectionPoint->translate( intersector.intersections()[0]->intersectionPoint() );
-			mIntersectionPoint->computeWorldMatrix();
-			
-			mPivot = intersector.intersections()[0]->intersectionPoint();
-
-			//// TODO: Move to the center of the screen
-			//const double zoomFactor = m_dZoomFactor > 0 ? m_dZoomFactor :
-			//	(1 / std::abs(m_dZoomFactor));
-
-			//vl::vec4 in1(mPivot.x(),mPivot.y(),mPivot.z(),1);
-			//vl::vec4 out1;
-			//camera()->project(in1,out1);
-
-			//vl::vec4 in2(mStartPivot.x(),mStartPivot.y(),mStartPivot.z(),1);
-			//vl::vec4 out2;
-			//camera()->project(in2,out2);
-
-			//float tx =out2.x()-out1.x();
-			//float ty = out2.y()-out1.y();
-
-			//tx/=zoomFactor;
-			//ty/=zoomFactor;
-
-			//camera()->setProjectionMatrix(
-			//	// compute directly an orthographic projection & center the scene on the screen
-			//	mOldProjMatrix*
-			//	vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
+			mIntersectionPointTransf->setLocalMatrix( mat4() );
+			mIntersectionPoint = intersector.intersections()[0]->intersectionPoint();
+			mIntersectionPointTransf->translate( mIntersectionPoint );
+			mIntersectionPointTransf->computeWorldMatrix();
 		}
 
-		openglContext()->update();
-	}
-}
-
-void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, int y )
-{
-	TrackballManipulator::mouseUpEvent(btn,x,y);
-
-	if (btn == MiddleButton)  //Pan and center the window
-	{
-		m_pVLBaseView->sceneManager()->tree()->eraseActor( mCrossActor);
 		openglContext()->update();
 	}
 }
@@ -198,6 +140,59 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 
 	// update the view
 	openglContext()->update();
+}
+
+void OrthographicTrackballManipulator::mouseUpEvent( EMouseButton btn, int x, int y )
+{
+	TrackballManipulator::mouseUpEvent(btn,x,y);
+
+	if (btn == MiddleButton)  //Pan and center the window
+	{
+		if (x== mMouseStart.x() && y == mMouseStart.y() )//single click
+		{
+			mPivot = mIntersectionPoint;
+
+			//Move to the center of the screen	
+			const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
+				(1 / std::abs(mZoomFactor));
+
+			int centerX = camera()->viewport()->width()/2.0;
+			int centerY = camera()->viewport()->height()/2.0;
+
+			double tx = -(x- centerX ) /zoomFactor;
+			double ty = (y - centerY ) /zoomFactor;
+
+			camera()->setProjectionMatrix(
+				// compute directly an orthographic projection & pan the scene on the screen
+				mProjMatrixBeforePan*
+				vl::mat4::getTranslation(tx, ty, 0),PMT_OrthographicProjection);
+		}
+
+		m_pVLBaseView->sceneManager()->tree()->eraseActor( mCrossActor);
+		openglContext()->update();
+	}
+}
+
+void OrthographicTrackballManipulator::mouseWheelEvent( int n )
+{
+	float scaleRelativeFactor = n>0?1.1f:0.9f;
+	mZoomFactor*=scaleRelativeFactor;
+
+	vl::mat4 projMatrix = camera()->projectionMatrix();
+	camera()->setProjectionMatrix(projMatrix.scale(scaleRelativeFactor,scaleRelativeFactor,scaleRelativeFactor),PMT_OrthographicProjection);
+
+	if (!m_bShift) //if shift key is not pushed, need to translate the camera
+	{
+		int centerX = camera()->viewport()->width()/2.0;
+		int centerY = camera()->viewport()->height()/2.0;
+
+		// 10/17/2012 modified by mwu : need to consider the best factor for offset
+		double dOffsetX = -(m_pVLBaseView->mWheelX- centerX ) /8000.0*n;
+		double dOffsetY = (m_pVLBaseView->mWheelY - centerY ) /8000.0*n;
+
+		projMatrix = camera()->projectionMatrix();
+		camera()->setProjectionMatrix(projMatrix.translate(dOffsetX,dOffsetY,0),PMT_OrthographicProjection);
+	}
 }
 
 void OrthographicTrackballManipulator::keyReleaseEvent( unsigned short, EKey key )

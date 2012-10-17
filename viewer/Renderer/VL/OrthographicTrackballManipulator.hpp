@@ -28,7 +28,8 @@ public:
 
 private:
 	VLBaseView* m_pVLBaseView;
-	Transform* mIntersectionPoint;
+	Transform* mIntersectionPointTransf;
+	vec3 mIntersectionPoint;
 	Actor* mCrossActor;
 	bool m_bShift;
 	float mZoomFactor;
@@ -38,5 +39,8 @@ private:
 	//int _y;
 	int mOldSizeX;
 	int mOldSizeY;
+	
+	int mOldX;
+	int mOldY;
 };
 #endif
