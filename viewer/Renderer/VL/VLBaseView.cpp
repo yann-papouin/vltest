@@ -657,7 +657,11 @@ void VLBaseView::updateScene()
 		rend->camera()->nearPlane(),
 		rend->camera()->farPlane()
 		);
-	mTextDebug->setText(vl::String(debug));
+
+	if (mTextDebug != NULL)
+	{
+		mTextDebug->setText(vl::String(debug));
+	}
 }
 //-----------------------------------------------------------------------------
 void VLBaseView::addDebugActor()

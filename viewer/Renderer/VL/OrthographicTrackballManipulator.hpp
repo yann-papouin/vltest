@@ -34,8 +34,8 @@ private:
 	float mZoomFactor;
 
 	vl::mat4 mProjMatrixBeforePan;
-	int _x;
-	int _y;
+	//int _x;
+	//int _y;
 	int mOldSizeX;
 	int mOldSizeY;
 };

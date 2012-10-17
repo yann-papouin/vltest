@@ -56,48 +56,28 @@ void OrthographicTrackballManipulator::resizeEvent( int w, int h )
 //		vl::mat4::getTranslation(translation.x(), translation.y(), 0)
 //		,PMT_OrthographicProjection);
 
-
 	camera()->setProjectionOrtho(-new_w/2.0,new_w/2.0,-new_h/2.0,new_h/2.0, nearPlane, farPlane);
-
 }
 
 void OrthographicTrackballManipulator::mouseWheelEvent( int n )
 {
-	if (n>0)
-	{
-		mZoomFactor*=1.1f;
-	}
-	else
-	{
-		mZoomFactor*=0.9f;
-	}
-// 	mZoomFactor += 2 * n;
-// 	mZoomFactor = mZoomFactor != 0 ? mZoomFactor : 1;
-//	double scale = 1.0* (mZoomFactor+2*n)/mZoomFactor;
-	float scale = n>0?1.1f:0.9f;
+	float scaleRelativeFactor = n>0?1.1f:0.9f;
+	mZoomFactor*=scaleRelativeFactor;
+
 	vl::mat4 projMatrix = camera()->projectionMatrix();
+	camera()->setProjectionMatrix(projMatrix.scale(scaleRelativeFactor,scaleRelativeFactor,scaleRelativeFactor),PMT_OrthographicProjection);
 
-	if (m_bShift)
+	if (!m_bShift) //if shift key is not pushed, need to translate the camera
 	{
-		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
-		camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
-	}
-	else
-	{
-		//need to consider the best factor for offset
-		double dOffsetX = -(_x - camera()->viewport()->width()/2.0 )/800.0*n;
-		double dOffsetY = (_y - camera()->viewport()->height()/2.0 ) /800.0*n;
+		int centerX = camera()->viewport()->width()/2.0;
+		int centerY = camera()->viewport()->height()/2.0;
 
-		//const float zoomFactor = mZoomFactor > 0 ? mZoomFactor :
-		//	(1 / std::abs(mZoomFactor));
+		// 10/17/2012 modified by mwu : need to consider the best factor for offset
+		double dOffsetX = -(m_pVLBaseView->mWheelX- centerX ) /8000.0*n;
+		double dOffsetY = (m_pVLBaseView->mWheelY - centerY ) /8000.0*n;
 
-		//dOffsetX = - ( _x - camera()->viewport()->width()/2.0) / zoomFactor ;
-		//dOffsetY =  ( _y - camera()->viewport()->height()/2.0) / zoomFactor;
-
-		projMatrix *= vl::mat4::getTranslation(dOffsetX, dOffsetY, 0);
-		projMatrix *= vl::mat4::getScaling(scale,scale,scale);
-
-		camera()->setProjectionMatrix(projMatrix,PMT_OrthographicProjection);
+		projMatrix = camera()->projectionMatrix();
+		camera()->setProjectionMatrix(projMatrix.translate(dOffsetX,dOffsetY,0),PMT_OrthographicProjection);
 	}
 }
 
@@ -126,11 +106,8 @@ void OrthographicTrackballManipulator::mouseDownEvent( EMouseButton btn, int x, 
 		{
 			ref<Effect> fx = new Effect;
 			fx->shader()->enable(EN_DEPTH_TEST);
-			fx->shader()->enable(EN_LIGHTING);
-			fx->shader()->gocLight(0)->setLinearAttenuation(0.025f);
-			fx->shader()->gocMaterial()->setDiffuse( green );
 
-			ref<Geometry> intersection_point_geom = makeCross(vec3(0,0,0), 0.5f);
+			ref<Geometry> intersection_point_geom = makeCross(vec3(0,0,0), 20.0f/mZoomFactor);
 
 			intersection_point_geom->computeNormals();
 			mCrossActor = m_pVLBaseView->sceneManager()->tree()->addActor( intersection_point_geom.get(), fx.get(), new Transform );
@@ -189,9 +166,6 @@ void OrthographicTrackballManipulator::mouseMoveEvent( int x, int y )
 
 	if (camera() == 0 || mode() == NoMode)
 		return;
-
-	_x = x;
-	_y = y;
 
 	// set x/y relative to the top/left corner of the viewport
 	const vl::Viewport* vp = camera()->viewport();
