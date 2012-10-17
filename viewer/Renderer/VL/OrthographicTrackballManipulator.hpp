@@ -28,19 +28,15 @@ public:
 
 private:
 	VLBaseView* m_pVLBaseView;
-	Transform* mIntersectionPointTransf;
 	vec3 mIntersectionPoint;
 	Actor* mCrossActor;
 	bool m_bShift;
 	float mZoomFactor;
 
-	vl::mat4 mProjMatrixBeforePan;
-	//int _x;
-	//int _y;
+	mat4 mProjMatrixBeforePan;
+
 	int mOldSizeX;
 	int mOldSizeY;
-	
-	int mOldX;
-	int mOldY;
+
 };
 #endif
