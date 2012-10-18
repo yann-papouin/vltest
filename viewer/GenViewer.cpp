@@ -362,13 +362,13 @@ void CGenViewerApp::OnFileOpen()
 	filter = _T("ProE Files (*.prt;*.prt.*)|*.prt;*.prt.*|ProE Assemblies (*.asm;*.asm.*)|*.asm;*.asm.*|GraniteHOOPS Stream Files (*.gsf)|*.gsf|Parasolid Files (*.x_t;*.xmt_txt;x_b)|*.x_t;*.xmt_txt;*.xmb|IGES Files (*.igs)|*.igs|Acis Files (*.sat)|*.sat|STEP Files (*.stp;*.step)|*.stp;*.step|VDA Files (*.vda)|*.vda|Granite Neutral Files (*.g)|*.g|");
 	def_ext = _T(".prt");
 #elif defined VL
-	filter  = _T("stl Files (*.stl)|*.stl|");
+	filter = _T("3dxml Files (*.3dxml)|*.3dxml|");
+	filter += _T("stl Files (*.stl)|*.stl|");
 	filter += _T("obj Files (*.obj)|*.obj|");
 	filter += _T("ac3d Files (*.ac)|*.ac|");
 	filter += _T("3ds Files (*.3ds)|*.3ds|");
 	filter += _T("ply Files (*.ply)|*.ply|");
 	filter += _T("vlx Files (*.vlt;*vlb)|*.vlt;*.vlb|");
-	filter += _T("3dxml Files (*.3dxml)|*.3dxml|");
 #endif
 
 #pragma region For Additional Formats

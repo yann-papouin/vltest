@@ -148,10 +148,60 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 						{
 							m_pTempGeometry=new TFRep();
 							TraverseGetInformation(rootElement);
+							//fix bug
+							m_geometryList.push_back(m_pTempGeometry);
 							rootElement=rootElement->NextSiblingElement();
 						}
 					}
 					else
+					{
+						if(strcmp(rootElement->FirstChildElement()->FirstChildElement()->Value(),"Rep")!=0)
+						{
+							rootElement=rootElement->FirstChildElement();
+							m_pTempGeometry=new TFRep(3);
+							while(rootElement!=NULL)
+							{
+								m_pTempChildGeometry=new TFRep();
+								TraverseGetInformation(rootElement);
+								m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
+								rootElement=rootElement->NextSiblingElement();
+							}
+							m_geometryList.push_back(m_pTempGeometry);
+						}
+						else
+						{
+							while (strcmp(rootElement->FirstChildElement()->Value(),"Rep")==0)
+							{
+								rootElement=rootElement->FirstChildElement();
+								if(rootElement->NextSiblingElement()!=NULL)
+								{
+									break;
+								}
+							}
+
+							while (rootElement!=NULL)
+							{
+								m_pTempGeometry=new TFRep(3);
+								TiXmlElement *childElement=rootElement;
+								while (strcmp(childElement->FirstChildElement()->Value(),"Rep")==0)
+								{
+									childElement=childElement->FirstChildElement();
+								}
+								while(childElement!=NULL)
+								{
+									m_pTempChildGeometry=new TFRep();
+									//GetIdRepInformation(rootElement);
+									char *aaaaaa=(char *)childElement->FirstChildElement()->Value();
+									TraverseGetInformation(childElement);
+									m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
+									childElement=childElement->NextSiblingElement();
+								}
+								m_geometryList.push_back(m_pTempGeometry);
+								rootElement=rootElement->NextSiblingElement();
+							}
+						}
+					}
+					/*else
 					{
 						m_pTempGeometry=new TFRep(3);
 						while (strcmp(rootElement->FirstChildElement()->Value(),"Rep")==0)
@@ -167,7 +217,7 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 							rootElement=rootElement->NextSiblingElement();
 						}
 					}
-					m_geometryList.push_back(m_pTempGeometry);
+					m_geometryList.push_back(m_pTempGeometry);*/
 				}
 				delete []pstr;
 				delete myDocument;
