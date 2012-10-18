@@ -12,7 +12,7 @@ class XMLDLL_EXPORT TFRep
 {
 public:
 	TFRep(void);
-	TFRep(int flag);
+	//TFRep(int flag);
 	~TFRep(void);
 	void AddChildRep(TFRep *p);
 
@@ -28,9 +28,9 @@ public:
 
 	void AddFans(TFFan *p);
 
-	void SetRepType(int f);
+	/*void SetRepType(int f);
 
-	int GetRepType();
+	int GetRepType();*/
 
 	vector<TFRep*> GetChildRepList() const
 	{
@@ -82,5 +82,5 @@ private:
 
 	vector<TFFan*>				m_fansList;
 	//标记Rep是何种类型的，1代表是子Rep，3代表是父Rep
-	int							m_iRepType;	
+	//int							m_iRepType;	
 };
