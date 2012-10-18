@@ -300,6 +300,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TF3DRepFile.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\TFFan.cpp"
 				>
 				<FileConfiguration
@@ -519,6 +531,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TF3DRepFile.h"
 				>
 			</File>
 			<File

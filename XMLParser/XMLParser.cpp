@@ -10,6 +10,7 @@
 #include "split.h"
 #include "Poly.h"
 #include "TFRep.h"
+#include "TF3DRepFile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -102,11 +103,6 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 	size_t sz=0;
 	wcstombs_s(&sz,qstr,strsize,szFolder,_TRUNCATE);
 
-	//const size_t filestrsize=(fileStr.size()+1)*2; // 宽字符的长度;
-	//char * filestr= new char[filestrsize]; //分配空间;
-	//sz=0;
-	//wcstombs_s(&sz,filestr,filestrsize,CString(fileStr.c_str()),_TRUNCATE);
-
 	cUnpackFile unpackTool;
 	unpackTool.CreateDirFromZip(qstr,fileStr.c_str());
 	delete []qstr;
@@ -141,7 +137,9 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 				TiXmlElement *rootElement=myDocument->RootElement();
 				if(rootElement->FirstChildElement()->FirstChildElement()!=NULL && strcmp(rootElement->FirstChildElement()->FirstChildElement()->Value(),"Rep")==0)
 				{
+					m_pTempFile=new TF3DRepFile();
 					TraverseRep(rootElement->FirstChildElement()->FirstChildElement());
+					m_fileList.push_back(m_pTempFile);
 				}
 				delete []pstr;
 				delete myDocument;
@@ -156,9 +154,9 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 
 CXMLParser::~CXMLParser()
 {
-	vector<TFRep*>::iterator fileIter;
-	for (fileIter = m_geometryList.begin();
-		fileIter != m_geometryList.end(); ++fileIter)
+	vector<TF3DRepFile*>::iterator fileIter;
+	for (fileIter = m_fileList.begin();
+		fileIter != m_fileList.end(); ++fileIter)
 	{
 		delete *fileIter;
 		*fileIter = NULL;
@@ -478,7 +476,8 @@ void CXMLParser::TraverseRep(TiXmlElement *root)
 		{
 			m_pTempGeometry=new TFRep();
 			TraverseGetInformation(root);
-			m_geometryList.push_back(m_pTempGeometry);
+			//m_geometryList.push_back(m_pTempGeometry);
+			m_pTempFile->AddRep(m_pTempGeometry);
 		}
 		root=root->NextSiblingElement();
 	}

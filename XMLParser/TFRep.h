@@ -14,6 +14,7 @@ public:
 	TFRep(void);
 	//TFRep(int flag);
 	~TFRep(void);
+
 	void AddChildRep(TFRep *p);
 
 	void AddPoint(TFPoint *p);
