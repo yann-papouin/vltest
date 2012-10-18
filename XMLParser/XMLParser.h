@@ -38,6 +38,7 @@ private:
 
 protected:
 	void TraverseGetInformation(TiXmlElement *root);	//遍历结点树获得信息
+	void TraverseRep(TiXmlElement *root);
 	void AddPoint(const string &str);	//将找到的点添加入向量
 	void AddNormals(const string &str);
 	void AddTriangle(const string &str);

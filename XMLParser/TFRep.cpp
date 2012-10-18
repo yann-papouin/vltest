@@ -3,13 +3,13 @@
 
 TFRep::TFRep(void)
 {
-	m_iRepType=1;
+	//m_iRepType=1;
 }
 
-TFRep::TFRep(int flag)
-{
-	this->m_iRepType=flag;
-}
+//TFRep::TFRep(int flag)
+//{
+//	this->m_iRepType=flag;
+//}
 
 TFRep::~TFRep(void)
 {
@@ -112,12 +112,12 @@ void TFRep::AddStrips(TFStrips *p)
 	this->m_stripsList.push_back(p);
 }
 
-void TFRep::SetRepType(int f)
-{
-	this->m_iRepType=f;
-}
-
-int TFRep::GetRepType()
-{
-	return m_iRepType;
-}
+//void TFRep::SetRepType(int f)
+//{
+//	this->m_iRepType=f;
+//}
+//
+//int TFRep::GetRepType()
+//{
+//	return m_iRepType;
+//}

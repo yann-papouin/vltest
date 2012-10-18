@@ -141,83 +141,7 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 				TiXmlElement *rootElement=myDocument->RootElement();
 				if(rootElement->FirstChildElement()->FirstChildElement()!=NULL && strcmp(rootElement->FirstChildElement()->FirstChildElement()->Value(),"Rep")==0)
 				{
-					rootElement=rootElement->FirstChildElement()->FirstChildElement();
-					if(strcmp(rootElement->FirstChildElement()->Value(),"Rep")!=0)
-					{
-						while(rootElement!=NULL)
-						{
-							m_pTempGeometry=new TFRep();
-							TraverseGetInformation(rootElement);
-							//fix bug
-							m_geometryList.push_back(m_pTempGeometry);
-							rootElement=rootElement->NextSiblingElement();
-						}
-					}
-					else
-					{
-						if(strcmp(rootElement->FirstChildElement()->FirstChildElement()->Value(),"Rep")!=0)
-						{
-							rootElement=rootElement->FirstChildElement();
-							m_pTempGeometry=new TFRep(3);
-							while(rootElement!=NULL)
-							{
-								m_pTempChildGeometry=new TFRep();
-								TraverseGetInformation(rootElement);
-								m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
-								rootElement=rootElement->NextSiblingElement();
-							}
-							m_geometryList.push_back(m_pTempGeometry);
-						}
-						else
-						{
-							while (strcmp(rootElement->FirstChildElement()->Value(),"Rep")==0)
-							{
-								rootElement=rootElement->FirstChildElement();
-								if(rootElement->NextSiblingElement()!=NULL)
-								{
-									break;
-								}
-							}
-
-							while (rootElement!=NULL)
-							{
-								m_pTempGeometry=new TFRep(3);
-								TiXmlElement *childElement=rootElement;
-								while (strcmp(childElement->FirstChildElement()->Value(),"Rep")==0)
-								{
-									childElement=childElement->FirstChildElement();
-								}
-								while(childElement!=NULL)
-								{
-									m_pTempChildGeometry=new TFRep();
-									//GetIdRepInformation(rootElement);
-									char *aaaaaa=(char *)childElement->FirstChildElement()->Value();
-									TraverseGetInformation(childElement);
-									m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
-									childElement=childElement->NextSiblingElement();
-								}
-								m_geometryList.push_back(m_pTempGeometry);
-								rootElement=rootElement->NextSiblingElement();
-							}
-						}
-					}
-					/*else
-					{
-						m_pTempGeometry=new TFRep(3);
-						while (strcmp(rootElement->FirstChildElement()->Value(),"Rep")==0)
-						{
-							rootElement=rootElement->FirstChildElement();
-						}
-						while(rootElement!=NULL)
-						{
-							m_pTempGeometry->SetRepType(3);
-							m_pTempChildGeometry=new TFRep();
-							TraverseGetInformation(rootElement);
-							m_pTempGeometry->AddChildRep(m_pTempChildGeometry);
-							rootElement=rootElement->NextSiblingElement();
-						}
-					}
-					m_geometryList.push_back(m_pTempGeometry);*/
+					TraverseRep(rootElement->FirstChildElement()->FirstChildElement());
 				}
 				delete []pstr;
 				delete myDocument;
@@ -370,14 +294,7 @@ void CXMLParser::AddPoint(const string &str)
 			z=atof(result[2].c_str());
 		}
 		TFPoint *p=new TFPoint(x,y,z);
-		if(m_pTempGeometry->GetRepType()==1)
-		{
-			m_pTempGeometry->AddPoint(p);
-		}
-		else
-		{
-			m_pTempChildGeometry->AddPoint(p);
-		}
+		m_pTempGeometry->AddPoint(p);
 	}
 }
 
@@ -405,14 +322,7 @@ void CXMLParser::AddNormals(const string &str)
 			z=atof(result[2].c_str());
 		}
 		TFNormals *p=new TFNormals(x,y,z);
-		if(m_pTempGeometry->GetRepType()==1)
-		{
-			m_pTempGeometry->AddNormals(p);
-		}
-		else
-		{
-			m_pTempChildGeometry->AddNormals(p);
-		}
+		m_pTempGeometry->AddNormals(p);
 	}
 }
 
@@ -440,14 +350,7 @@ void CXMLParser::AddTriangle(const string& str)
 			p3=atoi(result[2].c_str());
 		}
 		TFTriangle *p=new TFTriangle(p1,p2,p3);
-		if(m_pTempGeometry->GetRepType()==1)
-		{
-			m_pTempGeometry->AddTriangle(p);
-		}
-		else
-		{
-			m_pTempChildGeometry->AddTriangle(p);
-		}
+		m_pTempGeometry->AddTriangle(p);
 	}
 }
 
@@ -463,14 +366,7 @@ void CXMLParser::AddIdTriangle(const string &str)
 		{
 			z=atoi(temp[i].c_str());
 			TFTriangle *p=new TFTriangle(x,y,z);
-			if(m_pTempGeometry->GetRepType()==1)
-			{
-				m_pTempGeometry->AddTriangle(p);
-			}
-			else
-			{
-				m_pTempChildGeometry->AddTriangle(p);
-			}
+			m_pTempGeometry->AddTriangle(p);
 		}
 		else if(i%3==0)
 		{
@@ -511,14 +407,7 @@ void CXMLParser::AddPoly(const string& str)
 		v_pt.push_back(pt);
 	}
 	TFPoly* p=new TFPoly(v_pt);
-	if(m_pTempGeometry->GetRepType()==1)
-	{
-		m_pTempGeometry->AddPolyline(p);
-	}
-	else
-	{
-		m_pTempChildGeometry->AddPolyline(p);
-	}
+	m_pTempGeometry->AddPolyline(p);
 }
 
 void CXMLParser::AddStrips(const string &str)
@@ -538,14 +427,7 @@ void CXMLParser::AddStrips(const string &str)
 			v.push_back(n);
 		}
 		TFStrips *p=new TFStrips(v);
-		if(m_pTempGeometry->GetRepType()==1)
-		{
-			m_pTempGeometry->AddStrips(p);
-		}
-		else
-		{
-			m_pTempChildGeometry->AddStrips(p);
-		}
+		m_pTempGeometry->AddStrips(p);
 	}
 }
 
@@ -566,14 +448,7 @@ void CXMLParser::AddFans(const string &str)
 			v.push_back(n);
 		}
 		TFFan *p=new TFFan(v);
-		if(m_pTempGeometry->GetRepType()==1)
-		{
-			m_pTempGeometry->AddFans(p);
-		}
-		else
-		{
-			m_pTempChildGeometry->AddFans(p);
-		}
+		m_pTempGeometry->AddFans(p);
 	}
 }
 
@@ -591,3 +466,20 @@ bool CXMLParser::IsTriangleStrWithSplit(char *str)
 	return flag;
 }
 
+void CXMLParser::TraverseRep(TiXmlElement *root)
+{
+	while (root!=NULL && strcmp(root->Value(),"Rep")==0)
+	{
+		if(strcmp(root->FirstChildElement()->Value(),"Rep")==0)
+		{
+			TraverseRep(root->FirstChildElement());
+		}
+		else
+		{
+			m_pTempGeometry=new TFRep();
+			TraverseGetInformation(root);
+			m_geometryList.push_back(m_pTempGeometry);
+		}
+		root=root->NextSiblingElement();
+	}
+}
