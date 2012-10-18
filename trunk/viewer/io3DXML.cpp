@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 #include "XMLParser.h"
-#include "TFRep.h"
+#include "TF3DRepFile.h"
 #include "assert.h"
 //#include "glc_factory.h"
 //#include "geometry\glc_geometry.h"
@@ -169,39 +169,44 @@ ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 {
 	std::vector<fvec3> verts;
 	std::vector<fvec3> norms;
-
-	std::string fileStr = file->path().toStdString();
-	CXMLParser xmlParser(fileStr);
-	vector<TFRep*> geomList = xmlParser.GetGeometryList();
-	vector<TFRep*>::iterator geomIter;
-	
-	vector<TFRep*> childRepList;
-	vector<TFRep*>::iterator childRepIter;
-
 	std::vector<ref<Geometry>> stripGeomList;
 	std::vector<ref<Geometry>> fanGeomList;
 	std::vector<ref<Geometry>>::iterator stripIter;
 
-	int i = 0;
-	for (geomIter = geomList.begin();
-		geomIter != geomList.end(); ++geomIter)
+	std::string fileStr = file->path().toStdString();
+	CXMLParser xmlParser(fileStr);
+	vector<TF3DRepFile*> repFileList = xmlParser.GetFileList();
+	vector<TF3DRepFile*>::iterator fileIter;
+	for (fileIter = repFileList.begin();
+		fileIter != repFileList.end(); ++fileIter)
 	{
-		i++;
-		TFRep* curGeom = *geomIter;
-		childRepList = curGeom->GetChildRepList();
-		for (childRepIter = childRepList.begin();
-			childRepIter != childRepList.end(); ++childRepIter)
-		{
-			TFRep* curChildGeom = *childRepIter;
-			FillTriangleVertAndNormal(curChildGeom, verts, norms);
-			FillStripsGeometry(curChildGeom, stripGeomList);
-			FillFanGeometry(curChildGeom, fanGeomList);
-		}
-		FillTriangleVertAndNormal(curGeom, verts, norms);
-		FillStripsGeometry(curGeom, stripGeomList);
-		FillFanGeometry(curGeom, fanGeomList);
-	}
+		vector<TFRep*> geomList = (*fileIter)->GetRepList();
+		vector<TFRep*>::iterator geomIter;
 
+		vector<TFRep*> childRepList;
+		vector<TFRep*>::iterator childRepIter;
+
+		int i = 0;
+		for (geomIter = geomList.begin();
+			geomIter != geomList.end(); ++geomIter)
+		{
+			i++;
+			TFRep* curGeom = *geomIter;
+			childRepList = curGeom->GetChildRepList();
+			for (childRepIter = childRepList.begin();
+				childRepIter != childRepList.end(); ++childRepIter)
+			{
+				TFRep* curChildGeom = *childRepIter;
+				FillTriangleVertAndNormal(curChildGeom, verts, norms);
+				FillStripsGeometry(curChildGeom, stripGeomList);
+				FillFanGeometry(curChildGeom, fanGeomList);
+			}
+			FillTriangleVertAndNormal(curGeom, verts, norms);
+			FillStripsGeometry(curGeom, stripGeomList);
+			FillFanGeometry(curGeom, fanGeomList);
+		}
+	}
+	
 	ref<ResourceDatabase> res_db = new ResourceDatabase;
 	if (verts.empty())
 	{
