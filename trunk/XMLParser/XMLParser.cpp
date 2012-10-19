@@ -11,6 +11,7 @@
 #include "Poly.h"
 #include "TFRep.h"
 #include "TF3DRepFile.h"
+#include <atlconv.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -138,6 +139,10 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 				if(rootElement->FirstChildElement()->FirstChildElement()!=NULL && strcmp(rootElement->FirstChildElement()->FirstChildElement()->Value(),"Rep")==0)
 				{
 					m_pTempFile=new TF3DRepFile();
+					string filename;
+					CT2A xx(name);
+					filename = xx;
+					m_pTempFile->SetFileName(filename);
 					TraverseRep(rootElement->FirstChildElement()->FirstChildElement());
 					m_fileList.push_back(m_pTempFile);
 				}

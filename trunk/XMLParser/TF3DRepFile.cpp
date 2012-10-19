@@ -19,5 +19,10 @@ TF3DRepFile::~TF3DRepFile(void)
 
 void TF3DRepFile::AddRep(TFRep *p)
 {
-	m_RepList.push_back(p);
+	this->m_RepList.push_back(p);
+}
+
+void TF3DRepFile::SetFileName(string &name)
+{
+	this->m_fileName=name;
 }
