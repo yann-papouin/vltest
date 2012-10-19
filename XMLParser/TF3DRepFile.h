@@ -2,6 +2,7 @@
 
 #include "TFRep.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 class XMLDLL_EXPORT TF3DRepFile
@@ -13,11 +14,19 @@ public:
 
 	void AddRep(TFRep *p);
 
+	void SetFileName(string &name);
+
 	vector<TFRep*> GetRepList() const
 	{
-		return m_RepList;
+		return this->m_RepList;
+	}
+
+	string GetFileName() const
+	{
+		return this->m_fileName;
 	}
 
 private:
 	vector<TFRep*>				m_RepList;
+	string						m_fileName;
 };
