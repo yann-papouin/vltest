@@ -11,6 +11,8 @@
 #include "Poly.h"
 #include "TFRep.h"
 #include "TF3DRepFile.h"
+#include "TFReference3D.h"
+#include "TFInstance3D.h"
 #include <atlconv.h>
 
 #ifdef _DEBUG
@@ -115,6 +117,8 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 	strWildcard += _T("\\*.*");
 	CString m_ext_now;
 	m_ext_now.Format(_T("%s"),_T("3DRep"));
+	CString m_str_3dxml;	//查找装配树的.3dxml文件
+	m_str_3dxml.Format(_T("%s"),_T("3dxml"));
 	BOOL bWorking = finder.FindFile(strWildcard);
 	while (bWorking)
 	{
@@ -146,8 +150,46 @@ CXMLParser::CXMLParser(const std::string& fileStr)
 					TraverseRep(rootElement->FirstChildElement()->FirstChildElement());
 					m_fileList.push_back(m_pTempFile);
 				}
-				delete []pstr;
 				delete myDocument;
+				delete []pstr;
+			}
+			if(extend == m_str_3dxml)
+			{
+				CString str=finder.GetFilePath();
+				// 先得到要转换为字符的长度
+				const size_t strsize=(str.GetLength()+1)*2; // 宽字符的长度;
+				char * pstr= new char[strsize]; //分配空间;
+				size_t sz=0;
+				wcstombs_s(&sz,pstr,strsize,str,_TRUNCATE);
+
+				TiXmlDocument *myDocument = new TiXmlDocument(pstr);
+				myDocument->LoadFile();
+				TiXmlElement *rootElement=myDocument->RootElement();
+				if(strcmp(rootElement->FirstChildElement()->NextSiblingElement()->Value(),"ProductStructure")==0)
+				{
+					rootElement=rootElement->FirstChildElement()->NextSiblingElement()->FirstChildElement();
+					m_root=new ReferenceTreeElement();
+					m_root->value=(char *)rootElement->FirstAttribute()->Next()->Next()->Value();
+					m_root->id=atoi(rootElement->FirstAttribute()->Next()->Value());
+					m_root->instancename="";
+					m_root->FirstChildElement=NULL;
+					m_root->NextSimblingElement=NULL;
+					while(rootElement!=NULL)
+					{
+						if(strcmp(rootElement->Value(),"Reference3D")==0)
+						{
+							AddReference3D(rootElement);
+						}
+						if(strcmp(rootElement->Value(),"Instance3D")==0)
+						{
+							AddInstance3D(rootElement);
+						}
+						rootElement=rootElement->NextSiblingElement();
+					}
+					FindAllTreeNode();
+					ReferenceTreeElement *p=m_root;
+					LinkTreeNode(p,NULL);
+				}
 			}
 		}
 	}
@@ -166,6 +208,24 @@ CXMLParser::~CXMLParser()
 		delete *fileIter;
 		*fileIter = NULL;
 	}
+
+	vector<TFInstance3D*>::iterator instanceIter;
+	for(instanceIter = m_instance3DList.begin();
+	   instanceIter != m_instance3DList.end(); ++instanceIter)
+	{
+		delete *instanceIter;
+		*instanceIter = NULL;
+	}
+
+	vector<TFReference3D*>::iterator referenceIter;
+	for(referenceIter = m_treeNodeList.begin();
+		referenceIter!= m_treeNodeList.end(); ++referenceIter)
+	{
+		delete *referenceIter;
+		*referenceIter = NULL;
+	}
+
+	ReleaseTreeNode(m_root);
 }
 
 void CXMLParser::TraverseGetInformation(TiXmlElement* root)
@@ -481,9 +541,153 @@ void CXMLParser::TraverseRep(TiXmlElement *root)
 		{
 			m_pTempGeometry=new TFRep();
 			TraverseGetInformation(root);
-			//m_geometryList.push_back(m_pTempGeometry);
 			m_pTempFile->AddRep(m_pTempGeometry);
 		}
 		root=root->NextSiblingElement();
+	}
+}
+
+void CXMLParser::AddReference3D(TiXmlElement *root)
+{
+	string name((char *)root->FirstAttribute()->Next()->Next()->Value());
+	int id=atoi(root->FirstAttribute()->Next()->Value());
+	TFReference3D *p=new TFReference3D(name,id);
+	m_reference3DList.push_back(p);
+}
+
+void CXMLParser::AddInstance3D(TiXmlElement *root)
+{
+	string name((char *)root->FirstAttribute()->Next()->Next()->Value());
+	int id=atoi(root->FirstAttribute()->Next()->Value());
+	int num_Aggregated=atoi(root->FirstChildElement()->GetText());
+	int num_Instance=atoi(root->FirstChildElement()->NextSiblingElement()->GetText());
+	TFInstance3D *p=new TFInstance3D(name,id,num_Aggregated,num_Instance);
+	m_instance3DList.push_back(p);
+}
+
+void CXMLParser::FindAllTreeNode()
+{
+	for(unsigned int i=0;i<m_instance3DList.size();i++)
+	{
+		for(unsigned int j=0;j<m_reference3DList.size();j++)
+		{
+			if(m_reference3DList[j]->GetId()==m_instance3DList[i]->GetIsInstanceNum())
+			{
+				if(m_reference3DList[j]->GetIstanceId()==-1)
+				{
+					m_reference3DList[j]->SetInstanceName(m_instance3DList[i]->GetName());
+					m_reference3DList[j]->SetIstanceId(m_instance3DList[i]->GetId());
+					m_reference3DList[j]->SetAggretedId(m_instance3DList[i]->GetAggregatedNum());
+					m_treeNodeList.push_back(m_reference3DList[j]);
+				}
+				else
+				{
+					TFReference3D *newRefer=new TFReference3D(*m_reference3DList[j]);
+					newRefer->SetInstanceName(m_instance3DList[i]->GetName());
+					newRefer->SetIstanceId(m_instance3DList[i]->GetId());
+					newRefer->SetAggretedId(m_instance3DList[i]->GetAggregatedNum());
+					newRefer->SetIsMul(1);
+					m_treeNodeList.push_back(newRefer);
+				}
+			}
+		}
+	}
+	m_copy=m_treeNodeList;
+	for(unsigned int i=0;i<m_copy.size();i++)
+	{
+		if(m_copy[i]->GetIsMul()==1)
+		{
+			CopyReference3D(m_copy[i]->GetId());
+		}
+	}
+}
+
+void CXMLParser::CopyReference3D(int id)
+{
+	for(unsigned int i=0;i<m_copy.size();i++)
+	{
+		if(m_copy[i]->GetAggretedId()==id)
+		{
+			TFReference3D *q=new TFReference3D(*m_copy[i]);
+			q->SetInstanceName(m_copy[i]->GetInstaceName());
+			q->SetIstanceId(m_copy[i]->GetIstanceId());
+			q->SetAggretedId(m_copy[i]->GetAggretedId());
+			m_treeNodeList.push_back(q);
+			CopyReference3D(m_copy[i]->GetId());
+		}
+	}
+}
+
+void CXMLParser::LinkTreeNode(ReferenceTreeElement *root,ReferenceTreeElement *father)
+{
+	for(unsigned int i=0;i<m_treeNodeList.size();i++)
+	{
+		if(m_treeNodeList[i]->GetAggretedId()==root->id && m_treeNodeList[i]->GetFlag()==false)
+		{
+			ReferenceTreeElement *p=new ReferenceTreeElement();
+			p->id=m_treeNodeList[i]->GetId();
+			p->value=m_treeNodeList[i]->GetName();
+			p->instancename=m_treeNodeList[i]->GetInstaceName();
+			p->FirstChildElement=NULL;
+			p->NextSimblingElement=NULL;
+			p->instanceId=m_treeNodeList[i]->GetIstanceId();
+			root->FirstChildElement=p;
+			m_treeNodeList[i]->SetFlag(true);
+			break;
+		}
+	}
+	if(father!=NULL)
+	{
+		for(unsigned int i=0;i<m_treeNodeList.size();i++)
+		{
+			if(m_treeNodeList[i]->GetAggretedId()==father->id && m_treeNodeList[i]->GetFlag()==false)
+			{
+				bool f=true;
+				ReferenceTreeElement *temp=father->FirstChildElement;
+
+				while(temp!=NULL)
+				{
+					if(temp->instanceId==m_treeNodeList[i]->GetIstanceId())
+					{
+						f=false;
+						break;
+					}
+					temp=temp->NextSimblingElement;
+				}
+				if(f==true)
+				{
+					ReferenceTreeElement *p=new ReferenceTreeElement();
+					p->id=m_treeNodeList[i]->GetId();
+					p->value=m_treeNodeList[i]->GetName();
+					p->instancename=m_treeNodeList[i]->GetInstaceName();
+					p->FirstChildElement=NULL;
+					p->NextSimblingElement=NULL;
+					p->instanceId=m_treeNodeList[i]->GetIstanceId();
+					root->NextSimblingElement=p;
+					m_treeNodeList[i]->SetFlag(true);
+					break;
+				}
+			}
+		}
+	}
+	if(root->FirstChildElement!=NULL)
+	{
+		LinkTreeNode(root->FirstChildElement,root);
+	}
+	if(root->NextSimblingElement!=NULL)
+	{
+		LinkTreeNode(root->NextSimblingElement,father);
+	}
+}
+
+void CXMLParser::ReleaseTreeNode(ReferenceTreeElement *root)
+{
+	if(root!=NULL)
+	{
+		ReferenceTreeElement *p=root->FirstChildElement;
+		ReferenceTreeElement *q=root->NextSimblingElement;
+		delete root;
+		ReleaseTreeNode(p);
+		ReleaseTreeNode(q);
 	}
 }

@@ -13,11 +13,23 @@
 class TiXmlElement;
 class TFRep;
 class TF3DRepFile;
+class TFReference3D;
+class TFInstance3D;
 
 #include <vector>
 #include <string>
 
 using namespace std;
+
+struct ReferenceTreeElement
+{
+	string value;
+	int id;
+	string instancename;
+	int instanceId;
+	ReferenceTreeElement *FirstChildElement;
+	ReferenceTreeElement *NextSimblingElement;
+};
 
 class XMLDLL_EXPORT CXMLParser
 {
@@ -33,11 +45,14 @@ public:
 	}
 
 private: 
-	//vector<TFRep*>				m_geometryList;
 	TFRep*							m_pTempGeometry;
-	//TFRep*						m_pTempChildGeometry;
 	vector<TF3DRepFile*>			m_fileList;
 	TF3DRepFile*					m_pTempFile;
+	vector<TFReference3D*>			m_reference3DList;
+	vector<TFInstance3D*>			m_instance3DList;
+	vector<TFReference3D*>			m_treeNodeList;		//树的结点List，因为m_reference3DList不包含重复结点，这里将节点找全
+	ReferenceTreeElement*			m_root;
+	vector<TFReference3D*>			m_copy;				//辅助寻找结点的copy
 
 protected:
 	void TraverseGetInformation(TiXmlElement *root);	//遍历结点树获得信息
@@ -50,4 +65,10 @@ protected:
 	void AddStrips(const string &str);
 	void AddFans(const string &str);
 	bool IsTriangleStrWithSplit(char *str);
+	void AddReference3D(TiXmlElement *root);
+	void AddInstance3D(TiXmlElement *root);
+	void FindAllTreeNode();
+	void CopyReference3D(int id);
+	void LinkTreeNode(ReferenceTreeElement *root,ReferenceTreeElement *father);
+	void ReleaseTreeNode(ReferenceTreeElement *root);
 };
