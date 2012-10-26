@@ -324,6 +324,30 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TFInstance3D.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\TFReference3D.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\TFRep.cpp"
 				>
 				<FileConfiguration
@@ -539,6 +563,14 @@
 			</File>
 			<File
 				RelativePath=".\TFFan.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TFInstance3D.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TFReference3D.h"
 				>
 			</File>
 			<File

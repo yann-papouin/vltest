@@ -17,6 +17,7 @@ CModelPaneView::CModelPaneView()
 {
 //	m_nToolBarID = IDR_EXPLORER_BAR;
 	m_nToolBarID = 0;
+	m_pRootRecordNode = NULL;
 }
 
 CModelPaneView::~CModelPaneView()
@@ -65,16 +66,16 @@ CWnd* CModelPaneView::OnCreateView()
 	pColumn = m_wndModelTree.AddColumn(new CXTPReportColumn(3,_T("透明度"), _T("透明度"), 25,FALSE,7,FALSE));
 	pColumn->SetEditable(FALSE);
 
-	CMessageRecord *pParentRec1 = new CMessageRecord(_T("装配1") ,0,TRUE,TRUE,FALSE, FALSE, FALSE); 
-	m_wndModelTree.AddRecord(pParentRec1);
-	pParentRec1->GetChilds()->Add(new CMessageRecord(_T("零件"), 2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
-	pParentRec1->GetChilds()->Add(new CMessageRecord(_T("零件"),2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
-	pParentRec1->GetChilds()->Add(new CMessageRecord(_T("零件"), 2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
+	m_pRootRecordNode = new CMessageRecord(_T("装配1") ,0,TRUE,TRUE,FALSE, FALSE, FALSE); 
+	m_wndModelTree.AddRecord(m_pRootRecordNode);
+	m_pRootRecordNode->GetChilds()->Add(new CMessageRecord(_T("零件"), 2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
+	m_pRootRecordNode->GetChilds()->Add(new CMessageRecord(_T("零件"),2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
+	m_pRootRecordNode->GetChilds()->Add(new CMessageRecord(_T("零件"), 2,TRUE,TRUE,FALSE, FALSE, FALSE)); 
 
-	pParentRec1->SetExpanded(TRUE);
+	m_pRootRecordNode->SetExpanded(TRUE);
 
 	CMessageRecord *pParentRec2 = new CMessageRecord(_T("子装配1"),1, TRUE,TRUE,FALSE, FALSE, FALSE); 
-	pParentRec1->GetChilds()->Add(pParentRec2);
+	m_pRootRecordNode->GetChilds()->Add(pParentRec2);
 	pParentRec2->GetChilds()->Add(new CMessageRecord(_T("零件4"), 2, TRUE,TRUE,FALSE, FALSE, FALSE));
 	pParentRec2->SetExpanded(TRUE);
 

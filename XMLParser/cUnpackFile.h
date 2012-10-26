@@ -21,6 +21,6 @@ public:
 	cUnpackFile();
 	~cUnpackFile();
 	void CreateDirFromZip(const char * dirName, const char * zipFileName);//解压到文件夹dirName
-	//void CreateFileFromZip(const char * fName, const char * zipFileName);//解压第一个文件到文件fName
+	void CreateFileFromZip(const char * fName, const char * zipFileName);//解压第一个文件到文件fName
 };
 

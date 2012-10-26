@@ -108,9 +108,9 @@ CMessageRecord::CMessageRecord(
 
 }
 
-void CMessageRecord::CreateItems()
+void CMessageRecord::CreateItems(const CString& itemName)
 {
-	AddItem(new CMessageRecordItemIconCheckText(_T("")));
+	AddItem(new CMessageRecordItemIconCheckText(itemName));
 	AddItem(new CMessageRecordItemCheck(TRUE));
 	AddItem(new CMessageRecordItemCheck(TRUE));
 	AddItem(new CMessageRecordItemCheck(TRUE));

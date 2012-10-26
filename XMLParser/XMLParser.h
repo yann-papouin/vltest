@@ -44,6 +44,11 @@ public:
 		return m_fileList;
 	}
 
+	ReferenceTreeElement* GetRootElement() const
+	{
+		return m_root;
+	}
+
 private: 
 	TFRep*							m_pTempGeometry;
 	vector<TF3DRepFile*>			m_fileList;

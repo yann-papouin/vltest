@@ -71,7 +71,7 @@ public:
 	virtual ~CMessageRecord();
 
 	// Create record fields using empty values
-	virtual void CreateItems();
+	virtual void CreateItems(const CString& itemName = _T(""));
 
 	// Overridden callback method, where we can customize any drawing item metrics.
 	virtual void GetItemMetrics(XTP_REPORTRECORDITEM_DRAWARGS* pDrawArgs, XTP_REPORTRECORDITEM_METRICS* pItemMetrics);
