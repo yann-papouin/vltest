@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include "PaneView.h"
+class CMessageRecord;
 
 /////////////////////////////////////////////////////////////////////////////
 // CModelPaneView window
@@ -21,7 +22,7 @@ public:
 //	CTreeCtrl   m_wndModelTree;
 	CImageList m_ilIcons;
 	CXTPOfficeBorder<CXTPReportControl,false> m_wndModelTree;
-
+	CMessageRecord *							m_pRootRecordNode;
 // Operations
 public:
 	CWnd* OnCreateView();

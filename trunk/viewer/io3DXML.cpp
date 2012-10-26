@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "io3DXML.hpp"
 #include <vlCore/Log.hpp>
 #include <vlCore/Say.hpp>
@@ -13,6 +14,8 @@
 #include "XMLParser.h"
 #include "TF3DRepFile.h"
 #include "assert.h"
+#include "MainFrm.h"
+#include "gui/MessageRecord.h"
 //#include "glc_factory.h"
 //#include "geometry\glc_geometry.h"
 //#include "geometry\glc_geometry.h"
@@ -165,6 +168,28 @@ void FillFanGeometry(TFRep*& curGeom,
 	}
 }
 
+void ClearAllTheRecode(CXTPReportRecord* curRecord)
+{
+	CMainFrame* m_pMainFrame = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CModelPaneView& modelPane = m_pMainFrame->m_wndModelPaneView;
+
+	CXTPReportRecords* rootChild = curRecord->GetChilds();
+	int childNum = rootChild->GetCount();
+	for (int i = 0; i < childNum; ++i)
+	{
+		CXTPReportRecord* curRecord = rootChild->GetAt(i);
+		if (curRecord == NULL)
+		{
+			continue;
+		}
+		modelPane.m_wndModelTree.RemoveRecordEx(curRecord, TRUE);
+		if (curRecord->GetChilds()->GetCount() > 0)
+		{
+			ClearAllTheRecode(curRecord);
+		}	
+	}
+}
+
 ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 {
 	std::vector<fvec3> verts;
@@ -175,6 +200,31 @@ ref<ResourceDatabase> File3DXMLLoader::loadAscii(VirtualFile* file)
 
 	std::string fileStr = file->path().toStdString();
 	CXMLParser xmlParser(fileStr);
+	ReferenceTreeElement* rootElement = xmlParser.GetRootElement();
+
+	//Update model tree
+	CMainFrame* m_pMainFrame = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CModelPaneView& modelPane = m_pMainFrame->m_wndModelPaneView;
+	modelPane.m_pRootRecordNode->RemoveAll();
+
+	ClearAllTheRecode(modelPane.m_pRootRecordNode);
+	CString rootName;
+	if (rootElement->instancename == "")
+	{
+		rootName = CString(rootElement->value.c_str());
+	}
+	else
+	{
+		rootName = CString(rootElement->instancename.c_str());
+	}
+	modelPane.m_pRootRecordNode->CreateItems(rootName);
+	modelPane.m_wndModelTree.UpdateRecord(modelPane.m_pRootRecordNode, TRUE);
+
+	/*CMessageRecord* pCurRecord = new CMessageRecord(_T("×°Åä1") ,0,TRUE,TRUE,FALSE, FALSE, FALSE); 
+	modelPane.m_pRootRecordNode = pCurRecord;
+	modelPane.m_wndModelTree.AddRecord(pCurRecord);*/
+
+	//Display
 	vector<TF3DRepFile*> repFileList = xmlParser.GetFileList();
 	vector<TF3DRepFile*>::iterator fileIter;
 	for (fileIter = repFileList.begin();
